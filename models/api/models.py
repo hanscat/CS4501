@@ -7,7 +7,7 @@ class user(models.Model):
     user_name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
     class Meta:
-        abstract = true;
+        abstract = True
 
 class buyer(user):
     car_want = models.onetomanyField(car_want_buy)
@@ -23,7 +23,7 @@ class car(models.Model):
     price = models.IntegerField(default=0)
 
     class Meta:
-        abstract = true;
+        abstract = True
 
 class car_to_sell(car):
     price_to_sell = models.IntegerField(default=0)
