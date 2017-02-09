@@ -12,3 +12,10 @@
     2. json post/get method
     3. json fixture
     4. docker-compose file
+
+##Workable urls
+1. 8001/api
+2. 8001/api/user/seller/[1-9]+
+3. 8001/api/user/buyer/[1-9]+
+4. 8001/api/car/sell/[1-9]+
+5. 8001/api/car/buy/[1-9]+
