@@ -28,6 +28,7 @@
     1. 8001/api/create/user/seller: accept format
 
     {
+    
         "first_name": "new",
 
         "last_name": "user",
