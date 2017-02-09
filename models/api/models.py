@@ -7,6 +7,9 @@ class user(models.Model):
     user_name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
 
+    class Meta:
+        abstract = True
+
 class buyer(models.Model):
     car_want = models.CharField(max_length=1)
 
