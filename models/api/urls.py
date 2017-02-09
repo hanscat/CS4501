@@ -16,4 +16,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
 
-urlpatterns = [url(r'^$', views.index),]
+index = [url(r'^$', views.index),]
+car = [url(r'car/sale/(?P<car_id>[0-9]+)', views.car_sale),
+       url(r'car/buy/(?P<car_id>[0-9]+)', views.car_buy),
+       url(r'user/seller/(?P<user_id>[0-9]+)', views.seller),
+       url(r'user/buyer/(?P<user_id>[0-9]+)', views.buyer)
+       ]
+
+urlpatterns = index + car

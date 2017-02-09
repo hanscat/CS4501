@@ -1,4 +1,5 @@
 models:
+    container name:
     image: tp33/django
     external_links:
       -  mysql:../db
