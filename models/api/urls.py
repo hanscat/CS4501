@@ -15,12 +15,15 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
+from .views import *
 
 index = [url(r'^$', views.index),]
-car = [url(r'car/sale/(?P<car_id>[0-9]+)', views.car_sale),
-       url(r'car/buy/(?P<car_id>[0-9]+)', views.car_buy),
-       url(r'user/seller/(?P<user_id>[0-9]+)', views.seller),
-       url(r'user/buyer/(?P<user_id>[0-9]+)', views.buyer)
+car = [url(r'car/sale/(?P<car_id>[0-9]+)', CarSellView.as_view()),
+       url(r'car/buy/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
+       url(r'user/seller/(?P<user_id>[0-9]+)', SellerView.as_view()),
+       url(r'user/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view())
+       url(r'create/user/seller', SellerView.as_view()),
+       url(r'create/user/buyer', BuyerView.as_view()),
        ]
 
 urlpatterns = index + car
