@@ -10,12 +10,12 @@ class user(models.Model):
     class Meta:
         abstract = True
 
-class buyer(models.Model):
+class buyer(user):
     car_want = models.CharField(max_length=1)
 
 
-class seller(models.Model):
-    car_want = models.CharField(max_length=1)
+class seller(user):
+    car_sell = models.CharField(max_length=1)
 
 class car(models.Model):
     car_color = models.CharField(max_length=30)
