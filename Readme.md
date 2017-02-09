@@ -27,8 +27,7 @@
 2. POST :
     1. 8001/api/create/user/seller: accept format
 
-    {
-    
+
         "first_name": "new",
 
         "last_name": "user",
@@ -38,13 +37,11 @@
         "password": "12345678",
 
         "car_own": ""
-    }
 
     otherwise return "Bad Request"
 
     2. 8001/api/create/user/buyer
 
-    {
 
         "first_name": "new",
 
@@ -56,6 +53,5 @@
 
         "car_want": ""
 
-    }
 
     otherwise return "Bad Request"
