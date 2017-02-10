@@ -2,7 +2,6 @@ from django.forms import ModelForm
 from .models import *
 
 class CarSellForm(ModelForm) :
-
     class Meta:
         model = car_to_sell
         fields = '__all__'
