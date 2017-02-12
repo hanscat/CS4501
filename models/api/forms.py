@@ -16,7 +16,6 @@ class BuyerForm(ModelForm) :
         model = buyer
         fields = '__all__'
 
-
 class SellerForm(ModelForm) :
     class Meta:
         model = seller

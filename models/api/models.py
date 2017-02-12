@@ -10,13 +10,6 @@ class user(models.Model):
     class Meta:
         abstract = True
 
-class buyer(user):
-    car_want = models.CharField(max_length=1)
-
-
-class seller(user):
-    car_sell = models.CharField(max_length=1)
-
 class car(models.Model):
     car_color = models.CharField(max_length=30)
     car_brand = models.CharField(max_length=30)
@@ -32,3 +25,9 @@ class car_to_sell(car):
 
 class car_to_buy(car):
     price_to_offer = models.IntegerField(default=0)
+
+class buyer(user):
+    car_want = models.ManyToManyField(car_to_buy)
+
+class seller(user):
+    car_sell = models.ManyToManyField(car_to_sell)
