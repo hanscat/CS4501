@@ -26,10 +26,18 @@ class car(models.Model):
     price = models.IntegerField(default=0)
     
     class Meta:
-        abstract = True;
+        abstract = True
 
 class car_to_sell(car):
     price_to_sell = models.IntegerField(default=0)
 
 class car_to_buy(car):
     price_to_offer = models.IntegerField(default=0)
+
+class inventory(models.Model):
+    owner = models.CharField(max_length=20)
+    num = models.IntegerField(default=0)
+    location = models.CharField(max_length = 20)
+
+class favorite(models.Model):
+    user: models.CharField(max_length=20)
