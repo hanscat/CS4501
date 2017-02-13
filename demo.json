@@ -1,0 +1,24 @@
+[
+  {
+    "model": "models.user",
+    "pk": 1,
+    "fields": {
+      "first_name": "Hans",
+      "last_name": "Zhang",
+      "id": "1",
+      "user_name": "Hans",
+      "password": "123"
+    }
+  },
+  {
+    "model": "models.user",
+    "pk": 2,
+    "fields": {
+      "first_name": "Jerry",
+      "last_name": "Sun",
+      "id": "2",
+      "user_name": "Jerry",
+      "password": "123"
+    }
+  }
+]

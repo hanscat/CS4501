@@ -6,4 +6,4 @@ models:
       -  ./models:/app
     ports:
       - "8001:8000"
-    command: bash -c "python manage.py makemigration && python manage.py migrate && python manage.py load demo.json &&mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/models/wsgi.py"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata demo.json &&mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/models/wsgi.py"
