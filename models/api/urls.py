@@ -18,14 +18,13 @@ from . import views
 from .views import *
 
 index = [url(r'^$', views.index),]
-car = [url(r'detail/sale_car/(?P<car_id>[0-9]+)', CarSellView.as_view()),
+
+car = [url(r'detail/sell_car/(?P<car_id>[0-9]+)', CarSellView.as_view()),
        url(r'detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
        url(r'detail/seller/(?P<user_id>[0-9]+)', SellerView.as_view()),
        url(r'detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
-       url(r'create/user/seller', SellerView.as_view()),
-       url(r'create/user/buyer', BuyerView.as_view()),
-       url(r'update/user/seller/(?P<user_id>[0-9]+)', SellerView.update()),
-       url(r'update/user/buyer/(?P<user_id>[0-9]+)', BuerView.update()),
+    #    url(r'update/user/seller/(?P<user_id>[0-9]+)', SellerView.update()),
+    #    url(r'update/user/buyer/(?P<user_id>[0-9]+)', BuerView.update()),
        ]
 
 urlpatterns = index + car
