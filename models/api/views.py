@@ -54,8 +54,6 @@ class CarBuyView(ListView):
         else :
             return HttpResponse('Bad Post Request')
 
-
-
 class BuyerView(ListView):
     model = buyer
 
@@ -91,6 +89,17 @@ class SellerView(ListView):
             return HttpResponse('Success')
         else :
             return HttpResponse('Bad Post Request')
+
+    def update(request, user_id, *args, **kwargs):
+        user = get_object_or_404(seller, pk=kwargs['user_id'])
+        data = request.body.decode('utf-8')
+        data_dict = json.loads(data)
+        form = SellerForm(data_dict, instance = user)
+        if form.is_vaid() :
+            form.save()
+            return HttpResponse('Update Success')
+        else :
+            return HttpResponse('Bad Post request')
 
 # Original implementation changed to class_based view
 # def SellerDetail(request, user_id):
