@@ -1,0 +1,96 @@
+[
+  {
+    "model": "api.car_to_sell",
+    "pk": 1,
+    "fields": {
+      "car_color": "grey",
+      "car_brand": "Porsche",
+      "car_model": "Cayenne",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+    }
+  },
+  {
+    "model": "api.car_to_sell",
+    "pk": 2,
+    "fields": {
+      "car_color": "red",
+      "car_brand": "Benz",
+      "car_model": "G63",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+    }
+  },
+  {
+    "model": "api.car_to_sell",
+    "pk": 3,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "Audi",
+      "car_model": "Q5",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+    }
+  },
+  {
+    "model": "api.car_to_sell",
+    "pk": 4,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "BWM",
+      "car_model": "X3",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+    }
+  },
+  {
+    "model": "api.car_to_buy",
+    "pk": 1,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "BWM",
+      "car_model": "X3",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_offer": 9999
+    }
+  },
+  {
+    "model": "api.car_to_buy",
+    "pk": 2,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "Audi",
+      "car_model": "Q5",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_offer": 9999
+    }
+  },
+  {
+    "model": "api.buyer",
+    "pk": 1,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "user1",
+      "password": "12345678",
+      "favourite": [1]
+    }
+  },
+  {
+    "model": "api.seller",
+    "pk": 1,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "user1",
+      "password": "12345678",
+      "car_sell": [1,4]
+    }
+  }
+]
