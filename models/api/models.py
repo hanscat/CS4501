@@ -33,10 +33,10 @@ class buyer(user):
 class seller(user):
     car_sell = models.ManyToManyField(car_to_sell, blank = True)
 
-class inventory(models.Model):
-    owner = models.CharField(max_length=20)
-    num = models.IntegerField(default=0)
-    location = models.CharField(max_length = 20)
+# class inventory(models.Model):
+#     owner = models.CharField(max_length=20)
+#     num = models.IntegerField(default=0)
+#     location = models.CharField(max_length = 20)
 
 # class favorite(models.Model):
 #     user = models.CharField(max_length=20)
