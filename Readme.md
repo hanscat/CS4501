@@ -20,17 +20,17 @@
 
 ##Model
 * seller
-  * first_name 'CharField'
-  * last_name 'CharField'
-  * username 'CharField' 'Unique'
-  * password 'CharField'
-  * car_sell 'ManyToManyField' list of car_to_sell types
-  * id(pk) 'PrimaryKey' set by default Automatically increment when new seller inserted
+  * first_name `CharField`
+  * last_name `CharField`
+  * username `CharField` `Unique`
+  * password `CharField`
+  * car_sell `ManyToManyField` list of car_to_sell types
+  * id(pk) `PrimaryKey` set by default Automatically increment when new seller inserted
 
 
 * buyer
   * all fields in seller except car_sell
-  * favourite 'ManyToManyField' list of car_to_buy types
+  * favourite `ManyToManyField` list of car_to_buy types
 
 
 * car_to_sell
@@ -62,29 +62,29 @@
 
 1. GET /detail/<model>/<id>[0-9]+
 
-    * Response: a JSON response containing the information of the model with id(pk) given.
+    * Response: a JSON response containing the information of the model with `id` given
 
     * Status
-      * '200' if object found
-      * '404' if object not found
+      * `200` if object found
+      * `404` if object not found
 
 
 2. POST /detail/<model>/<id>[0-9]+
-    * Post: valid JSON table for corresponding model
+    * Post: valid JSON table for corresponding model.
 
     * Status:
-      * '400': if form posted not valid
-      * '404': if form posted valid but in 'ManyToManyField' contains invalid id in corresponding model(car)
-      * '201' if <id> not found in db, automatically create new object by the given info **the new object will not have the pk(id) given in the url, system will automatically assign one id to it**
-      * '202' if <id> found in db, update new object by the given info
+      * `400`: if form posted not valid.
+      * `404`: if form posted is valid, but 'ManyToManyField' contains invalid id in corresponding model(car).
+      * `201`: if `id` not found in db, automatically create new object by the given info **the new object will not have the `id` given in the url, system will automatically assign one id to it**.
+      * `202`: if `id` found in db, update new object by the given info.
 
 
 3. POST /delete/<model>/<id>[0-9]+
     * Post: nothing required
 
     * Status:
-      * '404': if object not found
-      * '202': if object found and deleted
+      * `404`: if object not found
+      * `202`: if object found and deleted
 
 
 
