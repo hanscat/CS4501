@@ -13,7 +13,7 @@ class user(models.Model):
 
 class car(models.Model):
     car_color = models.CharField(max_length=30)
-    car_make = models.CharField(max_length=30)
+    car_brand = models.CharField(max_length=30)
     car_model = models.CharField(max_length=10)
     car_year = models.IntegerField(default = 0)
     car_body_type = models.CharField(max_length= 10)
