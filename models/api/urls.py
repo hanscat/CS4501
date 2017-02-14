@@ -20,16 +20,14 @@ from .views import *
 index = [url(r'^$', views.index),]
 
 car = [
-       url(r'detail/sell_car/(?P<car_id>[0-9]+)', CarSellView.as_view()),
-       url(r'detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
-       url(r'detail/seller/(?P<user_id>[0-9]+)', SellerView.as_view()),
-       url(r'detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
-       url(r'delete/sell_car/(?P<car_id>[0-9]+)', DeleteSellCarView.as_view()),
-       url(r'delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
-       url(r'delete/seller/(?P<user_id>[0-9]+)', DeleteSellerView.as_view()),
-       url(r'delete/buyer/(?P<user_id>[0-9]+)', DeleteBuyerView.as_view()),
-    #    url(r'update/user/seller/(?P<user_id>[0-9]+)', SellerView.update()),
-    #    url(r'update/user/buyer/(?P<user_id>[0-9]+)', BuerView.update()),
+       url(r'v1/detail/sell_car/(?P<car_id>[0-9]+)', CarSellView.as_view()),
+       url(r'v1/detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
+       url(r'v1/detail/seller/(?P<user_id>[0-9]+)', SellerView.as_view()),
+       url(r'v1/detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
+       url(r'v1/delete/sell_car/(?P<car_id>[0-9]+)', DeleteSellCarView.as_view()),
+       url(r'v1/delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
+       url(r'v1/delete/seller/(?P<user_id>[0-9]+)', DeleteSellerView.as_view()),
+       url(r'v1/delete/buyer/(?P<user_id>[0-9]+)', DeleteBuyerView.as_view()),
        ]
 
 urlpatterns = index + car

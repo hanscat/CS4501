@@ -11,6 +11,13 @@ from django.forms import ModelForm
 import json
 # Create your views here.
 
+# def get_object_or_404(klass, id):
+#     queryset = klass.objects.all()
+#     try:
+#         return queryset.get(pk = id)
+#     except ObjectDoesNotExist:
+#         raise _failure(404, klass.__name__ + "with given id doesn't exists")
+
 def get_success(code, data_dict, model_name):
     correct = {"Status Code" : code, model_name : data_dict }
     return JsonResponse(correct)
@@ -30,7 +37,12 @@ class CarView(View):
     modelForm = ModelForm
 
     def get(self, request, *args, **kwargs):
-        car = get_object_or_404(self.model, pk=kwargs['car_id'])
+        # car = get_object_or_404(self.model, pk = kwargs['car_id'])
+        try :
+            car = self.model.objects.get(pk = kwargs['car_id'])
+        except ObjectDoesNotExist:
+            return _failure(404, "Car doesn't exist")
+
         car = model_to_dict(car)
         return get_success('200', car, self.model.__name__)
 
@@ -47,7 +59,7 @@ class CarView(View):
             return _failure(400, 'form invalid, bad post request.')
 
     def update(self, car_id, data_dict):
-        car = get_object_or_404(self.model, pk = car_id)
+        car = self.model.objects.get(pk = car_id)
         form = self.modelForm(data_dict, instance = car)
         form.save()
         return  _success(202, 'Update Success')
@@ -59,7 +71,10 @@ class UserView(View):
     modelForm = ModelForm
 
     def get(self, request, *args, **kwargs):
-        user = get_object_or_404(self.model, pk=kwargs['user_id'])
+        try :
+            user = self.model.objects.get(pk = kwargs['user_id'])
+        except ObjectDoesNotExist:
+            return _failure(404, "User doesn't exist")
         user_want = model_to_dict(user)
         l = []
         if 'favourite' in [f.name for f in self.model._meta.get_fields()]:
@@ -106,8 +121,8 @@ class UserView(View):
                 return _failure(400, 'form invalid, bad post request.')
 
     def update(self, user_id, data_dict):
-        car = get_object_or_404(self.model, pk = user_id)
-        form = self.modelForm(data_dict, instance = car)
+        user = self.model.objects.get(pk = user_id)
+        form = self.modelForm(data_dict, instance = user)
         form.save()
         return _success(202, 'Update Success')
 
@@ -116,7 +131,10 @@ class DeleteCarView(DeleteView):
     owner = Model
 
     def delete(self, request, *args, **kwargs) :
-        car = get_object_or_404(self.model, pk=kwargs['car_id'])
+        try :
+            car = self.model.objects.get(pk = kwargs['car_id'])
+        except ObjectDoesNotExist:
+            return _failure(404, "Car doesn't exist")
         self.Userdelete(car)
         car.delete()
         return _success(202, 'Delete Success')
@@ -135,7 +153,10 @@ class DeleteUserView(DeleteView):
     model = Model
 
     def delete(self, request, *args, **kwargs) :
-        user = get_object_or_404(self.model, pk=kwargs['user_id'])
+        try :
+            user = self.model.objects.get(pk = kwargs['user_id'])
+        except ObjectDoesNotExist:
+            return _failure(404, "User doesn't exist")
         user.delete()
         return _success(202, 'Delete Success')
 

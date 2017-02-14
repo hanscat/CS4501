@@ -7,28 +7,91 @@
     2. testing models setup
     3. views.py , urls.py updated
 
+
 2. 2017-02-09:
     1. json post/get method setup, usage see below
 
-2. To do:
-    1. finalize models
-    2. json fixture
-    3. docker-compose file
-    4. url restructure
+
+3. 2017-02-13:
+    1. json fixture
+    2. docker-compose file
+    3. url restructure
+    4. curd all created and tested
+
+##Model
+* seller
+  * first_name `CharField`
+  * last_name `CharField`
+  * username `CharField` `Unique`
+  * password `CharField`
+  * car_sell `ManyToManyField` list of car_to_sell types
+  * id(pk) `PrimaryKey` set by default Automatically increment when new seller inserted
+
+
+* buyer
+  * all fields in seller except car_sell
+  * favourite `ManyToManyField` list of car_to_buy types
+
+
+* car_to_sell
+  * car_color
+  * car_brand
+  * car_model
+  * price
+  * description
+  * price_to_sell
+
+
+* car_to_buy
+  * all fields in seller except price_to_sell
+  * price_to_offer
+
 
 ##Workable urls
-1. GET :
-    1. 8001/api: return index page
-    2. 8001/api/user/seller/[1-9]+: return json format seller(pk = id) if exists
-    3. 8001/api/user/buyer/[1-9]+: return json format buyer(pk=id) if exists
-    4. 8001/api/car/sell/[1-9]+: return json format car_to_sell(pk=id) if exists
-    5. 8001/api/car/buy/[1-9]+: return json format car_to_sell(pk=id) if exists
 
-2. POST :
-    1. 8001/api/create/user/seller: accept format
+    localhost:8001/api/v1/detail/seller/[0-9]+
+    localhost:8001/api/v1/detail/buyer/[0-9]+
+    localhost:8001/api/v1/detail/sell_car/[0-9]+
+    localhost:8001/api/v1/detail/buy_car/[0-9]+
+    localhost:8001/api/v1/delete/seller/[0-9]+
+    localhost:8001/api/v1/delete/seller/[0-9]+
+    localhost:8001/api/v1/delete/sell_car/[0-9]+
+    localhost:8001/api/v1/delete/buy_car/[0-9]+
+
+##API Documentation
+
+1. GET /detail/<model>/<id>[0-9]+
+
+    * Response: a JSON response containing the information of the model with `id` given
+
+    * Status
+      * `200` if object found
+      * `404` if object not found
 
 
-        "first_name": "new",
+2. POST /detail/<model>/<id>[0-9]+
+    * Post: valid JSON table for corresponding model.
+
+    * Status:
+      * `400`: if form posted not valid.
+      * `404`: if form posted is valid, but 'ManyToManyField' contains invalid id in corresponding model(car).
+      * `201`: if `id` not found in db, automatically create new object by the given info **the new object will not have the `id` given in the url, system will automatically assign one id to it**.
+      * `202`: if `id` found in db, update new object by the given info.
+
+
+3. POST /delete/<model>/<id>[0-9]+
+    * Post: nothing required
+
+    * Status:
+      * `404`: if object not found
+      * `202`: if object found and deleted
+
+
+
+
+
+
+        <!-- "first_name": "new",
 
         "last_name": "user",
 
@@ -54,4 +117,4 @@
         "car_want": ""
 
 
-    otherwise return "Bad Request"
+    otherwise return "Bad Request" -->
