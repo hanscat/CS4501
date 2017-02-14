@@ -58,9 +58,9 @@
     localhost:8001/api/v1/delete/sell_car/[0-9]+
     localhost:8001/api/v1/delete/buy_car/[0-9]+
 
-##API Documentation
+##API
 
-1. GET /detail/<model>/<id>[0-9]+
+1. GET /detail/[model]/[id][0-9]+
 
     * Response: a JSON response containing the information of the model with `id` given
 
@@ -69,43 +69,28 @@
       * `404` if object not found
 
 
-2. POST /detail/<model>/<id>[0-9]+
+2. POST /detail/[model]/[id][0-9]+
     * Post: valid JSON table for corresponding model.
 
     * Status:
       * `400`: if form posted not valid.
       * `404`: if form posted is valid, but 'ManyToManyField' contains invalid id in corresponding model(car).
-      * `201`: if `id` not found in db, automatically create new object by the given info **the new object will not have the `id` given in the url, system will automatically assign one id to it**.
+      * `201`: if `id` not found in db, automatically create new object by the given info. **Note: the new object will not have the `id` given in the url, system will automatically assign one id to it**.
       * `202`: if `id` found in db, update new object by the given info.
 
 
-3. POST /delete/<model>/<id>[0-9]+
+3. POST /delete/[model]/[id][0-9]+
     * Post: nothing required
 
     * Status:
       * `404`: if object not found
       * `202`: if object found and deleted
 
+##Example Json Post Format
 
+        //userModel(buyer & seller)
 
-
-
-
-        <!-- "first_name": "new",
-
-        "last_name": "user",
-
-        "user_name": "newuser",
-
-        "password": "12345678",
-
-        "car_own": ""
-
-    otherwise return "Bad Request"
-
-    2. 8001/api/create/user/buyer
-
-
+        {
         "first_name": "new",
 
         "last_name": "user",
@@ -114,7 +99,25 @@
 
         "password": "12345678",
 
-        "car_want": ""
+        "car_sell": [1,2,3]   //for seller, optional
 
+        "favourite": [1,2,3]  //for buyer, optional
+        }
 
-    otherwise return "Bad Request" -->
+        //carModel(car_to_sell & car_to_buy)
+
+        {
+        "car_color": "black",
+
+        "car_brand": "Benz",
+
+        "car_model": "G63",
+
+        "description": "This is a car."
+
+        "price": "9999"
+
+        "price_to_sell": "15000" //for car_to_sell
+
+        "price_to_offer": "7000" //for car_to_buy
+        }
