@@ -28,6 +28,8 @@ car = [
        url(r'v1/delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
        url(r'v1/delete/seller/(?P<user_id>[0-9]+)', DeleteSellerView.as_view()),
        url(r'v1/delete/buyer/(?P<user_id>[0-9]+)', DeleteBuyerView.as_view()),
+       url(r'v1/detail/user/(?P<user_id>[0-9]+)', UserView.as_view()),
+       url(r'v1/detail/car/(?P<car_id>[0-9]+)', CarView.as_view())
        ]
 
 urlpatterns = index + car

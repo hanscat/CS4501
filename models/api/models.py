@@ -13,8 +13,11 @@ class user(models.Model):
 
 class car(models.Model):
     car_color = models.CharField(max_length=30)
-    car_brand = models.CharField(max_length=30)
+    car_make = models.CharField(max_length=30)
     car_model = models.CharField(max_length=10)
+    car_year = models.IntegerField(default = 0)
+    car_body_type = models.CharField(max_length= 10)
+    car_new = models.BooleanField(default=False)
     description = models.CharField(max_length=1000)
     price = models.IntegerField(default=0)
 
@@ -23,6 +26,7 @@ class car(models.Model):
 
 class car_to_sell(car):
     price_to_sell = models.IntegerField(default=0)
+    warranty = models.BooleanField(default=False)
 
 class car_to_buy(car):
     price_to_offer = models.IntegerField(default=0)
@@ -32,6 +36,8 @@ class buyer(user):
 
 class seller(user):
     car_sell = models.ManyToManyField(car_to_sell, blank = True)
+    contact_info = models.CharField(max_length=10)
+    location = models.CharField(max_length=100)
 
 # class inventory(models.Model):
 #     owner = models.CharField(max_length=20)

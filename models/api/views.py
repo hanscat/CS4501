@@ -27,10 +27,12 @@ def _success(code, message):
     return JsonResponse(correct)
 
 def _failure(code, message):
-    return JsonResponse({"Status Code" : code, "message" : message})
+    fail = {"Status Code" : code, "message" : message}
+    return JsonResponse(fail)
 
 def index(request):
-    return HttpResponse("Welcome to API page.")
+    greeting_msg = "Welcome to API page."
+    return HttpResponse(greeting_msg)
 
 class CarView(View):
     model = Model
