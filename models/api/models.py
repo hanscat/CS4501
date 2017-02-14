@@ -5,46 +5,44 @@ from django.db import models
 class user(models.Model):
     first_name = models.CharField(max_length=20)
     last_name  = models.CharField(max_length=20)
-#     id = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
-    
+
     class Meta:
         abstract = True
 
 class car(models.Model):
-#     VIN = models.AutoField(primary_key=True)
     car_color = models.CharField(max_length=30)
-    car_brand = models.CharField(max_length=30)
+    car_make = models.CharField(max_length=30)
     car_model = models.CharField(max_length=10)
+    car_year = models.IntegerField(default = 0)
+    car_body_type = models.CharField(max_length= 10)
+    car_new = models.BooleanField(default=False)
     description = models.CharField(max_length=1000)
     price = models.IntegerField(default=0)
-    
+
     class Meta:
         abstract = True
 
 class car_to_sell(car):
     price_to_sell = models.IntegerField(default=0)
+    warranty = models.BooleanField(default=False)
 
 class car_to_buy(car):
     price_to_offer = models.IntegerField(default=0)
 
 class buyer(user):
-    car_want = models.ManyToManyField(car_to_buy)
+    favourite = models.ManyToManyField(car_to_buy, blank = True)
 
 class seller(user):
-    car_sell = models.ManyToManyField(car_to_sell)
-    
+    car_sell = models.ManyToManyField(car_to_sell, blank = True)
+    contact_info = models.CharField(max_length=10)
+    location = models.CharField(max_length=100)
+
 # class inventory(models.Model):
-#     id = models.AutoField(primary_key=True)
 #     owner = models.CharField(max_length=20)
 #     num = models.IntegerField(default=0)
 #     location = models.CharField(max_length = 20)
 
 # class favorite(models.Model):
-# <<<<<<< Hans
-#     id = models.AutoField(primary_key=True)
 #     user = models.CharField(max_length=20)
-# =======
-#     user: models.CharField(max_length=20)
-# >>>>>>> master
