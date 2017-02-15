@@ -3,3 +3,4 @@
 /models/api/migrations/
 /models/models/__pycache__/
 .idea/workspace.xml
+.DS_Store
