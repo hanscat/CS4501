@@ -77,20 +77,44 @@
     "fields": {
       "first_name": "user",
       "last_name": "1",
-      "user_name": "user1",
+      "user_name": "buyer1",
+      "password": "12345678",
+      "favourite": [1,2]
+    }
+  },
+  {
+    "model": "api.buyer",
+    "pk": 2,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "buyer2",
       "password": "12345678",
       "favourite": [1]
     }
   },
+
   {
     "model": "api.seller",
     "pk": 1,
     "fields": {
       "first_name": "user",
       "last_name": "1",
-      "user_name": "user1",
+      "user_name": "seller1",
       "password": "12345678",
       "car_sell": [1,4]
+    }
+  },
+
+  {
+  "model": "api.seller",
+  "pk": 2,
+  "fields": {
+    "first_name": "user",
+    "last_name": "1",
+    "user_name": "seller2",
+    "password": "12345678",
+    "car_sell": [2,3]
     }
   }
 ]
