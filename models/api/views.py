@@ -136,7 +136,7 @@ class UserView(View):
             return _success(202, 'Update Success')
         else :
             return _failure(400, 'form invalid, bad post request.')
-            
+
 class DeleteCarView(DeleteView):
     model = Model
     owner = Model
