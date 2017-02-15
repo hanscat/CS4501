@@ -27,10 +27,12 @@ def _success(code, message):
     return JsonResponse(correct)
 
 def _failure(code, message):
-    return JsonResponse({"Status Code" : code, "message" : message})
+    failure = {"Status Code" : code, "message" : message}
+    return JsonResponse(failure)
 
 def index(request):
-    return HttpResponse("Welcome to API page.")
+    greeting = "Welcome to API page."
+    return HttpResponse(greeting)
 
 class CarView(View):
     model = Model
@@ -53,8 +55,9 @@ class CarView(View):
         if form.is_valid() :
             if int(kwargs['car_id']) in self.model.objects.values_list('pk', flat = True) :
                 return self.update(kwargs['car_id'], data_dict)
-            form.save()
-            return _success(201, 'Create Success')
+            else:
+                form.save()
+                return _success(201, 'Create Success')
         else :
             return _failure(400, 'form invalid, bad post request.')
 
@@ -94,6 +97,8 @@ class UserView(View):
         data_dict = json.loads(data)
         l = set()
         if 'car_sell' in data_dict.keys():
+            if self.model != seller :
+                return _failure(400, 'form invalid, bad post request.')
             for i in data_dict['car_sell']:
                 try :
                     obj = self.submodel.objects.get(pk=i)
@@ -103,6 +108,9 @@ class UserView(View):
             data_dict['car_sell'] = l
 
         elif 'favourite' in data_dict.keys():
+            if self.model != buyer :
+                return _failure(400, 'form invalid, bad post request.')
+            this = buyer
             for i in data_dict['favourite']:
                 try :
                     obj = self.submodel.objects.get(pk=i)
@@ -111,21 +119,24 @@ class UserView(View):
                 l.add(obj)
             data_dict['favourite'] = l
             # data_dict['car_sell'] = [self.submodel.objects.get(pk = i) for i in data_dict['car_sell']]
+        if int(kwargs['user_id']) in self.model.objects.values_list('pk', flat = True) :
+            return self.update(kwargs['user_id'], data_dict)
         form = self.modelForm(data_dict)
-        if form.is_valid() :
-            if int(kwargs['user_id']) in self.model.objects.values_list('pk', flat = True) :
-                return self.update(kwargs['user_id'], data_dict)
+        if form.is_valid():
                 form.save()
                 return _success(201, 'Create Success')
-            else :
+        else:
                 return _failure(400, 'form invalid, bad post request.')
 
     def update(self, user_id, data_dict):
         user = self.model.objects.get(pk = user_id)
         form = self.modelForm(data_dict, instance = user)
-        form.save()
-        return _success(202, 'Update Success')
-
+        if form.is_valid():
+            form.save()
+            return _success(202, 'Update Success')
+        else :
+            return _failure(400, 'form invalid, bad post request.')
+            
 class DeleteCarView(DeleteView):
     model = Model
     owner = Model
