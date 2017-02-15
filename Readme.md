@@ -22,7 +22,7 @@
 * seller
   * first_name `CharField`
   * last_name `CharField`
-  * username `CharField` `Unique`
+  * user_name `CharField` `Unique`
   * password `CharField`
   * car_sell `ManyToManyField` list of car_to_sell types
   * id(pk) `PrimaryKey` set by default Automatically increment when new seller inserted
@@ -34,17 +34,17 @@
 
 
 * car_to_sell
-  * car_color
-  * car_brand
-  * car_model
-  * price
-  * description
-  * price_to_sell
+  * car_color `CharField`
+  * car_brand `CharField`
+  * car_model `CharField`
+  * price `IntegerField`
+  * description `IntegerField`
+  * price_to_sell `IntegerField`
 
 
 * car_to_buy
   * all fields in seller except price_to_sell
-  * price_to_offer
+  * price_to_offer `IntegerField`
 
 
 ##Workable urls
@@ -60,7 +60,7 @@
 
 ##API
 
-1. GET /detail/[model]/[id][0-9]+
+* GET /detail/[model]/[id][0-9]+
 
     * Response: a JSON response containing the information of the model with `id` given
 
@@ -69,7 +69,7 @@
       * `404` if object not found
 
 
-2. POST /detail/[model]/[id][0-9]+
+* POST /detail/[model]/[id][0-9]+
     * Post: valid JSON table for corresponding model.
 
     * Status:
@@ -79,12 +79,15 @@
       * `202`: if `id` found in db, update new object by the given info.
 
 
-3. POST /delete/[model]/[id][0-9]+
+* POST /delete/[model]/[id][0-9]+
     * Post: nothing required
 
     * Status:
       * `404`: if object not found
       * `202`: if object found and deleted
+
+
+* NOTE: All other HTTP request other than those specified above will result in a DJANGO fault page.
 
 ##Example Json Post Format
 
@@ -121,3 +124,133 @@
 
         "price_to_offer": "7000" //for car_to_buy
         }
+
+## Fixture
+
+    {
+    "model": "api.car_to_sell",  
+    "pk": 1,
+    "fields": {
+      "car_color": "grey",
+      "car_brand": "Porsche",
+      "car_model": "Cayenne",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+      }
+    }
+
+
+    {
+    "model": "api.car_to_sell",
+    "pk": 2,
+    "fields": {
+      "car_color": "red",
+      "car_brand": "Benz",
+      "car_model": "G63",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+      }
+    }
+
+
+    {
+    "model": "api.car_to_sell",
+    "pk": 3,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "Audi",
+      "car_model": "Q5",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+      }
+    }
+
+    {
+    "model": "api.car_to_sell",
+    "pk": 4,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "BWM",
+      "car_model": "X3",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_sell": 9999
+      }
+    }
+
+    {
+    "model": "api.car_to_buy",
+    "pk": 1,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "BWM",
+      "car_model": "X3",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_offer": 9999
+      }
+    }
+
+    {
+    "model": "api.car_to_buy",
+    "pk": 2,
+    "fields": {
+      "car_color": "black",
+      "car_brand": "Audi",
+      "car_model": "Q5",
+      "description": "This is a car",
+      "price": 9999,
+      "price_to_offer": 9999
+      }
+    }
+
+    {
+    "model": "api.buyer",
+    "pk": 1,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "buyer1",
+      "password": "12345678",
+      "favourite": [1,2]
+      }
+    }
+
+    {
+    "model": "api.buyer",
+    "pk": 2,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "buyer2",
+      "password": "12345678",
+      "favourite": [1]
+      }
+    }  
+
+    {
+    "model": "api.seller",
+    "pk": 1,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "seller1",
+      "password": "12345678",
+      "car_sell": [1,4]
+      }
+    }
+
+    {
+    "model": "api.seller",
+    "pk": 2,
+    "fields": {
+      "first_name": "user",
+      "last_name": "1",
+      "user_name": "seller2",
+      "password": "12345678",
+      "car_sell": [2,3]
+      }
+    }
