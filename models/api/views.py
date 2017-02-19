@@ -32,7 +32,7 @@ def _failure(code, message):
 
 def index(request):
     greeting = "Welcome to API page."
-    return HttpResponse(greeting)
+    return _success(200, greeting)
 
 class CarView(View):
     model = Model
