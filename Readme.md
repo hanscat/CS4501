@@ -1,5 +1,9 @@
 ##Web Application for CS 4501: P2P Used Car Sale
 
+##Project 3 Timeline:
+1. 2017-02-19:
+    1. models, views, urls reset for further implementation, detail see sections below
+
 ##Project 2 Timeline:
 
 1. 2017-02-08:
@@ -19,18 +23,14 @@
     4. curd all created and tested
 
 ##Model
-* seller
+* user
   * first_name `CharField`
   * last_name `CharField`
   * user_name `CharField` `Unique`
   * password `CharField`
-  * car_sell `ManyToManyField` list of car_to_sell types
-  * id(pk) `PrimaryKey` set by default Automatically increment when new seller inserted
-
-
-* buyer
-  * all fields in seller except car_sell
-  * favourite `ManyToManyField` list of car_to_buy types
+  * car_sell `ManyToManyField` `optional` list of car types
+  * favourite `ManyToManyField` `optional` list of car types
+  * id(pk) `PrimaryKey` set by default Automatically increment when new user inserted
 
 
 * car_to_sell
@@ -39,24 +39,15 @@
   * car_model `CharField`
   * price `IntegerField`
   * description `IntegerField`
-  * price_to_sell `IntegerField`
-
-
-* car_to_buy
-  * all fields in seller except price_to_sell
-  * price_to_offer `IntegerField`
+  * id(pk) `PrimaryKey` set by default Automatically increment when new car inserted
 
 
 ##Workable urls
 
-    localhost:8001/api/v1/detail/seller/[0-9]+
-    localhost:8001/api/v1/detail/buyer/[0-9]+
-    localhost:8001/api/v1/detail/sell_car/[0-9]+
-    localhost:8001/api/v1/detail/buy_car/[0-9]+
-    localhost:8001/api/v1/delete/seller/[0-9]+
-    localhost:8001/api/v1/delete/seller/[0-9]+
-    localhost:8001/api/v1/delete/sell_car/[0-9]+
-    localhost:8001/api/v1/delete/buy_car/[0-9]+
+    localhost:8001/api/v1/detail/user/[0-9]+
+    localhost:8001/api/v1/detail/car/[0-9]+
+    localhost:8001/api/v1/delete/user/[0-9]+
+    localhost:8001/api/v1/delete/car/[0-9]+
 
 ##API
 
@@ -82,16 +73,22 @@
 * POST /delete/[model]/[id][0-9]+
     * Post: nothing required
 
+    * Notice:
+      * Car: when `car` is deleted, all `user` will automatically remove it from `car_sell` and `favourite`
+      * User: when a user is deleted, all `car` in its `car_sell` will be removed, within the same logic as above.   
+
     * Status:
       * `404`: if object not found
       * `202`: if object found and deleted
 
 
-* NOTE: All other HTTP request other than those specified above will result in a DJANGO fault page.
+* NOTE:
+    * All other HTTP request other than those specified above will raise `500` error
+    * All unspecified url will raise `404` page not found error
 
 ##Example Json Post Format
 
-        //userModel(buyer & seller)
+        //userModel
 
         {
         "first_name": "new",
@@ -102,12 +99,12 @@
 
         "password": "12345678",
 
-        "car_sell": [1,2,3]   //for seller, optional
+        "car_sell": [1,2,3],   //optional
 
-        "favourite": [1,2,3]  //for buyer, optional
+        "favourite": [1,2,3]  //optional
         }
 
-        //carModel(car_to_sell & car_to_buy)
+        //carModel
 
         {
         "car_color": "black",
@@ -116,141 +113,9 @@
 
         "car_model": "G63",
 
-        "description": "This is a car."
+        "description": "This is a car.",
 
-        "price": "9999"
-
-        "price_to_sell": "15000" //for car_to_sell
-
-        "price_to_offer": "7000" //for car_to_buy
+        "price": "9999
         }
 
 ## Fixture
-
-    {
-    "model": "api.car_to_sell",  
-    "pk": 1,
-    "fields": {
-      "car_color": "grey",
-      "car_brand": "Porsche",
-      "car_model": "Cayenne",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-      }
-    }
-
-
-    {
-    "model": "api.car_to_sell",
-    "pk": 2,
-    "fields": {
-      "car_color": "red",
-      "car_brand": "Benz",
-      "car_model": "G63",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-      }
-    }
-
-
-    {
-    "model": "api.car_to_sell",
-    "pk": 3,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "Audi",
-      "car_model": "Q5",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-      }
-    }
-
-    {
-    "model": "api.car_to_sell",
-    "pk": 4,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "BWM",
-      "car_model": "X3",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-      }
-    }
-
-    {
-    "model": "api.car_to_buy",
-    "pk": 1,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "BWM",
-      "car_model": "X3",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_offer": 9999
-      }
-    }
-
-    {
-    "model": "api.car_to_buy",
-    "pk": 2,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "Audi",
-      "car_model": "Q5",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_offer": 9999
-      }
-    }
-
-    {
-    "model": "api.buyer",
-    "pk": 1,
-    "fields": {
-      "first_name": "user",
-      "last_name": "1",
-      "user_name": "buyer1",
-      "password": "12345678",
-      "favourite": [1,2]
-      }
-    }
-
-    {
-    "model": "api.buyer",
-    "pk": 2,
-    "fields": {
-      "first_name": "user",
-      "last_name": "1",
-      "user_name": "buyer2",
-      "password": "12345678",
-      "favourite": [1]
-      }
-    }  
-
-    {
-    "model": "api.seller",
-    "pk": 1,
-    "fields": {
-      "first_name": "user",
-      "last_name": "1",
-      "user_name": "seller1",
-      "password": "12345678",
-      "car_sell": [1,4]
-      }
-    }
-
-    {
-    "model": "api.seller",
-    "pk": 2,
-    "fields": {
-      "first_name": "user",
-      "last_name": "1",
-      "user_name": "seller2",
-      "password": "12345678",
-      "car_sell": [2,3]
-      }
-    }
