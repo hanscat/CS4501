@@ -11,6 +11,9 @@ import json
 def bad_request(request):
     return _failure(400, "Url not valid")
 
+def internal_error(request):
+    return _failure(500, "BOOM! I don't know what it going on now!")
+
 def _failure(code, message):
     failure = {"Status Code" : code, "message" : message}
     return JsonResponse(failure)

@@ -1,93 +1,70 @@
 [
   {
-    "model": "api.car_to_sell",
+    "model": "api.car",
     "pk": 1,
-    "fields": {
-      "car_color": "grey",
-      "car_brand": "Porsche",
-      "car_model": "Cayenne",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-    }
-  },
-  {
-    "model": "api.car_to_sell",
-    "pk": 2,
     "fields": {
       "car_color": "red",
       "car_brand": "Benz",
       "car_model": "G63",
       "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
+      "price": 9999
     }
   },
+
   {
-    "model": "api.car_to_sell",
-    "pk": 3,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "Audi",
-      "car_model": "Q5",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-    }
-  },
-  {
-    "model": "api.car_to_sell",
-    "pk": 4,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "BWM",
-      "car_model": "X3",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_sell": 9999
-    }
-  },
-  {
-    "model": "api.car_to_buy",
-    "pk": 1,
-    "fields": {
-      "car_color": "black",
-      "car_brand": "BWM",
-      "car_model": "X3",
-      "description": "This is a car",
-      "price": 9999,
-      "price_to_offer": 9999
-    }
-  },
-  {
-    "model": "api.car_to_buy",
+    "model": "api.car",
     "pk": 2,
     "fields": {
       "car_color": "black",
-      "car_brand": "Audi",
-      "car_model": "Q5",
+      "car_brand": "Porsche",
+      "car_model": "Cayanne",
       "description": "This is a car",
-      "price": 9999,
-      "price_to_offer": 9999
+      "price": 9999
     }
   },
+
   {
-    "model": "api.buyer",
+    "model": "api.car",
+    "pk": 3,
+    "fields": {
+      "car_color": "white",
+      "car_brand": "BMW",
+      "car_model": "X5",
+      "description": "This is a car",
+      "price": 9999
+    }
+  },
+
+  {
+    "model": "api.car",
+    "pk": 4,
+    "fields": {
+      "car_color": "red",
+      "car_brand": "Audi",
+      "car_model": "Q7",
+      "description": "This is a car",
+      "price": 9999
+    }
+  },
+
+  {
+    "model": "api.user",
     "pk": 1,
     "fields": {
-      "first_name": "user",
+      "first_name": "buyer",
       "last_name": "1",
       "user_name": "buyer1",
       "password": "12345678",
       "favourite": [1,2]
     }
   },
+
   {
-    "model": "api.buyer",
+    "model": "api.user",
     "pk": 2,
     "fields": {
-      "first_name": "user",
-      "last_name": "1",
+      "first_name": "buyer",
+      "last_name": "2",
       "user_name": "buyer2",
       "password": "12345678",
       "favourite": [1]
@@ -95,10 +72,10 @@
   },
 
   {
-    "model": "api.seller",
-    "pk": 1,
+    "model": "api.user",
+    "pk": 3,
     "fields": {
-      "first_name": "user",
+      "first_name": "seller",
       "last_name": "1",
       "user_name": "seller1",
       "password": "12345678",
@@ -107,14 +84,27 @@
   },
 
   {
-  "model": "api.seller",
-  "pk": 2,
+  "model": "api.user",
+  "pk": 4,
+  "fields": {
+    "first_name": "seller",
+    "last_name": "2",
+    "user_name": "seller2",
+    "password": "12345678",
+    "car_sell": [2,3],
+    "favourite": [1]
+    }
+  },
+
+  {
+  "model": "api.user",
+  "pk": 5,
   "fields": {
     "first_name": "user",
     "last_name": "1",
-    "user_name": "seller2",
-    "password": "12345678",
-    "car_sell": [2,3]
+    "user_name": "user1",
+    "password": "12345678"
     }
   }
+
 ]

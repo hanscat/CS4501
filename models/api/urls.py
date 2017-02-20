@@ -20,14 +20,14 @@ from .views import *
 index = [url(r'^$', views.index),]
 
 car = [
-       url(r'v1/detail/sell_car/(?P<car_id>[0-9]+)', CarSellView.as_view()),
-       url(r'v1/detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
-       url(r'v1/detail/seller/(?P<user_id>[0-9]+)', SellerView.as_view()),
-       url(r'v1/detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
-       url(r'v1/delete/sell_car/(?P<car_id>[0-9]+)', DeleteSellCarView.as_view()),
-       url(r'v1/delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
-       url(r'v1/delete/seller/(?P<user_id>[0-9]+)', DeleteSellerView.as_view()),
-       url(r'v1/delete/buyer/(?P<user_id>[0-9]+)', DeleteBuyerView.as_view()),
+       url(r'v1/detail/car/(?P<car_id>[0-9]+)', CarView.as_view()),
+    #    url(r'v1/detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
+       url(r'v1/detail/user/(?P<user_id>[0-9]+)', UserView.as_view()),
+    #    url(r'v1/detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
+       url(r'v1/delete/car/(?P<car_id>[0-9]+)', DeleteCarView.as_view()),
+    #    url(r'v1/delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
+       url(r'v1/delete/user/(?P<user_id>[0-9]+)', DeleteUserView.as_view()),
+    #    url(r'v1/delete/buyer/(?P<user_id>[0-9]+)', DeleteBuyerView.as_view()),
        ]
 
 urlpatterns = index + car

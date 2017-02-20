@@ -22,3 +22,4 @@ urlpatterns = [
 ]
 
 handler404 = 'models.views.bad_request'
+handler500 = 'models.views.internal_error'

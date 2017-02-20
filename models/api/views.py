@@ -11,13 +11,6 @@ from django.forms import ModelForm
 import json
 # Create your views here.
 
-# def get_object_or_404(klass, id):
-#     queryset = klass.objects.all()
-#     try:
-#         return queryset.get(pk = id)
-#     except ObjectDoesNotExist:
-#         raise _failure(404, klass.__name__ + "with given id doesn't exists")
-
 def get_success(code, data_dict, model_name):
     correct = {"Status Code" : code, model_name : data_dict }
     return JsonResponse(correct)
@@ -35,8 +28,8 @@ def index(request):
     return _success(200, greeting)
 
 class CarView(View):
-    model = Model
-    modelForm = ModelForm
+    model = car
+    modelForm = CarForm
 
     def get(self, request, *args, **kwargs):
         # car = get_object_or_404(self.model, pk = kwargs['car_id'])
@@ -69,9 +62,9 @@ class CarView(View):
 
 
 class UserView(View):
-    model = Model
-    submodel = Model
-    modelForm = ModelForm
+    model = user
+    submodel = car
+    modelForm = UserForm
 
     def get(self, request, *args, **kwargs):
         try :
@@ -79,48 +72,46 @@ class UserView(View):
         except ObjectDoesNotExist:
             return _failure(404, "User doesn't exist")
         user_want = model_to_dict(user)
-        l = []
+        fav = []
         if 'favourite' in [f.name for f in self.model._meta.get_fields()]:
             for car in user_want['favourite'] :
-                l.append(car.pk)
-            user_want['favourite'] = l
+                fav.append(car.pk)
+            user_want['favourite'] = fav
 
-        elif "car_sell" in [f.name for f in self.model._meta.get_fields()]:
+        car_sell = []
+        if "car_sell" in [f.name for f in self.model._meta.get_fields()]:
             for car in user_want['car_sell'] :
-                l.append(car.pk)
-            user_want['car_sell'] = l
+                car_sell.append(car.pk)
+            user_want['car_sell'] = car_sell
 
         return get_success(200, user_want, self.model.__name__)
 
     def post(self, request, *args, **kwargs):
         data = request.body.decode('utf-8')
         data_dict = json.loads(data)
-        l = set()
+        car_sell = set()
         if 'car_sell' in data_dict.keys():
-            if self.model != seller :
-                return _failure(400, 'form invalid, bad post request.')
             for i in data_dict['car_sell']:
                 try :
                     obj = self.submodel.objects.get(pk=i)
                 except ObjectDoesNotExist:
                     return _failure(404, 'requested car_sell list not valid (no such car in db)')
-                l.add(obj)
-            data_dict['car_sell'] = l
+                car_sell.add(obj)
+            data_dict['car_sell'] = car_sell
 
-        elif 'favourite' in data_dict.keys():
-            if self.model != buyer :
-                return _failure(400, 'form invalid, bad post request.')
-            this = buyer
+        fav = set()
+        if 'favourite' in data_dict.keys():
             for i in data_dict['favourite']:
                 try :
                     obj = self.submodel.objects.get(pk=i)
                 except ObjectDoesNotExist:
                     return _failure(404, 'requested favourite list not valid (no such car in db)')
-                l.add(obj)
-            data_dict['favourite'] = l
+                fav.add(obj)
+            data_dict['favourite'] = fav
             # data_dict['car_sell'] = [self.submodel.objects.get(pk = i) for i in data_dict['car_sell']]
         if int(kwargs['user_id']) in self.model.objects.values_list('pk', flat = True) :
             return self.update(kwargs['user_id'], data_dict)
+
         form = self.modelForm(data_dict)
         if form.is_valid():
                 form.save()
@@ -138,8 +129,8 @@ class UserView(View):
             return _failure(400, 'form invalid, bad post request.')
 
 class DeleteCarView(DeleteView):
-    model = Model
-    owner = Model
+    model = car
+    owner = user
 
     def delete(self, request, *args, **kwargs) :
         try :
@@ -156,54 +147,64 @@ class DeleteCarView(DeleteView):
                 if car in user.car_sell.all():
                     user.car_sell.remove(car)
 
-            elif 'favourite' in [f.name for f in self.model._meta.get_fields()]:
+            if 'favourite' in [f.name for f in self.model._meta.get_fields()]:
                 if car in user.favourite.all():
-                    user.car_sell.remove(car)
+                    user.favourite.remove(car)
 
 class DeleteUserView(DeleteView):
-    model = Model
+    model = user
+    submodel = car
 
     def delete(self, request, *args, **kwargs) :
         try :
             user = self.model.objects.get(pk = kwargs['user_id'])
         except ObjectDoesNotExist:
             return _failure(404, "User doesn't exist")
+        if 'car_sell' in [f.name for f in self.model._meta.get_fields()] :
+            for car in user.car_sell.all():
+                self.Userdelete(car)
+                car.delete()
         user.delete()
         return _success(202, 'Delete Success')
 
+    def Userdelete(self, car) :
+        for user in car.like.all():
+            user.favourite.remove(car)
 
 
-class DeleteSellCarView(DeleteCarView):
-    model = car_to_sell
-    owner = seller
 
-class DeleteBuyCarView(DeleteCarView):
-    model = car_to_buy
-    owner = buyer
 
-class DeleteSellerView(DeleteUserView):
-    model = seller
-
-class DeleteBuyerView(DeleteUserView):
-    model = buyer
-
-class BuyerView(UserView):
-    model = buyer
-    modelForm = BuyerForm
-    submodel = car_to_buy
-
-class SellerView(UserView):
-    model = seller
-    modelForm = SellerForm
-    submodel = car_to_sell
-
-class CarSellView(CarView):
-    model = car_to_sell
-    modelForm = CarSellForm
-
-class CarBuyView(CarView):
-    model = car_to_buy
-    modelForm = CarBuyForm
+# class DeleteSellCarView(DeleteCarView):
+#     model = car_to_sell
+#     owner = seller
+#
+# class DeleteBuyCarView(DeleteCarView):
+#     model = car_to_buy
+#     owner = buyer
+#
+# class DeleteSellerView(DeleteUserView):
+#     model = seller
+#
+# class DeleteBuyerView(DeleteUserView):
+#     model = buyer
+#
+# class BuyerView(UserView):
+#     model = buyer
+#     modelForm = BuyerForm
+#     submodel = car_to_buy
+#
+# class SellerView(UserView):
+#     model = seller
+#     modelForm = SellerForm
+#     submodel = car_to_sell
+#
+# class CarSellView(CarView):
+#     model = car_to_sell
+#     modelForm = CarSellForm
+#
+# class CarBuyView(CarView):
+#     model = car_to_buy
+#     modelForm = CarBuyForm
 
 # class CarSellView(View):
 #     model = car_to_sell
