@@ -60,7 +60,6 @@ class CarView(View):
         form.save()
         return  _success(202, 'Update Success')
 
-
 class UserView(View):
     model = user
     submodel = car
@@ -109,24 +108,27 @@ class UserView(View):
                 fav.add(obj)
             data_dict['favourite'] = fav
             # data_dict['car_sell'] = [self.submodel.objects.get(pk = i) for i in data_dict['car_sell']]
+
         if int(kwargs['user_id']) in self.model.objects.values_list('pk', flat = True) :
             return self.update(kwargs['user_id'], data_dict)
 
         form = self.modelForm(data_dict)
         if form.is_valid():
-                form.save()
-                return _success(201, 'Create Success')
+            form.save()
+            return _success(201, 'Create Success')
         else:
-                return _failure(400, 'form invalid, bad post request.')
+            return _failure(400, 'form invalid, bad post request.')
 
     def update(self, user_id, data_dict):
         user = self.model.objects.get(pk = user_id)
         form = self.modelForm(data_dict, instance = user)
+
         if form.is_valid():
             form.save()
             return _success(202, 'Update Success')
         else :
             return _failure(400, 'form invalid, bad post request.')
+
 
 class DeleteCarView(DeleteView):
     model = car

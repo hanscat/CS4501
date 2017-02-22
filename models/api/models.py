@@ -4,12 +4,16 @@ from django.db import models
 # Create your models here.
 class car(models.Model):
     car_color = models.CharField(max_length=30)
-    car_brand = models.CharField(max_length=30)
+    car_make = models.CharField(max_length=30)
     car_model = models.CharField(max_length=10)
+    car_year = models.IntegerField(default = 0)
+    car_body_type = models.CharField(max_length= 10)
+    car_new = models.BooleanField(default=False)
     description = models.CharField(max_length=1000)
     price = models.IntegerField(default=0)
     class Meta:
         managed = True
+
 
 class user(models.Model):
     first_name = models.CharField(max_length=20)
@@ -20,6 +24,7 @@ class user(models.Model):
     car_sell = models.ManyToManyField(car, blank = True, related_name = "owner")
     class Meta:
         managed = True
+
 
 
 # class inventory(models.Model):
