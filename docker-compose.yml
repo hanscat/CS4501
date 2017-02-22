@@ -6,4 +6,27 @@ models:
       -  ./models:/app
     ports:
       - "8001:8000"
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata demo.json &&mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/models/wsgi.py"
+    command: bash -c "python manage.py makemigrations api
+                    && python manage.py migrate
+                    && python manage.py loaddata demo.json
+                    && mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/models/wsgi.py"
+
+exp:
+   image: tp33/django
+   links:
+      - models:models-api
+   ports:
+      - "8002:8000"
+   volumes:
+      - ./exp:/app
+   command: "mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/exp/wsgi.py"
+
+web:
+   image: tp33/django
+   links:
+      - exp:exp-api
+   ports:
+      - "8000:8000"
+   volumes:
+      - ./web:/app
+   command: "mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/web/wsgi.py"
