@@ -4,7 +4,10 @@
     "pk": 1,
     "fields": {
       "car_color": "red",
-      "car_brand": "Benz",
+      "car_make": "Benz",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
       "car_model": "G63",
       "description": "This is a car",
       "price": 9999
@@ -16,7 +19,10 @@
     "pk": 2,
     "fields": {
       "car_color": "black",
-      "car_brand": "Porsche",
+      "car_make": "Porsche",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
       "car_model": "Cayanne",
       "description": "This is a car",
       "price": 9999
@@ -28,7 +34,10 @@
     "pk": 3,
     "fields": {
       "car_color": "white",
-      "car_brand": "BMW",
+      "car_make": "BMW",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
       "car_model": "X5",
       "description": "This is a car",
       "price": 9999
@@ -40,7 +49,10 @@
     "pk": 4,
     "fields": {
       "car_color": "red",
-      "car_brand": "Audi",
+      "car_make": "Audi",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
       "car_model": "Q7",
       "description": "This is a car",
       "price": 9999

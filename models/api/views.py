@@ -27,6 +27,53 @@ def index(request):
     greeting = "Welcome to API page."
     return _success(200, greeting)
 
+def SearchCar(request):
+    dic = request.GET
+    if dic == {} :
+        return _failure(404, "invalid URL")
+    dic = dict(dic)
+    for key in dic.keys():
+        if key not in [f.name for f in car._meta.get_fields()] :
+            return _failure(404, "invalid fields")
+        dic[key] = dic[key][0]
+    cars = car.objects.filter(**dic)
+    li = []
+    for oneCar in cars :
+        li.append(model_to_dict(oneCar))
+    cars = li
+    if len(cars) == 0:
+        return _failure(404, "no such cars")
+    else :
+        return get_success(200, cars, "car")
+
+def SearchUser(request):
+    dic = request.GET
+    if dic == {} :
+        return _failure(404, "invalid URL")
+    dic = dict(dic)
+    for key in dic.keys():
+        if key not in [f.name for f in user._meta.get_fields()]:
+            return _failure(404, "invalid fields")
+        dic[key] = dic[key][0]
+    users = user.objects.filter(**dic)
+    li = []
+    for oneUser in users :
+        user_want = model_to_dict(oneUser)
+        fav = []
+        if 'favourite' in [f.name for f in user._meta.get_fields()]:
+            for car in user_want['favourite'] :
+                fav.append(car.pk)
+            user_want['favourite'] = fav
+
+        car_sell = []
+        if "car_sell" in [f.name for f in user._meta.get_fields()]:
+            for car in user_want['car_sell'] :
+                car_sell.append(car.pk)
+            user_want['car_sell'] = car_sell
+        li.append(user_want)
+    users = li
+    return get_success(200, users, "user")
+
 class CarView(View):
     model = car
     modelForm = CarForm

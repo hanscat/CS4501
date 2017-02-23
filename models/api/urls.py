@@ -24,6 +24,9 @@ car = [
     #    url(r'v1/detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
        url(r'v1/detail/user/(?P<user_id>[0-9]+)', UserView.as_view()),
     #    url(r'v1/detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
+       url(r'v1/detail/user/', views.SearchUser, name='SearchUser'),
+       url(r'v1/detail/car/', views.SearchCar, name='SearchCar'),
+
        url(r'v1/delete/car/(?P<car_id>[0-9]+)', DeleteCarView.as_view()),
     #    url(r'v1/delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
        url(r'v1/delete/user/(?P<user_id>[0-9]+)', DeleteUserView.as_view()),

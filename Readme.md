@@ -45,11 +45,22 @@
 ##Workable urls
 
     localhost:8001/api/v1/detail/user/[0-9]+
+    localhost:8001/api/v1/detail/user/?`fields`=`instance`&  
     localhost:8001/api/v1/detail/car/[0-9]+
+    localhost:8001/api/v1/detail/car/?`fields`=`instance`&
     localhost:8001/api/v1/delete/user/[0-9]+
     localhost:8001/api/v1/delete/car/[0-9]+
 
 ##API
+
+* GET detail/user/?[fields]=[instance]&
+
+    * Response: a JSON response containing a list of objects follow the constraints sent
+
+    * Status:
+      * `200`: if objects found
+      * `404`: if objects not fount
+      * `404`: if fields specified are not valid in the corresponding model
 
 * GET /detail/[model]/[id][0-9]+
 
