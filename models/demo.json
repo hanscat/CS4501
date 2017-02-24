@@ -10,7 +10,7 @@
       "car_new": 0,
       "car_model": "G63",
       "description": "This is a car",
-      "price": 9999
+      "price": 129999
     }
   },
 
@@ -25,7 +25,7 @@
       "car_new": 0,
       "car_model": "Cayanne",
       "description": "This is a car",
-      "price": 9999
+      "price": 49999
     }
   },
 
@@ -40,7 +40,7 @@
       "car_new": 0,
       "car_model": "X5",
       "description": "This is a car",
-      "price": 9999
+      "price": 49999
     }
   },
 
@@ -55,9 +55,34 @@
       "car_new": 0,
       "car_model": "Q7",
       "description": "This is a car",
-      "price": 9999
+      "price": 39999
     }
   },
+
+  {
+    "model": "api.car",
+    "pk": 5,
+    "fields": {
+      "car_color": "blue",
+      "car_brand": "BMW",
+      "car_model": "M3",
+      "description": "This is a sport sedan",
+      "price": 50488
+    }
+  },
+
+  {
+    "model": "api.car",
+    "pk": 6,
+    "fields": {
+      "car_color": "white",
+      "car_brand": "BMW",
+      "car_model": "i8",
+      "description": "This is a plug-in hybrid car",
+      "price": 120000
+    }
+  },
+
 
   {
     "model": "api.user",
