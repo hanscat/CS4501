@@ -12,15 +12,15 @@ import json
 # Create your views here.
 
 def get_success(code, data_dict, model_name):
-    correct = {"Status Code" : code, model_name : data_dict }
+    correct = {"status_code" : code, model_name : data_dict }
     return JsonResponse(correct)
 
 def _success(code, message):
-    correct = {"Status Code" : code, "message" : message}
+    correct = {"status_code" : code, "message" : message}
     return JsonResponse(correct)
 
 def _failure(code, message):
-    failure = {"Status Code" : code, "message" : message}
+    failure = {"status_code" : code, "message" : message}
     return JsonResponse(failure)
 
 def index(request):
@@ -86,7 +86,7 @@ class CarView(View):
             return _failure(404, "Car doesn't exist")
 
         car = model_to_dict(car)
-        return get_success('200', car, self.model.__name__)
+        return get_success(200, car, self.model.__name__)
 
     def post(self, request, *args, **kwargs):
         data = request.body.decode('utf-8')

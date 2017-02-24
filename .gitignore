@@ -2,7 +2,7 @@
 /models/api/__pycache__/
 /models/api/migrations/
 /models/models/__pycache__/
-/web/web/__pycache__/
 /exp/exp/__pycache__/
+/web/web/__pycache__/
 .idea/workspace.xml
 .DS_Store

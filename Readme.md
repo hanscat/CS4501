@@ -4,6 +4,10 @@
 1. 2017-02-19:
     1. models, views, urls reset for further implementation, detail see sections below
 
+2. 2017-02-23:
+    1. test for models half done
+    2. minor update for trivial text
+
 ##Project 2 Timeline:
 
 1. 2017-02-08:
@@ -45,9 +49,9 @@
 ##Workable urls
 
     localhost:8001/api/v1/detail/user/[0-9]+
-    localhost:8001/api/v1/detail/user/?`fields`=`instance`&  
+    localhost:8001/api/v1/detail/user/?[fields]=[instance]&  
     localhost:8001/api/v1/detail/car/[0-9]+
-    localhost:8001/api/v1/detail/car/?`fields`=`instance`&
+    localhost:8001/api/v1/detail/car/?[fields]=[instance]&
     localhost:8001/api/v1/delete/user/[0-9]+
     localhost:8001/api/v1/delete/car/[0-9]+
 
