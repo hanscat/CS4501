@@ -9,7 +9,7 @@ def invalidURL(request):
     err = {}
     err['message'] = "Welcome to API page. Oops, you might just entered an invalid API request!"
     err['status'] = False
-    return JsonResponse(200, err)
+    return JsonResponse(err)
 
 
 def demoCars(request, lb, ub):
