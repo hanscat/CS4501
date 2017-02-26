@@ -1,8 +1,21 @@
 from django.conf.urls import url
 from . import views
 
-urlpatterns = [
-        url(r'^api/v1/homepage/(?P<user_id>[0-9]+)/?', views.individualUserData, name = 'userPage'),
-        url(r'^api/v1/carpage/(?P<car_id>[0-9]+)/?', views.individualCarData, name = 'carPage'),
-        url ('', views.invalidURL),
-        ]
+car = [
+    url(r'^api/v1/democars/(?P<lb>[0-9]+)to(?P<ub>[0-9]+)/?', views.demoCars),
+    url(r'^api/v1/showCarsColor=/(?P<color>[a-zA-Z]+)/?', views.showCertainColorCar),
+    url(r'^api/v1/carpage/(?P<car_id>[0-9]+)/?', views.individualCarData, name='carPage'),
+]
+
+user = [
+    url(r'^api/v1/demousers/(?P<lb>[0-9]+)to(?P<ub>[0-9]+)/?', views.demoUsers),
+    url(r'^api/v1/allbuyers', views.showBuyers),
+    url(r'^api/v1/allsellers', views.showSellers),
+    url(r'^api/v1/userpage/(?P<user_id>[0-9]+)/?', views.individualUserData, name='userPage'),
+]
+
+index = [
+    url('', views.invalidURL),
+]
+
+urlpatterns =  user + car + index

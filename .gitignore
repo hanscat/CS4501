@@ -6,3 +6,4 @@
 /web/web/__pycache__/
 .idea/workspace.xml
 .DS_Store
+exp/exp_service/__pycache__/
