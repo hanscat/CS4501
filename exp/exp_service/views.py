@@ -27,26 +27,32 @@ def demoCars(request, lb, ub):
 
 
 def individualCarData(request, car_id):
-    car = "You are not using GET method!"
+    cars = "You are not using GET method!"
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "car/"
         requester = urllib.request.Request(urlForParticularCar + car_id)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
-        car = json.loads(response)
-    return JsonResponse(car)
+        cars = json.loads(response)
+    return JsonResponse(cars)
 
 
 def showCertainColorCar(request, color):
+    cars = "You are not using GET method!"
     if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "car/"
-        # to-do
-    return ""
+        urlForParticularCar = modelsAPI + "car/?car_color=" + color
+        requester = urllib.request.Request(urlForParticularCar)
+        response = urllib.request.urlopen(requester).read().decode('utf-8')
+        cars = json.loads(response)
+    return JsonResponse(cars)
 
 def showCertainMakeCar(request, make):
+    cars = "You are not using GET method!"
     if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "car/"
-        # to-do
-    return ""
+        urlForParticularCar = modelsAPI + "car/?car_make=" + make
+        requester = urllib.request.Request(urlForParticularCar)
+        response = urllib.request.urlopen(requester).read().decode('utf-8')
+        cars = json.loads(response)
+    return JsonResponse(cars)
 
 # ==================>
 def demoUsers(request, lb, ub):
