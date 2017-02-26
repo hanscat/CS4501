@@ -15,15 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.conf.urls.static import static
-from django.conf import settings
-
-statics = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+from . import views
 
 
-pages = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', include('frontend.urls'))
-]
+index = [url(r'^$', views.index, name = 'home')]
 
-urlpatterns = pages + statics
+urlpatterns = index
