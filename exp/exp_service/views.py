@@ -27,6 +27,7 @@ def demoCars(request, lb, ub):
 
 
 def individualCarData(request, car_id):
+    car = "You are not using GET method!"
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "car/"
         requester = urllib.request.Request(urlForParticularCar + car_id)
@@ -63,6 +64,7 @@ def demoUsers(request, lb, ub):
 
 
 def individualUserData(request, user_id):
+    user = "You are not using GET method!"
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "user/"
         requester = urllib.request.Request(urlForParticularCar + user_id)
