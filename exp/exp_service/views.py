@@ -41,6 +41,11 @@ def showCertainColorCar(request, color):
         # to-do
     return ""
 
+def showCertainMakeCar(request, make):
+    if request.method == 'GET':
+        urlForParticularCar = modelsAPI + "car/"
+        # to-do
+    return ""
 
 # ==================>
 def demoUsers(request, lb, ub):

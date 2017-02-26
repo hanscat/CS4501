@@ -1,10 +1,14 @@
-##Web Application for CS 4501: P2P Used Car Sale
+##Web Application for CS 4501: college P2P Used Car Sale/Trade
 
 ##Project 3 Timeline:
-1. 2017-02-19:
+1. 2017-02-17:
+    1. User stories written
+    
+2. 2017-02-19:
     1. models, views, urls reset for further implementation, detail see sections below
+    2. api's for experience tier created based on user stories and tested to function well
 
-2. 2017-02-23:
+3. 2017-02-23:
     1. test for models half done
     2. minor update for trivial text
 
