@@ -4,6 +4,7 @@
 /models/models/__pycache__/
 /exp/exp/__pycache__/
 /web/web/__pycache__/
+/web/frontend/__pycache__/
 .idea/workspace.xml
 .DS_Store
 exp/exp_service/__pycache__/
