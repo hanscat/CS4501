@@ -21,10 +21,7 @@ def get_success(code, data_dict, model_name):
 
 
 def invalidURL(request):
-    err = {}
-    err['message'] = "Welcome to API page. Oops, you might just entered an invalid API request!"
-    err['status'] = False
-    return JsonResponse(err)
+    return _failure(404, "url not valid")
 
 
 def demoCars(request, lb, ub):
