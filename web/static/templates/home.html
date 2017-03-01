@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include 'header.html' %}
+{% include 'header2.html' %}
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
    <div class="jumbotron"  style="background-image: url('/static/photos/carbackground.jpg') !important">
@@ -13,10 +13,10 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" >
       {% if cars %}
         {% for car in cars %}
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
           <h2>Car</h2>
           <p>Color: {{car.car_color}}</p>
           <p>Make: {{car.car_make}}</p>

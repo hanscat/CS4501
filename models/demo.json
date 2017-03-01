@@ -83,7 +83,90 @@
     }
   },
 
+  {
+    "model": "api.car",
+    "pk": 7,
+    "fields": {
+      "car_color": "red",
+      "car_make": "Benz",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
+      "car_model": "G63",
+      "description": "This is a car",
+      "price": 129999
+    }
+  },
 
+  {
+    "model": "api.car",
+    "pk": 8,
+    "fields": {
+      "car_color": "black",
+      "car_make": "Porsche",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
+      "car_model": "Cayanne",
+      "description": "This is a car",
+      "price": 49999
+    }
+  },
+
+  {
+    "model": "api.car",
+    "pk": 9,
+    "fields": {
+      "car_color": "white",
+      "car_make": "BMW",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
+      "car_model": "X5",
+      "description": "This is a car",
+      "price": 49999
+    }
+  },
+
+  {
+    "model": "api.car",
+    "pk": 10,
+    "fields": {
+      "car_color": "red",
+      "car_make": "Audi",
+      "car_year": 2016,
+      "car_body_type": "a",
+      "car_new": 0,
+      "car_model": "Q7",
+      "description": "This is a car",
+      "price": 39999
+    }
+  },
+
+  {
+    "model": "api.car",
+    "pk":11,
+    "fields": {
+      "car_color": "blue",
+      "car_make": "BMW",
+      "car_model": "M3",
+      "description": "This is a sport sedan",
+      "price": 50488
+    }
+  },
+
+  {
+    "model": "api.car",
+    "pk": 12,
+    "fields": {
+      "car_color": "white",
+      "car_make": "BMW",
+      "car_model": "i8",
+      "description": "This is a plug-in hybrid car",
+      "price": 120000
+    }
+  },
+  
   {
     "model": "api.user",
     "pk": 1,
