@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('exp_service.urls')),
 ]
+
 handler404 = 'models.views.bad_request'
 handler500 = 'models.views.internal_error'
