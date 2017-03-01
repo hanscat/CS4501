@@ -8,3 +8,5 @@
 .idea/workspace.xml
 .DS_Store
 exp/exp_service/__pycache__/
+exp/exp_service/migrations/
+exp/db.sqlite3
