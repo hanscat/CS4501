@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^api/', include('api.urls')),
 ]
 
-handler404 = 'models.views.bad_request'
+handler400 = 'models.views.bad_request'
 handler500 = 'models.views.internal_error'
