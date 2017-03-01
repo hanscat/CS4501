@@ -2,64 +2,65 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
       crossorigin="anonymous">
+  <link href="/static/css/sidebar.css" rel = "stylesheet">
 
 {% if users %}
 {% for user in users %}
-<div class="container" class="whole">
+<div class="col-md-2">
     <div class="row profile">
-        <div class="col-md-3">
-            <div class="profile-sidebar">
-                <!-- SIDEBAR USERPIC -->
-                <div class="profile-userpic">
-                    <img src="http://d39kbiy71leyho.cloudfront.net/wp-content/uploads/2016/05/09170020/cats-politics-TN.jpg"
-                         class="img-responsive" alt="">
+        <h1></h1>
+        <h4 class="">Recomended Seller:</h4>
+        <div class="profile-sidebar">
+            <!-- SIDEBAR USERPIC -->
+            <div class="profile-userpic">
+                <img src="http://d39kbiy71leyho.cloudfront.net/wp-content/uploads/2016/05/09170020/cats-politics-TN.jpg"
+                     class="img-responsive" alt="">
+            </div>
+            <!-- END SIDEBAR USERPIC -->
+            <!-- SIDEBAR USER TITLE -->
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    Hans Cat
                 </div>
-                <!-- END SIDEBAR USERPIC -->
-                <!-- SIDEBAR USER TITLE -->
-                <div class="profile-usertitle">
-                    <div class="profile-usertitle-name">
-                        Hans Cat
-                    </div>
-                    <div class="profile-usertitle-job">
-                        Top Seller
-                    </div>
+                <div class="profile-usertitle-job">
+                    Top Seller
                 </div>
-                <!-- END SIDEBAR USER TITLE -->
-                <!-- SIDEBAR BUTTONS -->
-                <div class="profile-userbuttons">
-                    <button type="button" class="btn btn-success btn-sm">Follow</button>
-                    <button type="button" class="btn btn-danger btn-sm">Message</button>
-                </div>
-                <!-- END SIDEBAR BUTTONS -->
-                <!-- SIDEBAR MENU -->
-                <div class="profile-usermenu">
-                    <ul class="nav">
-                        <li class="active">
-                            <a href="#">
-                                <i class="glyphicon glyphicon-user"
-                                   href="{% url 'user_detail_page' user_id=user.id %}"></i>
-                                Overview </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="glyphicon glyphicon-home"
-                                   href="{% url 'user_detail_page' user_id=user.id %}"></i>
-                                Inventory </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank">
-                                <i class="glyphicon glyphicon-ok"
-                                   href="{% url 'user_detail_page' user_id=user.id %}"></i>
-                                Intrested Vehicles </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="glyphicon glyphicon-flag"
-                                   href="{% url 'user_detail_page' user_id=user.id %}"></i>
-                                Contact Information </a>
-                        </li>
-                    </ul>
-                </div>
+            </div>
+            <!-- END SIDEBAR USER TITLE -->
+            <!-- SIDEBAR BUTTONS -->
+            <div class="profile-userbuttons">
+                <button type="button" class="btn btn-success btn-sm">Follow</button>
+                <button type="button" class="btn btn-danger btn-sm">Message</button>
+            </div>
+            <!-- END SIDEBAR BUTTONS -->
+            <!-- SIDEBAR MENU -->
+            <div class="profile-usermenu">
+                <ul class="nav">
+                    <li class="active">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-user"
+                               href="{% url 'user_detail_page' user_id=user.id %}"></i>
+                            Overview </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-home"
+                               href="{% url 'user_detail_page' user_id=user.id %}"></i>
+                            Inventory </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_detail_page' user_id=user.id %}">
+                            <i class="glyphicon glyphicon-ok"
+                               ></i>
+                            Intrested Vehicles </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-flag"
+                               href="{% url 'user_detail_page' user_id=user.id %}"></i>
+                            Contact Information </a>
+                    </li>
+                </ul>
                 <!-- END MENU -->
             </div>
         </div>
@@ -70,4 +71,3 @@
 {% else %}
 <strong>There is no recomended user!</strong>
 {% endif %}
-</html>

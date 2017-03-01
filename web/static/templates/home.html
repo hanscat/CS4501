@@ -12,22 +12,30 @@
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Join here&raquo;</a></p>
     </div>
 </div>
-{% include 'sidebar.html' %}
 <div class="container">
-      {% if cars %}
-        {% for car in cars %}
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
-          <h2>Car</h2>
-          <p>Color: {{car.car_color}}</p>
-          <p>Make: {{car.car_make}}</p>
-          <p>Model: {{car.car_model}}</p>
-          <p>New: {{car.car_new}}</p>
-          <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View details &raquo;</a></p>
+    <div class="row">
+
+        {% include 'sidebar.html' %}
+                <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            {% if cars %}
+            {% for car in cars %}
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                <h2>Car</h2>
+                <p>Color: {{car.car_color}}</p>
+                <p>Make: {{car.car_make}}</p>
+                <p>Model: {{car.car_model}}</p>
+                <p>New: {{car.car_new}}</p>
+                <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
+                    details &raquo;</a></p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <strong>There are no cars in stock.</strong>
+            {% endif %}
         </div>
-        {% endfor %}
-    {% else %}
-    <strong>There are no cars in stock.</strong>
-    {% endif %}
+
+    </div>
 </div>
 
 {% include 'footer.html' %}
