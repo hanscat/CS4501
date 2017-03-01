@@ -175,7 +175,7 @@
       "last_name": "Cat",
       "user_name": "superCat",
       "password": "12345678",
-      "favourite": ["Mecedez-Benz C63", "BMW M3"]
+      "car_sell": [1,2,3]
     }
   },
 
