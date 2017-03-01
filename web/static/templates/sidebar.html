@@ -2,7 +2,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
       crossorigin="anonymous">
-  <link href="/static/css/sidebar.css" rel = "stylesheet">
+<link href="/static/css/sidebar.css" rel="stylesheet">
 
 {% if users %}
 {% for user in users %}
@@ -37,27 +37,27 @@
             <div class="profile-usermenu">
                 <ul class="nav">
                     <li class="active">
-                        <a href="#">
+                        <a href="{% url 'user_detail_page' user_id=user.id %}">
                             <i class="glyphicon glyphicon-user"
-                               href="{% url 'user_detail_page' user_id=user.id %}"></i>
+                            ></i>
                             Overview </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{% url 'user_detail_page' user_id=user.id %}">
                             <i class="glyphicon glyphicon-home"
-                               href="{% url 'user_detail_page' user_id=user.id %}"></i>
+                            ></i>
                             Inventory </a>
                     </li>
                     <li>
                         <a href="{% url 'user_detail_page' user_id=user.id %}">
                             <i class="glyphicon glyphicon-ok"
-                               ></i>
+                            ></i>
                             Intrested Vehicles </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{% url 'user_detail_page' user_id=user.id %}">
                             <i class="glyphicon glyphicon-flag"
-                               href="{% url 'user_detail_page' user_id=user.id %}"></i>
+                            ></i>
                             Contact Information </a>
                     </li>
                 </ul>

@@ -171,11 +171,11 @@
     "model": "api.user",
     "pk": 1,
     "fields": {
-      "first_name": "buyer",
-      "last_name": "1",
-      "user_name": "buyer1",
+      "first_name": "Hans",
+      "last_name": "Cat",
+      "user_name": "superCat",
       "password": "12345678",
-      "favourite": [1,2]
+      "favourite": ["Mecedez-Benz C63", "BMW M3"]
     }
   },
 
