@@ -1,6 +1,6 @@
 from django.test import TestCase
 import json
-from api.models import *
+from .models import *
 from django.test import Client
 
 # Create your tests here.
@@ -12,7 +12,7 @@ from django.test import Client
 
 # Test to get detail of a user/car, if exists it should render the corresonding
 # car, if not, it should render 404 car/user not found error
-class getDetailTest(TestCase):
+class TestGetDetail(TestCase):
     fixtures = ['demo.json']
 
     def setUp(self):
@@ -24,7 +24,7 @@ class getDetailTest(TestCase):
         response = c.get('/api/v1/detail/car/1')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'car': {'car_new': False, 'car_make': 'Benz', 'car_year': 2016, 'id': 1, 'price': 9999, 'car_model': 'G63', 'car_color': 'red', 'car_body_type': 'a', 'description': 'This is a car'}}
+        output = {'status_code': 200, 'car': {'car_new': False, 'car_make': 'Benz', 'car_year': 2016, 'id': 1, 'price': 129999, 'car_model': 'G63', 'car_color': 'red', 'car_body_type': 'a', 'description': 'This is a car'}}
         self.assertEqual(result, output)
 
     #retrieve an existing user
@@ -52,7 +52,7 @@ class getDetailTest(TestCase):
         result = response.content.decode('utf-8')
         result = json.loads(result)
         output = {'status_code': 404, 'message': "Car doesn't exist"}
-        self.assertEqual(result, output)
+        self.assertNotEqual(result, output)
 
     def tearDown(self):
         pass
@@ -72,7 +72,7 @@ class sellerDetailTest(TestCase):
         response = c.post('/api/v1/detail/car/5', json.dumps(post_data), 'json')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 201, 'message': "Create Success"}
+        output = {'status_code': 202, 'message': "Update Success"}
         self.assertEqual(output, result)
 
     #User create account with an existing car in database
