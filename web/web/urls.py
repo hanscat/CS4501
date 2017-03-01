@@ -23,7 +23,7 @@ statics = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 pages = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', include('frontend.urls'))
+    url(r'^', include('frontend.urls'))
 ]
 
 urlpatterns = pages + statics

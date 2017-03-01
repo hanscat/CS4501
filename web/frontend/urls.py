@@ -17,10 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
 
+index = [
+    url(r'cardetail', views.car_detail, name='car_detail_page'),
+    url(r'userdetail', views.car_detail, name='user_detail_page'),
+    url(r'^$', views.index, name='home'),
 
-index = [url(r'^$', views.index, name = 'home'),
-         url(r'^cardetail', views.car_detail, name = 'car_detail_page'),
-         url(r'^userdetail', views.car_detail, name = 'user_detail_page')
-        ]
+]
 
 urlpatterns = index
