@@ -1,18 +1,17 @@
-<!DOCTYPE html>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
       crossorigin="anonymous">
-<link href="/static/css/sidebar.css" rel="stylesheet">
-<html lang="en">
+
 {% if users %}
+{% for user in users %}
 <div class="container" class="whole">
     <div class="row profile">
         <div class="col-md-3">
             <div class="profile-sidebar">
                 <!-- SIDEBAR USERPIC -->
                 <div class="profile-userpic">
-                    <img src="http://http://d39kbiy71leyho.cloudfront.net/wp-content/uploads/2016/05/09170020/cats-politics-TN.jpg"
+                    <img src="http://d39kbiy71leyho.cloudfront.net/wp-content/uploads/2016/05/09170020/cats-politics-TN.jpg"
                          class="img-responsive" alt="">
                 </div>
                 <!-- END SIDEBAR USERPIC -->
@@ -67,6 +66,7 @@
 
     </div>
 </div>
+{% endfor %}
 {% else %}
 <strong>There is no recomended user!</strong>
 {% endif %}

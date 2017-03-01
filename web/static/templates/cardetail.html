@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include 'header.html' %}
+{% include 'header2.html' %}
 
-    <div class="container">
+<div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
+    <div class="container" style = "text-align: center">
+        <font color="white">
+            <h1>The car you are looking for</h1>
+        </font>
+    </div>
+</div>
+
+<div class="container">
       {% if cars %}
         {% for car in cars %}
         <div class="col-lg-12">
