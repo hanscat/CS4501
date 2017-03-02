@@ -3,14 +3,27 @@
 ##Project 3 Timeline:
 1. 2017-02-17:
     1. User stories written
-    
+
 2. 2017-02-19:
     1. models, views, urls reset for further implementation, detail see sections below
     2. api's for experience tier created based on user stories and tested to function well
 
 3. 2017-02-23:
-    1. test for models half done
+    1. test for models
     2. minor update for trivial text
+
+4. 2017-02-26:
+    1. frontend page launched
+    2. exp layer setup and api provided
+
+5. 2017-02-28:
+    1. frontend and exp connected
+    2. index page, car detail page, user detail page, error page created and tested
+
+6. 2017-03-01:
+    1. sidebar for recommended user created
+    2. header2 created
+    3. project finalized
 
 ##Project 2 Timeline:
 
@@ -29,6 +42,16 @@
     2. docker-compose file
     3. url restructure
     4. curd all created and tested
+
+##URL
+* localhost:8000: index page, contain several car information, and a user information
+  * the brandname in the header links(in all pages) to the index page
+  * the `viewDetail` lead to the corresponding car page
+  * the link under `user` all lead to the same user page
+* localhost:8000/cardetail/<id>: cardetail page, contain information of a car
+* localhost:8000/userdetail/<id>: userdetail page, contain information of a user
+
+**if given id the car/user not found turn to a 404 error page**
 
 ##Model
 * user
