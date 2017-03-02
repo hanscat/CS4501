@@ -166,7 +166,7 @@
       "price": 120000
     }
   },
-  
+
   {
     "model": "api.user",
     "pk": 1,
@@ -187,7 +187,7 @@
       "last_name": "2",
       "user_name": "buyer2",
       "password": "12345678",
-      "favourite": [1]
+      "favourite": [1, 2]
     }
   },
 

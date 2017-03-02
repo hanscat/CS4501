@@ -33,7 +33,7 @@ class TestGetDetail(TestCase):
         response = c.get('/api/v1/detail/user/1')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '1', 'car_sell': [], 'id': 1, 'password': '12345678', 'user_name': 'buyer1', 'first_name': 'buyer', 'favourite': [1, 2]}}
+        output = {'status_code': 200, 'user': {'last_name': 'Cat', 'car_sell': [1,2,3], 'id': 1, 'password': '12345678', 'user_name': 'superCat', 'first_name': 'Hans', 'favourite': []}}
         self.assertEqual(result, output)
 
     #retrieve a not existing user
@@ -162,10 +162,10 @@ class carDeleteTest(TestCase):
         self.assertEqual(output, result)
 
         # the buyer usually has two tagged car [1,2] now it has only [2]
-        response = c.get('/api/v1/detail/user/1')
+        response = c.get('/api/v1/detail/user/2')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '1', 'car_sell': [], 'id': 1, 'password': '12345678', 'user_name': 'buyer1', 'first_name': 'buyer', 'favourite': [2]}}
+        output = {'status_code': 200, 'user': {'last_name': '2', 'car_sell': [], 'id': 2, 'password': '12345678', 'user_name': 'buyer2', 'first_name': 'buyer', 'favourite': [2]}}
         self.assertEqual(output, result)
 
 # a user can delete the account, which also results in some car removal
@@ -200,8 +200,8 @@ class userDeleteTest(TestCase):
         self.assertEqual(result, output)
 
         # also those deleted cars shall no longer present in any users list as well
-        response = c.get('/api/v1/detail/user/1')
+        response = c.get('/api/v1/detail/user/2')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '1', 'car_sell': [], 'id': 1, 'password': '12345678', 'user_name': 'buyer1', 'first_name': 'buyer', 'favourite': [2]}}
+        output = {'status_code': 200, 'user': {'last_name': '2', 'car_sell': [], 'id': 2, 'password': '12345678', 'user_name': 'buyer2', 'first_name': 'buyer', 'favourite': [2]}}
         self.assertEqual(output, result)
