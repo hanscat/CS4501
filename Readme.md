@@ -53,6 +53,32 @@
 
 **if given id the car/user not found turn to a 404 error page**
 
+##Test
+To run test please do the following:
+  * set a docker container (using tp33/django as image) containing the whole `app` folder, run following assume you have a clean database directory `db` parallel to `app`
+  ```bash
+  $ docker run -it --name web -p 8000:8000 --link mysql:db -v ~/absolute/directory/to/app:/app tp33/django
+  $ docker exec -it web bash
+  ```
+  * move into model layer
+  ```bash
+  $ cd models
+  ```
+  * run test using manage.py
+  ```bash
+  $ python manage.py test
+  ```
+
+  * you shall expect to see the following
+  ```bash
+  Creating test database for alias 'default'...
+  ...........
+    ----------------------------------------------------------------------
+  Ran 11 tests in 1.828s
+
+  OK
+  ```
+
 ##Model
 * user
   * first_name `CharField`
