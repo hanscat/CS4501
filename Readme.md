@@ -83,8 +83,26 @@ To run test please do the following:
   Ran 11 tests in 1.828s
   OK
   ```
-  ** Additional tests for exp tier to receive possible EXTRA CREDITS. Follow the instructions below:
-  
+
+  Additional tests for exp tier to receive possible EXTRA CREDITS. Follow the instructions below:
+
+  * make sure you have at least four of the container shown below and they are all running
+  ```bash
+  $ docker ps -a
+
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                         PORTS                    NAMES
+
+  d5eedb83bb1c        tp33/django         "mod_wsgi-express ..."   About an hour ago   Up 6 minutes                   0.0.0.0:8000->8000/tcp   app_web_1
+
+  e8f821ad6434        tp33/django         "mod_wsgi-express ..."   About an hour ago   Up 6 minutes                   0.0.0.0:8002->8000/tcp   app_exp_1
+
+  dd3ac974c687        tp33/django         "bash -c 'python m..."   About an hour ago   Up 6 minutes                   0.0.0.0:8001->8000/tcp   app_models_1
+
+  baf9fc18b60b        mysql:5.7.17        "docker-entrypoint..."   3 weeks ago         Up About an hour               3306/tcp                 mysql
+  ```
+
+  * then get to the console of `app_exp_1` container
+
   ```bash
   $ docker exec -it app_exp_1 bash
   ```
@@ -104,7 +122,7 @@ To run test please do the following:
   Ran 6 tests in 0.699s
   OK
   ```
-  
+
 ##Model
 * user
   * first_name `CharField`
