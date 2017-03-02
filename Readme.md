@@ -83,7 +83,7 @@ To run test please do the following:
   Ran 11 tests in 1.828s
   OK
   ```
-  * Additional tests for exp tier to receive extra credits. Follow the instructions below:
+  ** Additional tests for exp tier to receive possible EXTRA CREDITS. Follow the instructions below:
   
   ```bash
   $ cd exp
