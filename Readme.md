@@ -86,7 +86,7 @@ To run test please do the following:
   ** Additional tests for exp tier to receive possible EXTRA CREDITS. Follow the instructions below:
   
   ```bash
-  $ cd exp
+  $ docker exec -it app_exp_1 bash
   ```
 
   * run test using manage.py
