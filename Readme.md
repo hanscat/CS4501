@@ -25,6 +25,12 @@
     2. header2 created
     3. project finalized
 
+7. 2017-03-02:
+    1. fixed error handling
+    2. docker image setup
+
+* TODO:
+    1. test handler docker image on different machine 
 ##Project 2 Timeline:
 
 1. 2017-02-08:
