@@ -1,5 +1,5 @@
 models:
-    image: tp33/django
+    image: shadowgamefly/cs4501
     external_links:
       -  mysql:../db
     volumes:
@@ -13,7 +13,7 @@ models:
                     && mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/models/wsgi.py"
 
 exp:
-   image: tp33/django
+   image: shadowgamefly/cs4501
    links:
       - models:models-api
    ports:
@@ -23,7 +23,7 @@ exp:
    command: "mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/exp/wsgi.py"
 
 web:
-   image: tp33/django
+   image: shadowgamefly/cs4501
    links:
       - exp:exp-api
    ports:
