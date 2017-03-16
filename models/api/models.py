@@ -25,7 +25,10 @@ class user(models.Model):
     class Meta:
         managed = True
 
-
+class Authenticator(models.Model):
+    user_name = models.CharField(max_length=20)
+    auth = models.CharField(max_length=100, primary_key=True, unique=True)
+    date_created = models.DateField(auto_now_add=True)
 
 # class inventory(models.Model):
 #     owner = models.CharField(max_length=20)

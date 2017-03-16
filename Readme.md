@@ -30,7 +30,7 @@
     2. docker image setup
 
 * TODO:
-    1. test handler docker image on different machine 
+    1. test handler docker image on different machine
 ##Project 2 Timeline:
 
 1. 2017-02-08:
