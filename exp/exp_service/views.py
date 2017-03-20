@@ -1,4 +1,5 @@
 import urllib.request, json
+from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 
 # Create your views here.
@@ -126,32 +127,81 @@ def showSellers(request):
     # TO-DO
     return ""
 
-# Not yet tested
-# def createUser(request):
-#     if request.method == 'POST':
-#         username = request.POST['user_name']
-#         first_name = request.POST['first_name']
-#         last_name = request.POST['last_name']
-#         passwd = request.POST['password']
-#         # email = request.POST['email']
-#
-#         data = {'user_name': username,
-#                 'first_name': first_name,
-#                 'last_name': last_name,
-#                 'password': passwd, }
-#
-#         url = modelsAPI + 'user/create/'
-#         data = urllib.parse.urlencode(data)
-#         data = data.encode('utf-8')  # data should be bytes
-#         req = urllib.request.Request(url, data)
-#         response = urllib.request.urlopen(req)
-#         ret = response.read().decode('utf-8')
-#         ret = json.loads(ret)
-#         retJSON = {}
-#         if (ret['status'] == True):
-#             retJSON['status'] = True
-#             retJSON['message'] = "User created"
-#         else:
-#             retJSON['status'] = False
-#             retJSON['message'] = "User failed to be created"
-#         return get_success(200, retJSON, "users")
+'''Not yet tested'''
+def createUser(request):
+    if request.method == 'POST':
+        username = request.POST['user_name']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        passwd = request.POST['password']
+        # email = request.POST['email']
+
+        data = {'user_name': username,
+                'first_name': first_name,
+                'last_name': last_name,
+                'password': passwd, }
+
+        url = modelsAPI + 'user/create/'
+        data = urllib.parse.urlencode(data)
+        data = data.encode('utf-8')  # data should be bytes
+        req = urllib.request.Request(url, data)
+        response = urllib.request.urlopen(req)
+        ret = response.read().decode('utf-8')
+        ret = json.loads(ret)
+        retJSON = {}
+        if (ret['status'] == True):
+            retJSON['status'] = True
+            retJSON['message'] = "User created"
+        else:
+            retJSON['status'] = False
+            retJSON['message'] = "User failed to be created"
+        return get_success(200, retJSON, "users")
+
+'''Not yet tested'''
+def login(request):
+    if request.method == 'POST':
+        user_id = request.POST['username']
+        passwd = request.POST['passwd']
+
+        data = {'username': user_id,
+                'passwd': passwd}
+
+        url = modelsAPI + 'auth/create/'
+        data = urllib.parse.urlencode(data)
+        data = data.encode('utf-8')  # data should be bytes
+        req = urllib.request.Request(url, data)
+        response = urllib.request.urlopen(req)
+        ret = response.read().decode('utf-8')
+        ret = json.loads(ret)
+        authvalue = {}
+        if (ret['status'] == True):
+            authvalue['auth'] = ret['auth']
+            authvalue['status'] = True
+            authvalue['message'] = ret['message']
+        else:
+            authvalue['status'] = False
+            authvalue['message'] = ret['message']
+        return JsonResponse(authvalue)
+
+'''Not yet tested'''
+def logout(request):
+    if request.method == 'POST':
+        auth = request.POST['auth']
+
+        data = {'auth': auth}
+
+        url = modelsAPI + 'auth/delete/'
+        data = urllib.parse.urlencode(data)
+        data = data.encode('utf-8')  # data should be bytes
+        req = urllib.request.Request(url, data)
+        response = urllib.request.urlopen(req)
+        ret = response.read().decode('utf-8')
+        ret = json.loads(ret)
+        retJSON = {}
+        if (ret['status'] == True):
+            retJSON['status'] = True
+            retJSON['message'] = "Authenticator deleted"
+        else:
+            retJSON['status'] = False
+            retJSON['message'] = "Authenticator failed to be deleted"
+        return JsonResponse(retJSON)
