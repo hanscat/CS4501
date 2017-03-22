@@ -208,7 +208,7 @@ To run test please do the following:
       * `404`: if object not found
       * `202`: if object found and deleted
 
-  * POST /auth/login
+* POST /auth/login
     * Post: username and password
     * Status:
       * `400`: if missing required parameters
@@ -216,14 +216,14 @@ To run test please do the following:
       * `403`: if password given is not correct
       * `200`: if login success return a authenticator object in JSON
 
-  * POST /auth/logout
+* POST /auth/logout
     * Post: authenticator(auth)
     * Status:
       * `400`: if missing required parameters
       * `404`: if authenticator not found
       * `202`: if authenticator found and successfully deleted
 
-  * POST /auth/check_status
+* POST /auth/check_status
     * Post: authenticator(auth)
       * `400`: if missing required parameters
       * `404`: if authenticator not found
