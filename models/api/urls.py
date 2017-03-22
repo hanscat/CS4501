@@ -14,23 +14,29 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from . import views
+from . import views, auth_view
 from .views import *
+from .auth_view import *
 
 index = [url(r'^$', views.index),]
 
 car = [
        url(r'v1/detail/car/(?P<car_id>[0-9]+)', CarView.as_view()),
-    #    url(r'v1/detail/buy_car/(?P<car_id>[0-9]+)', CarBuyView.as_view()),
-       url(r'v1/detail/user/(?P<user_id>[0-9]+)', UserView.as_view()),
-    #    url(r'v1/detail/buyer/(?P<user_id>[0-9]+)', BuyerView.as_view()),
-       url(r'v1/detail/user/', views.SearchUser, name='SearchUser'),
        url(r'v1/detail/car/', views.SearchCar, name='SearchCar'),
-
        url(r'v1/delete/car/(?P<car_id>[0-9]+)', DeleteCarView.as_view()),
-    #    url(r'v1/delete/buy_car/(?P<car_id>[0-9]+)', DeleteBuyCarView.as_view()),
-       url(r'v1/delete/user/(?P<user_id>[0-9]+)', DeleteUserView.as_view()),
-    #    url(r'v1/delete/buyer/(?P<user_id>[0-9]+)', DeleteBuyerView.as_view()),
        ]
 
-urlpatterns = index + car
+user = [
+        url(r'v1/detail/user/(?P<user_id>[0-9]+)', UserView.as_view()),
+        url(r'v1/detail/user/', views.SearchUser, name='SearchUser'),
+        url(r'v1/delete/user/(?P<user_id>[0-9]+)', DeleteUserView.as_view()),
+]
+
+auth = [
+        url(r'v1/auth/login/', auth_view.login, name='login'),
+        url(r'v1/auth/logout/', auth_view.logout, name='login'),
+        url(r'v1/auth/check_status/', auth_view.check_status, name='login'),
+
+]
+
+urlpatterns = index + car + auth + user
