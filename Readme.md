@@ -1,11 +1,11 @@
-##Web Application for CS 4501: college P2P Used Car Sale/Trade
+## Web Application for CS 4501: college P2P Used Car Sale/Trade
 
-##Project 4 Timeline:
+## Project 4 Timeline:
 1. 2017-03-21:
     1. model layer authenticator and related api setup and tested
     2. TODO: add test cases
 
-##Project 3 Timeline:
+## Project 3 Timeline:
 1. 2017-02-17:
     1. User stories written
 
@@ -36,7 +36,8 @@
 
 * TODO:
     1. test handler docker image on different machine
-##Project 2 Timeline:
+
+## Project 2 Timeline:
 
 1. 2017-02-08:
     1. models container setup
@@ -54,7 +55,7 @@
     3. url restructure
     4. curd all created and tested
 
-##URL
+## URL
 * localhost:8000: index page, contain several car information, and a user information
   * the brandname in the header links(in all pages) to the index page
   * the `viewDetail` lead to the corresponding car page
@@ -64,7 +65,7 @@
 
 **if given id the car/user not found turn to a 404 error page**
 
-##Test
+## Test
 To run test please do the following:
   * set a docker container (using tp33/django as image) containing the whole `app` folder, run following assume you have a clean database directory `db` parallel to `app`
 
@@ -134,7 +135,7 @@ To run test please do the following:
   OK
   ```
 
-##Model
+## Model
 * user
   * first_name `CharField`
   * last_name `CharField`
@@ -154,7 +155,7 @@ To run test please do the following:
   * id(pk) `PrimaryKey` set by default Automatically increment when new car inserted
 
 
-##Workable urls
+## Workable urls
 
     localhost:8001/api/v1/detail/user/[0-9]+
     localhost:8001/api/v1/detail/user/?[fields]=[instance]&  
@@ -166,7 +167,7 @@ To run test please do the following:
     localhost:8001/api/v1/auth/check_status
     localhost:8001/api/v1/auth/logout
 
-##General API
+## General API
 
 * GET detail/user/?[fields]=[instance]&
 
@@ -234,7 +235,7 @@ To run test please do the following:
     * All other HTTP request other than those specified above will raise `500` error
     * All unspecified url will raise `404` page not found error
 
-##Example Json Post Format
+## Example Json Post Format
 
         //userModel
 
