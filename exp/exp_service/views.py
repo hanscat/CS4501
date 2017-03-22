@@ -151,10 +151,10 @@ def createUser(request):
         retJSON = {}
         if (ret['status'] == True):
             retJSON['status'] = True
-            retJSON['message'] = "User created"
+            retJSON['message'] = "User successfully created"
         else:
             retJSON['status'] = False
-            retJSON['message'] = "User failed to be created"
+            retJSON['message'] = "ERROR! User NOT created"
         return get_success(200, retJSON, "users")
 
 '''Not yet tested'''
