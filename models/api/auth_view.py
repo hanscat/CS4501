@@ -29,7 +29,7 @@ def _failure(code, message):
 
 def login(request):
     if request.method != 'POST':
-        return _failure(400, 'request not supported')
+        return _failure(500, 'request not supported')
     data = request.body.decode('utf-8')
     post = json.loads(data)
     # return _success(200, 'authenticator', post)
@@ -59,7 +59,7 @@ def login(request):
 
 def check_status(request):
     if request.method != 'POST':
-        return _failure(400, 'request not supported')
+        return _failure(500, 'request not supported')
     data = request.body.decode('utf-8')
     post = json.loads(data)
     try :
@@ -80,7 +80,7 @@ def check_status(request):
 
 def logout(request):
     if request.method != 'POST':
-        return _failure(400, 'request not supported')
+        return _failure(500, 'request not supported')
     data = request.body.decode('utf-8')
     post = json.loads(data)
     try :
