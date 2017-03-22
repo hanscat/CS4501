@@ -1,5 +1,10 @@
 ##Web Application for CS 4501: college P2P Used Car Sale/Trade
 
+##Project 4 Timeline:
+1. 2017-03-21:
+    1. model layer authenticator and related api setup and tested
+    2. TODO: add test cases
+
 ##Project 3 Timeline:
 1. 2017-02-17:
     1. User stories written
@@ -157,8 +162,11 @@ To run test please do the following:
     localhost:8001/api/v1/detail/car/?[fields]=[instance]&
     localhost:8001/api/v1/delete/user/[0-9]+
     localhost:8001/api/v1/delete/car/[0-9]+
+    localhost:8001/api/v1/auth/login
+    localhost:8001/api/v1/auth/check_status
+    localhost:8001/api/v1/auth/logout
 
-##API
+##General API
 
 * GET detail/user/?[fields]=[instance]&
 
@@ -199,8 +207,30 @@ To run test please do the following:
       * `404`: if object not found
       * `202`: if object found and deleted
 
+  * POST /auth/login
+    * Post: username and password
+    * Status:
+      * `400`: if missing required parameters
+      * `404`: if user corresponding to the username not found
+      * `403`: if password given is not correct
+      * `200`: if login success return a authenticator object in JSON
 
-* NOTE:
+  * POST /auth/logout
+    * Post: authenticator(auth)
+    * Status:
+      * `400`: if missing required parameters
+      * `404`: if authenticator not found
+      * `202`: if authenticator found and successfully deleted
+
+  * POST /auth/check_status
+    * Post: authenticator(auth)
+      * `400`: if missing required parameters
+      * `404`: if authenticator not found
+      * `200`: if authenticator not time-out return the same authenticator
+      * `202`: if authenticator time-out automatically delete the authenticator
+
+
+  * NOTE:
     * All other HTTP request other than those specified above will raise `500` error
     * All unspecified url will raise `404` page not found error
 
