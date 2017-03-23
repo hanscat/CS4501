@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from .models import *
+from django.contrib.auth import hashers
 
 class CarForm(ModelForm) :
     class Meta:
@@ -10,6 +11,12 @@ class UserForm(ModelForm) :
     class Meta:
         model = user
         fields = '__all__'
+
+    def clean_password(self):
+        pw = self.cleaned_data['password']
+        pw = hashers.make_password(pw)
+        return pw
+
 
 # class CarSellForm(ModelForm) :
 #     class Meta:

@@ -174,7 +174,7 @@
       "first_name": "Hans",
       "last_name": "Cat",
       "user_name": "superCat",
-      "password": "12345678",
+      "password": "pbkdf2_sha256$30000$XFR8x3A90OBU$QLQwZ+6yU6kuC3FSifU2+sOMEV1/ebq68DT+9GgcLR0=",
       "car_sell": [1,2,3]
     }
   },
@@ -186,7 +186,7 @@
       "first_name": "buyer",
       "last_name": "2",
       "user_name": "buyer2",
-      "password": "12345678",
+      "password": "pbkdf2_sha256$30000$Jmxi4bhUgfy1$jhqFIj5WJ3+qM5m3iu0vJFj/iDqG2k7mjBf9kNFWYVM=",
       "favourite": [1, 2]
     }
   },
@@ -198,7 +198,7 @@
       "first_name": "seller",
       "last_name": "1",
       "user_name": "seller1",
-      "password": "12345678",
+      "password": "pbkdf2_sha256$30000$lpLLtL6WYuIi$PUCpG8ZJNZ5SXYKf6AxEwgq0ZUgxJw11Moq4+13rEws=",
       "car_sell": [1,4]
     }
   },
@@ -210,7 +210,7 @@
     "first_name": "seller",
     "last_name": "2",
     "user_name": "seller2",
-    "password": "12345678",
+    "password": "pbkdf2_sha256$30000$6YmwPP80Tii1$z4kI87aepXBe2xwxt6fOpO8Gd8zPAGoaPeLqGXlMPKU=",
     "car_sell": [2,3],
     "favourite": [1]
     }
@@ -223,7 +223,7 @@
     "first_name": "user",
     "last_name": "1",
     "user_name": "user1",
-    "password": "12345678"
+    "password": "pbkdf2_sha256$30000$jKjB7iCIdJxO$wsm+s/IXloj58pHet6aS22/EPSU+cj1kTrM+Kkiu2yE="
     }
   }
 
