@@ -48,6 +48,42 @@ def car_detail(request, car_id):
     else :
         return bad_request(request)
 
+def login(request):
+    template = loader.get_template('home.html') #change?
+    url = expApi + "login/"
+    requester = urllib.request.Request(url)
+    response = urllib.request.urlopen(requester).read().decode('utf-8')
+    authvalue = json.loads(response)
+    if authvalue["status"] ==  True:
+        auth = [authvalue["auth"]]
+        return render(request, 'home.html', {'auth': auth})
+    else :
+        return bad_request(request)
+
+def logout(request):
+    template = loader.get_template('home.html') #change?
+    url = expApi + "logout/"
+    requester = urllib.request.Request(url)
+    response = urllib.request.urlopen(requester).read().decode('utf-8')
+    ret = json.loads(response)
+    if ret["status"]:# ==  True: --- If it returns Json, we want to pass and display message regardless
+        message = [ret["message"]]
+        return render(request, 'logout.html', {'message': message})
+    else :
+        return bad_request(request)
+
+def signup(request):
+    template = loader.get_template('home.html') #change?
+    url = expApi + "signup/"
+    requester = urllib.request.Request(url)
+    response = urllib.request.urlopen(requester).read().decode('utf-8')
+    ret = json.loads(response)
+    if ret["status"]:# ==  True: --- If it returns Json, we want to pass and display message regardless
+        message = [ret["message"]]
+        return render(request, 'confirmsignup.html', {'message': message})
+    else :
+        return bad_request(request)        
+
 def bad_request(request):
     template = loader.get_template('404.html')
     return HttpResponse(template.render(request))

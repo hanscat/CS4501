@@ -27,6 +27,9 @@ pages = [
     url(r'^admin/', admin.site.urls),
     url(r'cardetail/(?P<car_id>[0-9]+)', views.car_detail, name='car_detail_page'),
     url(r'userdetail/(?P<user_id>[0-9]+)', views.user_detail, name='user_detail_page'),
+    url(r'login', views.login, name='login'),
+    url(r'logout', views.logout, name='logout'),
+    url(r'signup', views.signup, name='signup'),
 ]
 
 handler400 = 'web.views.bad_request'

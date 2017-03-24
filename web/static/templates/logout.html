@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'header2.html' %}
+<!-- LOGIN TEST -->
+
+<!--
+<div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
+    <div class="container">
+        <font color="white">
+            <h1>Welcome to CarSales.com!</h1>
+            <p>Here at CarSales.com we are dedicated to providing quality service for customers</p>
+        </font>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Join here&raquo;</a></p>
+    </div>
+</div>
+-->
+<div class="container">
+    <div class="row">
+
+        {% include 'sidebar.html' %}
+                <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <!--{% if cars %}
+            {% for car in cars %} -->
+            LOG OUT PAGE
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+            LOGOUT CONFIRMATION HERE
+                <!-- <h2>Car</h2>
+                <p>Color: {{car.car_color}}</p>
+                <p>Make: {{car.car_make}}</p>
+                <p>Model: {{car.car_model}}</p>
+                <p>New: {{car.car_new}}</p>
+                <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
+                    details &raquo;</a></p> -->
+            </div>
+           <!-- {% endfor %}
+            {% else %}
+            <strong>There are no cars in stock.</strong>
+            {% endif %} -->
+        </div>
+
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
