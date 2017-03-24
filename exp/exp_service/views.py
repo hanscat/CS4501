@@ -1,9 +1,8 @@
-import urllib.request, json
-from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-import json, requests
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+import urllib.request
+import urllib.parse
+import json
+
 
 # Create your views here.
 modelsAPI = 'http://models-api:8000/api/v1/'
@@ -141,10 +140,18 @@ def showSellers(request):
     # TO-DO
     return ""
 
+
+def _make_post_request(url, post_data):
+    data = urllib.parse.urlencode(post_data).encode('utf-8')
+    requester = urllib.request.Request(url, data=data, method='POST')
+    response_json = urllib.request.urlopen(requester).read().decode('utf-8')
+    response = json.loads(response_json)
+    return response
+
 '''Not yet tested'''
-@csrf_exempt
-@require_http_methods(["POST"])
 def createUser(request):
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
     if request.method == 'POST':
 
         url = modelsAPI + 'create/user/'
@@ -173,54 +180,64 @@ def createUser(request):
 def user_logged_in(request):
     if ('Authenticator' not in request.META):
         return False
-    auth = request.META.get('Authenticator')
+    auth = request.META.get('auth')
     url = modelsAPI + 'auth/check_status'
     data = {'Authenticator': auth}
     response = urllib.request.Request(url, data)
     status = json.loads(response)
     if status["status_code"] == 200:
-        return get_success(200, status, "Authenticator")
+        return get_success(200, status, "auth")
     else:
         return model_failure(status)
 
 '''Not yet tested'''
-@csrf_exempt
-@require_http_methods(["POST"])
 def login(request):
-    if request.method == 'POST':
-        user_id = request.POST['username']
-        password = request.POST['password']
-
-        data = {'username': user_id,
-                'password': password}
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
+    else:
+        data = request.body.decode('utf-8')
+        post = json.loads(data)
+        data = {}
+        # return _success(200, 'authenticator', post)
+        try:
+            data['username'] = post['username']
+            data['password'] = post['password']
+        except KeyError:
+            return _failure(400, 'missing parameters')
 
         url = modelsAPI + 'auth/login/'
-        data = urllib.parse.urlencode(data).encode('utf-8')  # data should be bytes
-        requester = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(requester)
-        result = json.loads(response.read().decode('utf-8'))
+
+        result = _make_post_request(url, data)
         if result["status_code"] == 200:
-            return get_success(200, result, "Authenticator")
+            return get_success(200, result, "auth")
         else:
             return model_failure(result)
 
 '''Not yet tested'''
-@csrf_exempt
-@require_http_methods(["POST"])
 def logout(request):
-    if request.method == 'POST':
-        auth = request.POST['Authenticator']
-        data = {'Authenticator': auth}
-        url = modelsAPI + 'auth/logout/'
-        data = urllib.parse.urlencode(data).encode('utf-8')  # data should be bytes
-        requester = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(requester)
-        result = json.loads(response.read().decode('utf-8'))
-        if result["status_code"] == 200:
-            return get_success(200, result, "Authenticator")
-        else:
-            return model_failure(result)
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
 
+    post_data = request.POST.dict()
+    url = 'http://models-api:8000/api/auth/logout/'
+    resp = _make_post_request(url, post_data)
+    return _success(200, resp)
 
+    # else:
+    #     data = request.body.decode('utf-8')
+    #     post = json.loads(data)
+    #     data = {}
+    #     # return _success(200, 'authenticator', post)
+    #     try:
+    #         data['auth'] = post['auth']
+    #     except KeyError:
+    #         return _failure(400, 'missing parameters')
+    #
+    #     url = modelsAPI + 'auth/logout/'
+    #     result = _make_post_request(url, data)
+    #     if result["status_code"] == 200:
+    #         return get_success(200, result, "auth")
+    #     else:
+    #         return model_failure(result)
 
 """using decorator to write the create listing method"""
