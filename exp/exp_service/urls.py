@@ -15,8 +15,13 @@ user = [
     url(r'^api/v1/user/(?P<user_id>[0-9]+)', views.individualUserData, name='userPage'),
 ]
 
+auth = [
+    url(r'^api/v1/auth/login/', views.login, name='login'),
+    url(r'^api/v1/auth/logout/', views.logout, name='logout'),
+]
+
 index = [
     url('', views.invalidURL),
 ]
 
-urlpatterns =  user + car + index
+urlpatterns =  user + car + auth + index
