@@ -156,7 +156,7 @@ def createUser(request):
 
         url = modelsAPI + 'create/user/'
 
-        username = request.POST['user_name']
+        user_name = request.POST['user_name']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         password = request.POST['password']
@@ -182,7 +182,7 @@ def user_logged_in(request):
         return False
     auth = request.META.get('auth')
     url = modelsAPI + 'auth/check_status'
-    data = {'Authenticator': auth}
+    data = {"auth": auth}
     response = urllib.request.Request(url, data)
     status = json.loads(response)
     if status["status_code"] == 200:
@@ -198,29 +198,36 @@ def login(request):
         data = request.body.decode('utf-8')
         post = json.loads(data)
         data = {}
-        # return _success(200, 'authenticator', post)
         try:
-            data['username'] = post['username']
-            data['password'] = post['password']
+            data["username"] = post["username"]
+            data["password"] = post["password"]
         except KeyError:
             return _failure(400, 'missing parameters')
 
         url = modelsAPI + 'auth/login/'
 
-        result = _make_post_request(url, data)
-        if result["status_code"] == 200:
-            return get_success(200, result, "auth")
+        response = _make_post_request(url, data)
+        if response["status_code"] == 200:
+            return get_success(200, response, "auth")
         else:
-            return model_failure(result)
+            return model_failure(response)
 
 '''Not yet tested'''
 def logout(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
 
-    post_data = request.POST.dict()
-    url = 'http://models-api:8000/api/auth/logout/'
-    resp = _make_post_request(url, post_data)
+    post_data = request.body.decode('utf-8')
+    post = json.loads(post_data)
+    data={}
+    try:
+        data["auth"] = post["auth"]
+    except KeyError:
+        return _failure(400, 'missing parameters')
+
+    url = modelsAPI + 'auth/logout/'
+
+    resp = _make_post_request(url, data)
     return _success(200, resp)
 
     # else:
@@ -241,3 +248,28 @@ def logout(request):
     #         return model_failure(result)
 
 """using decorator to write the create listing method"""
+def createListing(request):
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
+    if request.method == 'POST':
+
+        url = modelsAPI + 'detail/car/9999'
+
+        username = request.POST['user_name']
+        first_name = request.POST['first_name']
+
+
+        data = {'user_name': username,
+                'first_name': first_name,
+                'last_name': last_name,
+                'password': password, }
+
+        data = urllib.parse.urlencode(data).encode('utf-8')  # data should be bytes
+        requester = urllib.request.Request(url, data)
+        response = urllib.request.urlopen(requester).read().decode('utf-8')
+        user = json.loads(response)
+        if user["status_code"] == 200 :
+            user = user["user"]
+            return get_success(200, user, "users")
+        else :
+            return model_failure(user)
