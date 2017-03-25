@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
 import urllib.request
 import urllib.parse
 import json
@@ -152,24 +152,20 @@ def _make_post_request(url, post_data):
 def createUser(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
-    if request.method == 'POST':
+    else:
+        data = request.body.decode('utf-8')
+        post = json.loads(data)
+        data = {}
+        try:
+            data["username"] = post["username"]
+            data["password"] = post["password"]
+            data["last_name"]= post["last_name"]
+            data["first_name"] = post["first_name"]
+        except KeyError:
+            return _failure(400, 'missing parameters')
 
-        url = modelsAPI + 'create/user/'
-
-        user_name = request.POST['user_name']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        password = request.POST['password']
-        # email = request.POST['email']
-        data = {'user_name': username,
-                'first_name': first_name,
-                'last_name': last_name,
-                'password': password, }
-
-        data = urllib.parse.urlencode(data).encode('utf-8')  # data should be bytes
-        requester = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        user = json.loads(response)
+        url = modelsAPI + 'detail/user/999'
+        user = _make_post_request(url, data)
         if user["status_code"] == 200 :
             user = user["user"]
             return get_success(200, user, "users")
@@ -177,16 +173,23 @@ def createUser(request):
             return model_failure(user)
 
 """Not yet tested"""
-def user_logged_in(request):
-    if ('Authenticator' not in request.META):
+def check_loggedIn(request):
+    # if ('auth' not in request.META):
+    #     return False
+    data = request.body.decode('utf-8')
+    post = json.loads(data)
+    data = {}
+    try:
+        data["auth"] = post["auth"]
+    except KeyError:
         return False
-    auth = request.META.get('auth')
+
     url = modelsAPI + 'auth/check_status'
-    data = {"auth": auth}
+
     response = urllib.request.Request(url, data)
     status = json.loads(response)
     if status["status_code"] == 200:
-        return get_success(200, status, "auth")
+        return True
     else:
         return model_failure(status)
 
@@ -208,7 +211,7 @@ def login(request):
 
         response = _make_post_request(url, data)
         if response["status_code"] == 200:
-            return get_success(200, response, "auth")
+            return get_success(200, response, "login successfully")
         else:
             return model_failure(response)
 
@@ -227,8 +230,11 @@ def logout(request):
 
     url = modelsAPI + 'auth/logout/'
 
-    resp = _make_post_request(url, data)
-    return _success(200, resp)
+    response = _make_post_request(url, data)
+    if response["status_code"] == 200:
+        return get_success(200, response, "logout successfully")
+    else:
+        return model_failure(response)
 
     # else:
     #     data = request.body.decode('utf-8')
@@ -246,30 +252,46 @@ def logout(request):
     #         return get_success(200, result, "auth")
     #     else:
     #         return model_failure(result)
+def login_required(f):
+    def wrap(request, *args, **kwargs):
+
+        # try authenticating the user
+        user = check_loggedIn(request)
+
+        # authentication failed
+        if not user:
+            # redirect the user to the login page
+            #return HttpResponseRedirect(reverse('login')+'?next='+current_url)
+            """needs to be modified!"""
+            return HttpResponseRedirect("https://www.google.com")
+        else:
+            return f(request, *args, **kwargs)
+    return wrap
+
 
 """using decorator to write the create listing method"""
+#@login_required
 def createListing(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
-    if request.method == 'POST':
+    else:
+        data = request.body.decode('utf-8')
+        post = json.loads(data)
+        data = {}
+        try:
+            for key in ("car_year", "car_make", "car_model", "car_color",
+                        "car_body_type", "car_new", "price"):
+                data[key] = post[key]
+            if post["description"]:
+                data["description"] = post["description"]
+        except KeyError:
+            return _failure(400, 'missing parameters')
 
         url = modelsAPI + 'detail/car/9999'
 
-        username = request.POST['user_name']
-        first_name = request.POST['first_name']
-
-
-        data = {'user_name': username,
-                'first_name': first_name,
-                'last_name': last_name,
-                'password': password, }
-
-        data = urllib.parse.urlencode(data).encode('utf-8')  # data should be bytes
-        requester = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        user = json.loads(response)
-        if user["status_code"] == 200 :
-            user = user["user"]
-            return get_success(200, user, "users")
+        car = _make_post_request(url, data)
+        if car["status_code"] == 200 :
+            car = car["user"]
+            return get_success(200, car, "cars")
         else :
-            return model_failure(user)
+            return model_failure(car)
