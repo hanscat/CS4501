@@ -151,7 +151,6 @@ class authTestCase(TestCase):
         response = self.client.post(reverse('loginPage'), {'username': 'Hans', 'password': 'hans_pwd'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'status_code')
-        self.assertContains(response, 'login successfully')
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         self.assertEqual(jsonResponse['status_code'], 200)
 
