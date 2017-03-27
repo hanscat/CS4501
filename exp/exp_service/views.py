@@ -120,6 +120,7 @@ def individualUserData(request, user_id):
             return model_failure(user)
     else :
         return _failure(405, "Methods not supported")
+
 """TO-DO"""
 def showBuyers(request):
     if request.method == 'GET':

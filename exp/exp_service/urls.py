@@ -6,7 +6,7 @@ car = [
     url(r'^api/v1/showCarsColor=/(?P<color>[a-zA-Z]+)', views.showCertainColorCar),
     url(r'^api/v1/showCarsMake=/(?P<make>[a-zA-Z]+)', views.showCertainMakeCar),
     url(r'^api/v1/car/(?P<car_id>[0-9]+)', views.individualCarData, name='carPage'),
-    url(r'^api/v1/createCar/$', views.createListing),
+    url(r'^api/v1/createCar/$', views.createListing, name='createCarPage'),
 ]
 
 user = [
@@ -14,13 +14,13 @@ user = [
     url(r'^api/v1/allbuyers', views.showBuyers),
     url(r'^api/v1/allsellers', views.showSellers),
     url(r'^api/v1/user/(?P<user_id>[0-9]+)', views.individualUserData, name='userPage'),
-    url(r'^api/v1/signup/$', views.createUser),
+    url(r'^api/v1/signup/$', views.createUser, name='createUserPage'),
 ]
 
 auth = [
-    url(r'^api/v1/auth/login/', views.login, name='login'),
-    url(r'^api/v1/auth/logout/', views.logout, name='logout'),
-    url(r'^api/v1/auth/check_loggedIn/', views.logout, name='check_status'),
+    url(r'^api/v1/auth/login/', views.login, name='loginPage'),
+    url(r'^api/v1/auth/logout/', views.logout, name='logoutPage'),
+    url(r'^api/v1/auth/check_loggedIn/', views.check_loggedIn, name='check_statusPage'),
 ]
 
 index = [
