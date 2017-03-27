@@ -13,7 +13,7 @@ user = [
     url(r'^api/v1/allbuyers', views.showBuyers),
     url(r'^api/v1/allsellers', views.showSellers),
     url(r'^api/v1/user/(?P<user_id>[0-9]+)', views.individualUserData, name='userPage'),
-    url(r'^api/v1/signup)', views.createUser, name='createUser'),
+    url(r'^api/v1/signup', views.createUser, name='createUser'),
 ]
 
 index = [
