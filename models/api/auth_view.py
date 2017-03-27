@@ -43,8 +43,8 @@ def login(request):
     except ObjectDoesNotExist:
         return _failure(404, 'user not found')
 
-    # if not hashers.check_password(password, login_user.password):
-    if password != login_user.password:
+    if not hashers.check_password(password, login_user.password):
+    # if password != login_user.password:
         return _failure(403, 'incorrect password')
 
     token = hmac.new(
