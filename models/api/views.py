@@ -89,8 +89,9 @@ class CarView(View):
         return get_success(200, car, self.model.__name__)
 
     def post(self, request, *args, **kwargs):
-        data = request.body.decode('utf-8')
-        data_dict = json.loads(data)
+        # data = request.body.decode('utf-8')
+        # data_dict = json.loads(data)
+        data_dict = request.POST
         form = self.modelForm(data_dict)
         if form.is_valid() :
             if int(kwargs['car_id']) in self.model.objects.values_list('pk', flat = True) :
@@ -133,8 +134,9 @@ class UserView(View):
         return get_success(200, user_want, self.model.__name__)
 
     def post(self, request, *args, **kwargs):
-        data = request.body.decode('utf-8')
-        data_dict = json.loads(data)
+        # data = request.body.decode('utf-8')
+        # data_dict = json.loads(data)
+        data_dict = request.POST
         car_sell = set()
         if 'car_sell' in data_dict.keys():
             for i in data_dict['car_sell']:

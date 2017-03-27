@@ -145,7 +145,8 @@ def showSellers(request):
 def _make_post_request(url, post_data):
     data = urllib.parse.urlencode(post_data).encode('utf-8')
     requester = urllib.request.Request(url, data=data, method='POST')
-    response_json = urllib.request.urlopen(requester).read().decode('utf-8')
+    response_json = urllib.request.urlopen(requester)
+    response_json = response_json.read().decode('utf-8')
     response = json.loads(response_json)
     return response
 
@@ -158,13 +159,13 @@ def createUser(request):
         post = json.loads(data)
         data = {}
         try:
-            data["username"] = post["username"]
+            data["user_name"] = post["user_name"]
             data["password"] = post["password"]
             data["last_name"]= post["last_name"]
             data["first_name"] = post["first_name"]
         except KeyError:
             return _failure(400, 'missing parameters')
-
+        # return HttpResponse(data)
         url = modelsAPI + 'detail/user/999'
         user = _make_post_request(url, data)
         if user["status_code"] == 200 :
@@ -175,8 +176,6 @@ def createUser(request):
 
 """Not yet tested"""
 def check_loggedIn(request):
-    # if ('auth' not in request.META):
-    #     return False
     data = request.body.decode('utf-8')
     post = json.loads(data)
     data = {}
@@ -262,9 +261,8 @@ def login_required(f):
         # authentication failed
         if not user:
             # redirect the user to the login page
-            #return HttpResponseRedirect(reverse('login')+'?next='+current_url)
             """needs to be modified!"""
-            return HttpResponseRedirect("https://www.google.com")
+            return HttpResponseRedirect(reverse('loginPage')+'?next='+modelsAPI+'detail/user/9999')
         else:
             return f(request, *args, **kwargs)
     return wrap
@@ -281,10 +279,9 @@ def createListing(request):
         data = {}
         try:
             for key in ("car_year", "car_make", "car_model", "car_color",
-                        "car_body_type", "car_new", "price"):
+                        "car_body_type", "car_new", "price", "description"):
                 data[key] = post[key]
-            if post["description"]:
-                data["description"] = post["description"]
+
         except KeyError:
             return _failure(400, 'missing parameters')
 
