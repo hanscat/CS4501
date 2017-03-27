@@ -20,7 +20,7 @@ user = [
 auth = [
     url(r'^api/v1/auth/login/', views.login, name='loginPage'),
     url(r'^api/v1/auth/logout/', views.logout, name='logoutPage'),
-    url(r'^api/v1/auth/check_loggedIn/', views.check_loggedIn, name='check_statusPage'),
+    url(r'^api/v1/auth/check_status/', views.check_loggedIn, name='check_statusPage'),
 ]
 
 index = [

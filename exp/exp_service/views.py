@@ -155,8 +155,7 @@ def createUser(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
     else:
-        data = request.body.decode('utf-8')
-        post = json.loads(data)
+        post = request.POST
         data = {}
         try:
             data["user_name"] = post["user_name"]
@@ -176,30 +175,29 @@ def createUser(request):
 
 """Not yet tested"""
 def check_loggedIn(request):
-    data = request.body.decode('utf-8')
-    post = json.loads(data)
+    post = request.POST
     data = {}
     try:
         data["auth"] = post["auth"]
     except KeyError:
         return False
 
-    url = modelsAPI + 'auth/check_status'
-
-    response = urllib.request.Request(url, data)
-    status = json.loads(response)
-    if status["status_code"] == 200:
+    url = modelsAPI + 'auth/check_status/'
+    response = _make_post_request(url, data)
+    #jsonResponse = json.loads(str(response.content, encoding='utf8'))
+    if response["status_code"] == 200:
         return True
     else:
-        return model_failure(status)
+        return model_failure(response)
 
 '''Not yet tested'''
 def login(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
     else:
-        data = request.body.decode('utf-8')
-        post = json.loads(data)
+        # data = request.body.decode('utf-8')
+        # post = json.loads(data)
+        post = request.POST
         data = {}
         try:
             data["username"] = post["username"]
@@ -220,9 +218,8 @@ def logout(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
 
-    post_data = request.body.decode('utf-8')
-    post = json.loads(post_data)
-    data={}
+    post = request.POST
+    data = {}
     try:
         data["auth"] = post["auth"]
     except KeyError:
@@ -269,13 +266,12 @@ def login_required(f):
 
 
 """using decorator to write the create listing method"""
-#@login_required
+@login_required
 def createListing(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
     else:
-        data = request.body.decode('utf-8')
-        post = json.loads(data)
+        post = request.POST
         data = {}
         try:
             for key in ("car_year", "car_make", "car_model", "car_color",
