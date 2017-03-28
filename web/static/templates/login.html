@@ -3,7 +3,7 @@
 {% include 'header2.html' %}
 <!-- LOGIN TEST -->
 
-<!--
+
 <div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
     <div class="container">
         <font color="white">
@@ -13,32 +13,38 @@
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Join here&raquo;</a></p>
     </div>
 </div>
--->
+
 <div class="container">
     <div class="row">
+        <form action="" method="POST" id="login-form">{% csrf_token %}
+        {{ userform }}
+        <!--
+          <div>
+              <label for="username">Username: </label>
+              <input id = "username" type = "text" name = "username">
+          </div>
+          <div>
+              <label for="password">Password: </label>
+              <input id = "password" type = "password" name = "password">  
+          </div>
+        -->
+                  <div class="submit-row">
+          <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Log in" />
+        </div>
+        <p>Not a user? Register <a href="/register">here</a></li> </p>
+        <div>
+        </div>
+        
+    </form>
 
-        {% include 'sidebar.html' %}
+    <!--
                 <div class="col-sm-2"></div>
         <div class="col-sm-8">
-            <!--{% if cars %}
-            {% for car in cars %} -->
             HELLO THERE
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
-            Ayo guy
-                <!-- <h2>Car</h2>
-                <p>Color: {{car.car_color}}</p>
-                <p>Make: {{car.car_make}}</p>
-                <p>Model: {{car.car_model}}</p>
-                <p>New: {{car.car_new}}</p>
-                <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
-                    details &raquo;</a></p> -->
             </div>
-           <!-- {% endfor %}
-            {% else %}
-            <strong>There are no cars in stock.</strong>
-            {% endif %} -->
         </div>
-
+        -->
     </div>
 </div>
 
