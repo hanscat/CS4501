@@ -25,6 +25,8 @@ auth = [
 
 index = [
     url('', views.invalidURL),
+    url(r'^api/v1/login)', views.login, name='login'),
+    url(r'^api/v1/logout)', views.logout, name='logout'),
 ]
 
 urlpatterns =  user + car + auth + index
