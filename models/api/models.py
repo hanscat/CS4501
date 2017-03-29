@@ -26,7 +26,7 @@ class user(models.Model):
         managed = True
 
 class Authenticator(models.Model):
-    user_name = models.CharField(max_length=20)
+    userid = models.IntegerField(default=0)
     auth = models.CharField(max_length=100, primary_key=True, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
 

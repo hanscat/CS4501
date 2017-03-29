@@ -18,24 +18,29 @@ def _failure(code, message):
     return JsonResponse(failure)
 
 def model_failure(modelResponse):
-    return _failure(modelResponse["status_code"], modelResponse["message"] + ", triggered in model layer")
+    return _failure(modelResponse["status_code"], modelResponse["message"])
 
 
 def get_success(code, data_dict, model_name):
     correct = {"status_code": code, model_name: data_dict}
     return JsonResponse(correct)
 
-
 def invalidURL(request):
     return _failure(404, "url not valid")
 
+def _make_post_request(url, post_data):
+    data = urllib.parse.urlencode(post_data).encode('utf-8')
+    requester = urllib.request.Request(url, data=data, method='POST')
+    response_json = urllib.request.urlopen(requester)
+    response_json = response_json.read().decode('utf-8')
+    response = json.loads(response_json)
+    return response
 
-def demoCars(request, lb, ub):
+def home(request):
     if request.method == 'GET':
-        if (lb > ub):
-            return _failure(404, "Index error")
+        ret = {}
         showingCars = []
-        for i in range(int(lb), int(ub) + 1):
+        for i in range(1, 8):
             urlForParticularCar = modelsAPI + "detail/car/"
             requester = urllib.request.Request(urlForParticularCar + str(i))
             response = urllib.request.urlopen(requester).read().decode('utf-8')
@@ -43,7 +48,20 @@ def demoCars(request, lb, ub):
             if car["status_code"] == 200:
                 car = car["car"]
                 showingCars.append(car)
-        return get_success(200, showingCars, "cars")
+        ret["cars"] = showingCars
+
+        showingUsers = []
+        for i in range(1, 2):
+            urlForParticularUser = modelsAPI + "detail/user/"
+            requester = urllib.request.Request(urlForParticularUser + str(i))
+            response = urllib.request.urlopen(requester).read().decode('utf-8')
+            user = json.loads(response)
+            if user["status_code"] == 200:
+                user = user["user"]
+            showingUsers.append(user)
+        ret["users"] = showingUsers
+
+        return get_success(200, ret, "ret")
     else :
         return _failure(405, "Methods not supported")
 
@@ -89,24 +107,6 @@ def showCertainMakeCar(request, make):
     else :
         return _failure(405, "Methods not supported")
 
-def demoUsers(request, lb, ub):
-    if request.method == 'GET':
-        if (lb > ub):
-            return _failure(404, "Index error")
-        showingUsers = []
-        for i in range(int(lb), int(ub) + 1):
-            urlForParticularUser = modelsAPI + "detail/user/"
-            requester = urllib.request.Request(urlForParticularUser + str(i))
-            response = urllib.request.urlopen(requester).read().decode('utf-8')
-            user = json.loads(response)
-            if user["status_code"] == 200:
-                user = user["user"]
-            showingUsers.append(user)
-        return get_success(200, showingUsers, "users")
-    else :
-        return _failure(405, "Methods not supported")
-
-
 def individualUserData(request, user_id):
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "detail/user/"
@@ -140,15 +140,6 @@ def showBuyers(request):
 def showSellers(request):
     # TO-DO
     return ""
-
-
-def _make_post_request(url, post_data):
-    data = urllib.parse.urlencode(post_data).encode('utf-8')
-    requester = urllib.request.Request(url, data=data, method='POST')
-    response_json = urllib.request.urlopen(requester)
-    response_json = response_json.read().decode('utf-8')
-    response = json.loads(response_json)
-    return response
 
 '''Not yet tested'''
 def createUser(request):
@@ -186,11 +177,10 @@ def check_loggedIn(request):
     response = _make_post_request(url, data)
     #jsonResponse = json.loads(str(response.content, encoding='utf8'))
     if response["status_code"] == 200:
-        return True
+        return _success(200, "validated")
     else:
         return model_failure(response)
 
-'''Not yet tested'''
 def login(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
@@ -204,16 +194,13 @@ def login(request):
             data["password"] = post["password"]
         except KeyError:
             return _failure(400, 'missing parameters')
-
         url = modelsAPI + 'auth/login/'
-
         response = _make_post_request(url, data)
         if response["status_code"] == 200:
-            return get_success(200, response, "login successfully")
+            return get_success(200, response["authenticator"], "authenticator")
         else:
             return model_failure(response)
 
-'''Not yet tested'''
 def logout(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
@@ -289,3 +276,37 @@ def createListing(request):
             return get_success(200, car, "cars")
         else :
             return model_failure(car)
+
+def demoUsers(request, lb, ub):
+    if request.method == 'GET':
+        if (lb > ub):
+            return _failure(404, "Index error")
+        showingUsers = []
+        for i in range(int(lb), int(ub) + 1):
+            urlForParticularUser = modelsAPI + "detail/user/"
+            requester = urllib.request.Request(urlForParticularUser + str(i))
+            response = urllib.request.urlopen(requester).read().decode('utf-8')
+            user = json.loads(response)
+            if user["status_code"] == 200:
+                user = user["user"]
+            showingUsers.append(user)
+        return get_success(200, showingUsers, "users")
+    else :
+        return _failure(405, "Methods not supported")
+
+def demoCars(request, lb, ub):
+    if request.method == 'GET':
+        if (lb > ub):
+            return _failure(404, "Index error")
+        showingCars = []
+        for i in range(int(lb), int(ub) + 1):
+            urlForParticularCar = modelsAPI + "detail/car/"
+            requester = urllib.request.Request(urlForParticularCar + str(i))
+            response = urllib.request.urlopen(requester).read().decode('utf-8')
+            car = json.loads(response)
+            if car["status_code"] == 200:
+                car = car["car"]
+                showingCars.append(car)
+        return get_success(200, showingCars, "cars")
+    else :
+        return _failure(405, "Methods not supported")

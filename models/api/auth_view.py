@@ -30,9 +30,7 @@ def _failure(code, message):
 def login(request):
     if request.method != 'POST':
         return _failure(500, 'request not supported')
-    # data = request.body.decode('utf-8')
     post = request.POST
-    # return _success(200, 'authenticator', post)
     try :
         username = post['username']
         password = post['password']
@@ -40,6 +38,7 @@ def login(request):
         return _failure(400, 'missing parameters')
     try :
         login_user = user.objects.get(user_name = username)
+        userid = login_user.pk
     except ObjectDoesNotExist:
         return _failure(404, 'user not found')
 
@@ -52,7 +51,7 @@ def login(request):
     msg = os.urandom(32),
     digestmod = 'sha256'
     ).hexdigest()
-    auth = Authenticator(user_name=username,auth=token)
+    auth = Authenticator(userid=userid,auth=token)
     auth.save()
     data = model_to_dict(auth)
     return _success(200, 'authenticator', data)
