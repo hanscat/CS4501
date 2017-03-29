@@ -1,9 +1,11 @@
-import urllib.request, json
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
+import urllib.request
+import urllib.parse
+import json
+
 
 # Create your views here.
-modelsAPI = 'http://models-api:8000/api/v1/detail/'
+modelsAPI = 'http://models-api:8000/api/v1/'
 
 
 def _success(code, message):
@@ -34,7 +36,7 @@ def demoCars(request, lb, ub):
             return _failure(404, "Index error")
         showingCars = []
         for i in range(int(lb), int(ub) + 1):
-            urlForParticularCar = modelsAPI + "car/"
+            urlForParticularCar = modelsAPI + "detail/car/"
             requester = urllib.request.Request(urlForParticularCar + str(i))
             response = urllib.request.urlopen(requester).read().decode('utf-8')
             car = json.loads(response)
@@ -47,7 +49,7 @@ def demoCars(request, lb, ub):
 
 def individualCarData(request, car_id):
     if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "car/"
+        urlForParticularCar = modelsAPI + "detail/car/"
         requester = urllib.request.Request(urlForParticularCar + car_id)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
         car = json.loads(response)
@@ -61,7 +63,7 @@ def individualCarData(request, car_id):
 
 def showCertainColorCar(request, color):
     if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "car/?car_color=" + color
+        urlForParticularCar = modelsAPI + "detail/car/?car_color=" + color
         requester = urllib.request.Request(urlForParticularCar)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
         cars = json.loads(response)
@@ -75,7 +77,7 @@ def showCertainColorCar(request, color):
 
 def showCertainMakeCar(request, make):
     if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "car/?car_make=" + make
+        urlForParticularCar = modelsAPI + "detail/car/?car_make=" + make
         requester = urllib.request.Request(urlForParticularCar)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
         cars = json.loads(response)
@@ -93,7 +95,7 @@ def demoUsers(request, lb, ub):
             return _failure(404, "Index error")
         showingUsers = []
         for i in range(int(lb), int(ub) + 1):
-            urlForParticularUser = modelsAPI + "user/"
+            urlForParticularUser = modelsAPI + "detail/user/"
             requester = urllib.request.Request(urlForParticularUser + str(i))
             response = urllib.request.urlopen(requester).read().decode('utf-8')
             user = json.loads(response)
@@ -107,7 +109,7 @@ def demoUsers(request, lb, ub):
 
 def individualUserData(request, user_id):
     if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "user/"
+        urlForParticularCar = modelsAPI + "detail/user/"
         requester = urllib.request.Request(urlForParticularCar + user_id)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
         user = json.loads(response)
@@ -118,90 +120,172 @@ def individualUserData(request, user_id):
             return model_failure(user)
     else :
         return _failure(405, "Methods not supported")
+
+"""TO-DO"""
 def showBuyers(request):
-    # TO-DO
-    return ""
+    if request.method == 'GET':
+        urlForSearchingUser = modelsAPI + "detail/user/"
+        requester = urllib.request.Request(urlForSearchingUser)
+        response = urllib.request.urlopen(requester).read().decode('utf-8')
+        user = json.loads(response)
+        if user["status_code"] == 200 :
+            user = user["user"]
+            return get_success(200, user, "users")
+        else :
+            return model_failure(user)
+    else :
+        return _failure(405, "Methods not supported")
 
 
 def showSellers(request):
     # TO-DO
     return ""
 
+
+def _make_post_request(url, post_data):
+    data = urllib.parse.urlencode(post_data).encode('utf-8')
+    requester = urllib.request.Request(url, data=data, method='POST')
+    response_json = urllib.request.urlopen(requester)
+    response_json = response_json.read().decode('utf-8')
+    response = json.loads(response_json)
+    return response
+
 '''Not yet tested'''
 def createUser(request):
-    if request.method == 'POST':
-        username = request.POST['user_name']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        passwd = request.POST['password']
-        # email = request.POST['email']
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
+    else:
+        post = request.POST
+        data = {}
+        try:
+            data["user_name"] = post["user_name"]
+            data["password"] = post["password"]
+            data["last_name"]= post["last_name"]
+            data["first_name"] = post["first_name"]
+        except KeyError:
+            return _failure(400, 'missing parameters')
+        # return HttpResponse(data)
+        url = modelsAPI + 'detail/user/999'
+        user = _make_post_request(url, data)
+        if user["status_code"] == 200 :
+            user = user["user"]
+            return get_success(200, user, "users")
+        else :
+            return model_failure(user)
 
-        data = {'user_name': username,
-                'first_name': first_name,
-                'last_name': last_name,
-                'password': passwd, }
+"""Not yet tested"""
+def check_loggedIn(request):
+    post = request.POST
+    data = {}
+    try:
+        data["auth"] = post["auth"]
+    except KeyError:
+        return False
 
-        url = modelsAPI + 'user/create/'
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')  # data should be bytes
-        req = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(req)
-        ret = response.read().decode('utf-8')
-        ret = json.loads(ret)
-        retJSON = {}
-        if (ret['status'] == True):
-            retJSON['status'] = True
-            retJSON['message'] = "User successfully created"
-        else:
-            retJSON['status'] = False
-            retJSON['message'] = "ERROR! User NOT created"
-        return get_success(200, retJSON, "users")
+    url = modelsAPI + 'auth/check_status/'
+    response = _make_post_request(url, data)
+    #jsonResponse = json.loads(str(response.content, encoding='utf8'))
+    if response["status_code"] == 200:
+        return True
+    else:
+        return model_failure(response)
 
 '''Not yet tested'''
 def login(request):
-    if request.method == 'POST':
-        user_id = request.POST['username']
-        passwd = request.POST['passwd']
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
+    else:
+        # data = request.body.decode('utf-8')
+        # post = json.loads(data)
+        post = request.POST
+        data = {}
+        try:
+            data["username"] = post["username"]
+            data["password"] = post["password"]
+        except KeyError:
+            return _failure(400, 'missing parameters')
 
-        data = {'username': user_id,
-                'passwd': passwd}
+        url = modelsAPI + 'auth/login/'
 
-        url = modelsAPI + 'auth/create/'
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')  # data should be bytes
-        req = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(req)
-        ret = response.read().decode('utf-8')
-        ret = json.loads(ret)
-        authvalue = {}
-        if (ret['status'] == True):
-            authvalue['auth'] = ret['auth']
-            authvalue['status'] = True
-            authvalue['message'] = ret['message']
+        response = _make_post_request(url, data)
+        if response["status_code"] == 200:
+            return get_success(200, response, "login successfully")
         else:
-            authvalue['status'] = False
-            authvalue['message'] = ret['message']
-        return JsonResponse(authvalue)
+            return model_failure(response)
 
 '''Not yet tested'''
 def logout(request):
-    if request.method == 'POST':
-        auth = request.POST['auth']
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
 
-        data = {'auth': auth}
+    post = request.POST
+    data = {}
+    try:
+        data["auth"] = post["auth"]
+    except KeyError:
+        return _failure(400, 'missing parameters')
 
-        url = modelsAPI + 'auth/delete/'
-        data = urllib.parse.urlencode(data)
-        data = data.encode('utf-8')  # data should be bytes
-        req = urllib.request.Request(url, data)
-        response = urllib.request.urlopen(req)
-        ret = response.read().decode('utf-8')
-        ret = json.loads(ret)
-        retJSON = {}
-        if (ret['status'] == True):
-            retJSON['status'] = True
-            retJSON['message'] = "Authenticator deleted"
+    url = modelsAPI + 'auth/logout/'
+
+    response = _make_post_request(url, data)
+    if response["status_code"] == 200:
+        return get_success(200, response, "logout successfully")
+    else:
+        return model_failure(response)
+
+    # else:
+    #     data = request.body.decode('utf-8')
+    #     post = json.loads(data)
+    #     data = {}
+    #     # return _success(200, 'authenticator', post)
+    #     try:
+    #         data['auth'] = post['auth']
+    #     except KeyError:
+    #         return _failure(400, 'missing parameters')
+    #
+    #     url = modelsAPI + 'auth/logout/'
+    #     result = _make_post_request(url, data)
+    #     if result["status_code"] == 200:
+    #         return get_success(200, result, "auth")
+    #     else:
+    #         return model_failure(result)
+def login_required(f):
+    def wrap(request, *args, **kwargs):
+
+        # try authenticating the user
+        user = check_loggedIn(request)
+
+        # authentication failed
+        if not user:
+            # redirect the user to the login page
+            """needs to be modified!"""
+            return HttpResponseRedirect(reverse('loginPage')+'?next='+modelsAPI+'detail/user/9999')
         else:
-            retJSON['status'] = False
-            retJSON['message'] = "Authenticator failed to be deleted"
-        return JsonResponse(retJSON)
+            return f(request, *args, **kwargs)
+    return wrap
+
+
+"""using decorator to write the create listing method"""
+@login_required
+def createListing(request):
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
+    else:
+        post = request.POST
+        data = {}
+        try:
+            for key in ("car_year", "car_make", "car_model", "car_color",
+                        "car_body_type", "car_new", "price", "description"):
+                data[key] = post[key]
+
+        except KeyError:
+            return _failure(400, 'missing parameters')
+
+        url = modelsAPI + 'detail/car/9999'
+
+        car = _make_post_request(url, data)
+        if car["status_code"] == 200 :
+            car = car["user"]
+            return get_success(200, car, "cars")
+        else :
+            return model_failure(car)

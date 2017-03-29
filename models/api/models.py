@@ -19,7 +19,7 @@ class user(models.Model):
     first_name = models.CharField(max_length=20, default="new")
     last_name  = models.CharField(max_length=20, default="user")
     user_name = models.CharField(max_length=30, unique = True, default="newUser")
-    password = models.CharField(max_length=30, default="password")
+    password = models.CharField(max_length=100, default="password")
     favourite = models.ManyToManyField(car, blank = True, related_name = "like")
     car_sell = models.ManyToManyField(car, blank = True, related_name = "owner")
     class Meta:
