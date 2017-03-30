@@ -37,7 +37,7 @@ def login(request):
     except KeyError:
         return _failure(400, 'missing parameters')
     try :
-        login_user = user.objects.get(user_name = username)
+        login_user = user.objects.get(username = username)
         userid = login_user.pk
     except ObjectDoesNotExist:
         return _failure(404, 'user not found')

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 import urllib.request, json
 from django.core.urlresolvers import reverse
-from .forms import UserInfo
+from .forms import *
 
 def get_request(url):
     req = urllib.request.Request(url)
@@ -49,6 +49,12 @@ def check_status(request):
     resp = post_request(url, post_data)
     return resp['status_code'] == 200
 
+def load_user(request):
+    id = request.COOKIES.get('id')
+    url = 'http://exp-api:8000/api/v1/user/' + str(id)
+    user = get_request(url)
+    return user
+
 def login_required(f):
     def wrap(request, *args, **kwargs):
         valid = check_status(request)
@@ -59,13 +65,12 @@ def login_required(f):
     return wrap
 
 @login_required
-def user_detail(request, user_id):
+def user_detail(request):
     template = loader.get_template('home.html')
-    url = expApi + "user/" + str(user_id)
-    user = get_request(url)
+    user = load_user(request)
     if user["status_code"] == 200 :
-        user = [user["users"]]
-        return render(request, 'userdetail.html', {'users': user})
+        user = user["users"]
+        return render(request, 'userdetail.html', {'user': user})
     else :
         return bad_request(request)
 
@@ -76,7 +81,6 @@ def login(request):
         data = {}
         data['userform'] = userform
         return render(request, 'login.html', data)
-
     elif request.method == "POST":
         loginform = UserInfo(request.POST)
         if loginform.is_valid():
@@ -87,16 +91,19 @@ def login(request):
                 authenticator = response['authenticator']
                 auth = authenticator['auth']
                 user_id = authenticator['userid']
-                next = request.GET.get('next') or reverse('user_detail_page', kwargs={'user_id':user_id})
+                next = request.GET.get('next') or reverse('user_detail_page')
                 response = HttpResponseRedirect(next)
                 response.set_cookie('auth', auth)
+                response.set_cookie('id', user_id)
                 return response
             else:
                 data = {}
                 data['message'] = response["message"]
                 data['userform'] = UserInfo()
                 return render(request, 'login.html', data)
-        return bad_request(request)
+        data = {}
+        data['userform'] = UserInfo()
+        return render(request, 'login.html', data)
     else :
         return bad_request(request)
 
@@ -113,25 +120,29 @@ def logout(request):
         return bad_request(request)
 
 def signup(request):
+    if request.method == "GET":
+        userform = SignupForm()
+        data = {}
+        data['SignupForm'] = userform
+        return render(request, 'signup.html', data)
     if request.method == "POST":
-        signupdict = {}
-        signupdict['user_name'] = request.POST['username']
-        signupdict['password'] = request.POST['password']
-        signupdict['retypepassword'] = request.POST['retypepassword']
-
-        #if loginform.is_valid():
-        if signupdict['password'] == signupdict['retypepassword']:
+        signupForm = SignupForm(request.POST)
+        if signupForm.is_valid():
+        # if signupdict['password'] == signupdict['retypepassword']:
             url = expApi + "signup/"
-            signup_data = json.dumps(signupdict).encode('utf8')
-            requester = urllib.request.Request(url, data=signup_data, method='POST', headers={'Content-Type': 'application/json'})
-            response = urllib.request.urlopen(requester).read().decode('utf-8')
-            ret = json.loads(response)
-            if ret["status"]:# ==  True: --- If it returns Json, we want to pass and display message regardless
-                message = [ret["message"]]
-                return render(request, 'confirmsignup.html', {'message': message})
-        return render(request, 'home.html') #invalid
-    else:
-        return render(request, 'signup.html')
+            data = signupForm.cleaned_data
+            data.pop('password_repeat', None)
+            ret= post_request(url, data)
+            if ret["status_code"] != 201:# ==  True: --- If it returns Json, we want to pass and display message regardless
+                message = ret["message"]
+                return render(request, 'signup.html', {'message': message})
+            else:
+                return HttpResponseRedirect(reverse('login'))
+        else :
+            data = {}
+            data['SignupForm'] = signupForm
+            data['message'] = "BAD INPUT"
+            return render(request, 'signup.html', data)
 
 def bad_request(request):
     template = loader.get_template('404.html')

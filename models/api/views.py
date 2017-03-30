@@ -136,7 +136,7 @@ class UserView(View):
     def post(self, request, *args, **kwargs):
         # data = request.body.decode('utf-8')
         # data_dict = json.loads(data)
-        data_dict = request.POST
+        data_dict = request.POST.copy()
         car_sell = set()
         if 'car_sell' in data_dict.keys():
             for i in data_dict['car_sell']:
@@ -145,7 +145,7 @@ class UserView(View):
                 except ObjectDoesNotExist:
                     return _failure(404, 'requested car_sell list not valid (no such car in db)')
                 car_sell.add(obj)
-            data_dict['car_sell'] = car_sell
+            data_dict["car_sell"] = car_sell
 
         fav = set()
         if 'favourite' in data_dict.keys():
@@ -156,7 +156,6 @@ class UserView(View):
                     return _failure(404, 'requested favourite list not valid (no such car in db)')
                 fav.add(obj)
             data_dict['favourite'] = fav
-            # data_dict['car_sell'] = [self.submodel.objects.get(pk = i) for i in data_dict['car_sell']]
 
         if int(kwargs['user_id']) in self.model.objects.values_list('pk', flat = True) :
             return self.update(kwargs['user_id'], data_dict)
@@ -166,7 +165,7 @@ class UserView(View):
             form.save()
             return _success(201, 'Create Success')
         else:
-            return _failure(400, 'form invalid, bad post request.')
+            return _failure(400, form.errors)
 
     def update(self, user_id, data_dict):
         user = self.model.objects.get(pk = user_id)
