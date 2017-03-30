@@ -2,12 +2,11 @@
 <html lang="en">
 {% include 'header2.html' %}
 
-{% if users %}
-  {% for user in users %}
+{% if user %}
 <div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
     <div class="container" style = "text-align: center">
         <font color="white">
-            <h1>{{user.user_name}}'s profile</h1>
+            <h1>{{user.username}}'s profile</h1>
         </font>
     </div>
 </div>
@@ -15,7 +14,7 @@
     <div class="container">
         <div class="col-lg-12">
           <h1>User Profile</h1>
-          <p>User Name: {{user.user_name}}</p>
+          <p>User Name: {{user.username}}</p>
           <p>Inventory: {{user.car_sell}}</p>
           <p>Interested in: {{user.favourite}}</p>
           <div class="profile-userbuttons">
@@ -24,7 +23,6 @@
           </div>
         </div>
     </div>
-      {% endfor %}
 {% else %}
 <div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
     <div class="container" style = "text-align: center">

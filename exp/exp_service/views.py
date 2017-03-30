@@ -149,7 +149,7 @@ def createUser(request):
         post = request.POST
         data = {}
         try:
-            data["user_name"] = post["user_name"]
+            data["username"] = post["username"]
             data["password"] = post["password"]
             data["last_name"]= post["last_name"]
             data["first_name"] = post["first_name"]

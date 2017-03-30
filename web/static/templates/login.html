@@ -16,14 +16,20 @@
 
 <div class="container">
     <div class="row">
-        <form action="" method="POST" id="login-form">{% csrf_token %}
-        {{ userform }}
+        <form action="" method="POST" id="login-form">
+        {% csrf_token %}
+        {{userform}}
         <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Log in" />
         </div>
         <p>Not a user? Register <a href="/register">here</a></p>
-        {%if message%}
-        <p>{{message}}</p>
+        {% if userform.errors %}
+        <p>asd<p>
+        {% for field in form %}
+        {% for error in field.errors %}
+        <p>{{error}}</p>
+        {%endfor%}
+        {%endfor%}
         {%endif%}
         <div>
         </div>

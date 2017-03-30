@@ -2,8 +2,6 @@
 <html lang="en">
 {% include 'header2.html' %}
 
-
-
 <div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
     <div class="container">
         <font color="white">
@@ -20,23 +18,14 @@
     <br></br>
 
        <form action="" method="POST" id="signup-form">{% csrf_token %}
-        
-          <div>
-              <label for="username">Username: </label>
-              <input id = "username" type = "text" name = "username">
-          </div>
-          <div>
-              <label for="password">Password: </label>
-              <input id = "password" type = "password" name = "password">  
-          </div>
-          <div>
-              <label for="retypepassword">Retype Password: </label>
-              <input id = "retypepassword" type = "password" name = "retypepassword">  
-          </div>
-        
-                  <div class="submit-row">
+
+         {{SignupForm}}
+
+          <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Log in" />
         </div>
+
+        <p>{{message}}<p>
 
     </div>
 </div>
