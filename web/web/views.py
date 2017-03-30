@@ -108,16 +108,17 @@ def login(request):
         return bad_request(request)
 
 def logout(request):
-    url = expApi + "logout/"
+    url = expApi + "auth/logout/"
     #need to pass authenticator
-    requester = urllib.request.Request(url)
-    response = urllib.request.urlopen(requester).read().decode('utf-8')
-    ret = json.loads(response)
-    if ret["status_code"] == 202 :# ==  True: --- If it returns Json, we want to pass and display message regardless
-        message = [ret["message"]]
+    auth = request.COOKIES.get('auth')
+    post_data = {'auth': auth}
+    resp = post_request(url, post_data)
+    if resp["status_code"] == 202 :# ==  True: --- If it returns Json, we want to pass and display message regardless
+        message = [resp["message"]]
         return render(request, 'logout.html', {'message': message})
     else :
-        return bad_request(request)
+        message = [resp["message"]]
+        return render(request, 'logout.html', {'message': message})
 
 def signup(request):
     if request.method == "GET":

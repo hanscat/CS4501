@@ -20,7 +20,7 @@
             <!-- SIDEBAR USER TITLE -->
             <div class="profile-usertitle">
                 <div class="profile-usertitle-name">
-                    {{user.user_name}}
+                    {{user.username}}
                 </div>
                 <div class="profile-usertitle-job">
                     Top Seller
@@ -37,25 +37,24 @@
             <div class="profile-usermenu">
                 <ul class="nav">
                     <li class="active">
-                        <a href="{% url 'user_detail_page' user_id=user.id %}">
+                        <a href="{% url 'user_detail_page' %}">
                             <i class="glyphicon glyphicon-user"></i>
-
                             Overview </a>
                     </li>
                     <li>
-                        <a href="{% url 'user_detail_page' user_id=user.id %}">
+                        <a href="{% url 'user_detail_page' %}">
                             <i class="glyphicon glyphicon-home"></i>
 
                             Inventory </a>
                     </li>
                     <li>
-                        <a href="{% url 'user_detail_page' user_id=user.id %}">
+                        <a href="{% url 'user_detail_page' %}">
                             <i class="glyphicon glyphicon-ok"
                             ></i>
                             Intrested Vehicles </a>
                     </li>
                     <li>
-                        <a href="{% url 'user_detail_page' user_id=user.id %}">
+                        <a href="{% url 'user_detail_page' %}">
                             <i class="glyphicon glyphicon-flag"></i>
 
                             Contact Information </a>
