@@ -69,7 +69,7 @@ def check_status(request):
     except ObjectDoesNotExist:
         return _failure(403, 'authenticator not found')
     time = timezone.now() - auth.date_created
-    if time.total_seconds() > 100:
+    if time.total_seconds() > 1000:
         auth.delete()
         return message_success(202, "timeout, automatically logout")
     else :

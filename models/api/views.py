@@ -62,13 +62,13 @@ def SearchUser(request):
         fav = []
         if 'favourite' in [f.name for f in user._meta.get_fields()]:
             for car in user_want['favourite'] :
-                fav.append(car.pk)
+                fav.append(model_to_dict(car))
             user_want['favourite'] = fav
 
         car_sell = []
         if "car_sell" in [f.name for f in user._meta.get_fields()]:
             for car in user_want['car_sell'] :
-                car_sell.append(car.pk)
+                car_sell.append(model_to_dict(car))
             user_want['car_sell'] = car_sell
         li.append(user_want)
     users = li
@@ -97,16 +97,16 @@ class CarView(View):
             if int(kwargs['car_id']) in self.model.objects.values_list('pk', flat = True) :
                 return self.update(kwargs['car_id'], data_dict)
             else:
-                form.save()
-                return _success(201, 'Create Success')
+                car = form.save()
+                return get_success(201, model_to_dict(car), 'car')
         else :
-            return _failure(400, 'form invalid, bad post request.')
+            return _failure(400, form.errors)
 
     def update(self, car_id, data_dict):
         car = self.model.objects.get(pk = car_id)
         form = self.modelForm(data_dict, instance = car)
-        form.save()
-        return  _success(202, 'Update Success')
+        car = form.save()
+        return  get_success(202, model_to_dict(car), 'car')
 
 class UserView(View):
     model = user
@@ -122,21 +122,21 @@ class UserView(View):
         fav = []
         if 'favourite' in [f.name for f in self.model._meta.get_fields()]:
             for car in user_want['favourite'] :
-                fav.append(car.pk)
+                fav.append(model_to_dict(car))
             user_want['favourite'] = fav
 
         car_sell = []
         if "car_sell" in [f.name for f in self.model._meta.get_fields()]:
             for car in user_want['car_sell'] :
-                car_sell.append(car.pk)
+                car_sell.append(model_to_dict(car))
             user_want['car_sell'] = car_sell
 
         return get_success(200, user_want, self.model.__name__)
 
     def post(self, request, *args, **kwargs):
-        # data = request.body.decode('utf-8')
-        # data_dict = json.loads(data)
-        data_dict = request.POST.copy()
+        data = request.body.decode('utf-8')
+        data_dict = json.loads(data)
+        # data_dict = request.POST
         car_sell = set()
         if 'car_sell' in data_dict.keys():
             for i in data_dict['car_sell']:
@@ -220,6 +220,18 @@ class DeleteUserView(DeleteView):
     def Userdelete(self, car) :
         for user in car.like.all():
             user.favourite.remove(car)
+
+def signup(request):
+    data_dict = request.POST
+    form = UserForm(data_dict)
+    if form.is_valid():
+        form.save()
+        return _success(201, 'Create Success')
+    else:
+        return _failure(400, form.errors)
+
+
+
 
 
 

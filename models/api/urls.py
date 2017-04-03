@@ -30,6 +30,7 @@ user = [
         url(r'v1/detail/user/(?P<user_id>[0-9]+)', UserView.as_view()),
         url(r'v1/detail/user/', views.SearchUser, name='SearchUser'),
         url(r'v1/delete/user/(?P<user_id>[0-9]+)', DeleteUserView.as_view()),
+        url(r'v1/signup', views.signup, name='signup')
 ]
 
 auth = [
