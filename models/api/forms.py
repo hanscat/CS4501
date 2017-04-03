@@ -14,7 +14,8 @@ class UserForm(ModelForm) :
 
     def clean_password(self):
         pw = self.cleaned_data['password']
-        pw = hashers.make_password(pw)
+        if (len(pw) <= 50):
+            pw = hashers.make_password(pw)
         return pw
 
 
