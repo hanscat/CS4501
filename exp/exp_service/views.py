@@ -71,7 +71,7 @@ def home(request):
     else :
         return _failure(405, "Methods not supported")
 
-def individualCarData(request, car_id):
+def car_detail(request, car_id):
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "detail/car/"
         requester = urllib.request.Request(urlForParticularCar + car_id)
@@ -85,35 +85,35 @@ def individualCarData(request, car_id):
     else:
         return _failure(405, "Methods not supported")
 
-def showCertainColorCar(request, color):
-    if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "detail/car/?car_color=" + color
-        requester = urllib.request.Request(urlForParticularCar)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        cars = json.loads(response)
-        if cars["status_code"] == 200:
-            car = cars["car"]
-            return get_success(200, cars, "cars")
-        else :
-            return model_failure(cars)
-    else :
-        return _failure(405, "Methods not supported")
+# def showCertainColorCar(request, color):
+#     if request.method == 'GET':
+#         urlForParticularCar = modelsAPI + "detail/car/?car_color=" + color
+#         requester = urllib.request.Request(urlForParticularCar)
+#         response = urllib.request.urlopen(requester).read().decode('utf-8')
+#         cars = json.loads(response)
+#         if cars["status_code"] == 200:
+#             car = cars["car"]
+#             return get_success(200, cars, "cars")
+#         else :
+#             return model_failure(cars)
+#     else :
+#         return _failure(405, "Methods not supported")
+#
+# def showCertainMakeCar(request, make):
+#     if request.method == 'GET':
+#         urlForParticularCar = modelsAPI + "detail/car/?car_make=" + make
+#         requester = urllib.request.Request(urlForParticularCar)
+#         response = urllib.request.urlopen(requester).read().decode('utf-8')
+#         cars = json.loads(response)
+#         if cars["status_code"] == 200:
+#             car = cars["car"]
+#             return get_success(200, cars, "cars")
+#         else :
+#             return model_failure(cars)
+#     else :
+#         return _failure(405, "Methods not supported")
 
-def showCertainMakeCar(request, make):
-    if request.method == 'GET':
-        urlForParticularCar = modelsAPI + "detail/car/?car_make=" + make
-        requester = urllib.request.Request(urlForParticularCar)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        cars = json.loads(response)
-        if cars["status_code"] == 200:
-            car = cars["car"]
-            return get_success(200, cars, "cars")
-        else :
-            return model_failure(cars)
-    else :
-        return _failure(405, "Methods not supported")
-
-def individualUserData(request, user_id):
+def user_detail(request, user_id):
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "detail/user/"
         requester = urllib.request.Request(urlForParticularCar + user_id)
@@ -127,7 +127,29 @@ def individualUserData(request, user_id):
     else :
         return _failure(405, "Methods not supported")
 
-def updateUser(request):
+def concise_user_detail(request, user_id):
+    if request.method == 'GET':
+        urlForParticularCar = modelsAPI + "detail/user/"
+        requester = urllib.request.Request(urlForParticularCar + user_id)
+        response = urllib.request.urlopen(requester).read().decode('utf-8')
+        user = json.loads(response)
+        if user["status_code"] == 200 :
+            user = user["user"]
+            index_list = []
+            for car in user['car_sell']:
+                index_list.append(car['id'])
+            user['car_sell'] = index_list
+            index_list = []
+            for car in user['favourite']:
+                index_list.append(car['id'])
+            user['favourite'] = index_list
+            return get_success(200, user, "users")
+        else :
+            return model_failure(user)
+    else :
+        return _failure(405, "Methods not supported")
+
+def update_user(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
     else:
@@ -145,7 +167,7 @@ def updateUser(request):
         user = _special_post_request(url, data)
         return _success(201, 'Create Success')
 
-def createUser(request):
+def create_user(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
     else:
@@ -166,7 +188,7 @@ def createUser(request):
         else :
             return model_failure(user)
 
-def createListing(request):
+def create_car(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
     else:

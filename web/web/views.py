@@ -20,7 +20,7 @@ def post_request(url, post_data):
     return resp
 
 def special_post_request(url, post_data):
-    response = requests.post(url, data=json.dumps(post_data))
+    response = requests.post(url, data=json.dumps(post_data)).json()
     return response
 
 expApi = 'http://exp-api:8000/api/v1/'
@@ -58,6 +58,13 @@ def load_user(request):
     url = 'http://exp-api:8000/api/v1/user/' + str(id)
     user = get_request(url)
     return user
+
+def load_concise_user(request):
+    id = request.COOKIES.get('id')
+    url = 'http://exp-api:8000/api/v1/user/concise/' + str(id)
+    user = get_request(url)
+    return user
+
 
 def login_required(f):
     def wrap(request, *args, **kwargs):
@@ -133,7 +140,7 @@ def signup(request):
     elif request.method == "POST":
         signupForm = SignupForm(request.POST)
         if signupForm.is_valid():
-            url = expApi + "signup/"
+            url = expApi + "user/signup/"
             data = signupForm.cleaned_data
             data.pop('password_repeat', None)
             ret= post_request(url, data)
@@ -168,11 +175,14 @@ def createListing(request):
             else :
                 car_id = ret['car']['id']
                 userid = request.COOKIES.get('id')
-                user = load_user(request)['users']
+                user = load_concise_user(request)['users']
                 user["car_sell"].append(car_id)
                 url = expApi + 'user/update/'
                 response = special_post_request(url, user)
-                return HttpResponse(response)
+                if response["status_code"] == 201:
+                    return HttpResponseRedirect(reverse('user_detail_page'))
+                else :
+                    return HttpResponseRedirect(reverse('createListing'))
     else :
         return HttpResponse("Bad Request")
 

@@ -234,8 +234,6 @@ def signup(request):
 
 
 
-
-
 # class DeleteSellCarView(DeleteCarView):
 #     model = car_to_sell
 #     owner = seller
