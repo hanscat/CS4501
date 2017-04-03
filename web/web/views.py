@@ -4,6 +4,7 @@ from django.template import loader
 import urllib.request, json
 from django.core.urlresolvers import reverse
 from .forms import *
+import requests
 
 def get_request(url):
     req = urllib.request.Request(url)
@@ -11,13 +12,16 @@ def get_request(url):
     resp = json.loads(resp_json)
     return resp
 
-
 def post_request(url, post_data):
     post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
     req = urllib.request.Request(url, data=post_encoded, method='POST')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return resp
+
+def special_post_request(url, post_data):
+    response = requests.post(url, data=json.dumps(post_data))
+    return response
 
 expApi = 'http://exp-api:8000/api/v1/'
 def index(request):
@@ -104,7 +108,7 @@ def login(request):
         data = {}
         data['userform'] = UserInfo()
         return render(request, 'login.html', data)
-    else :
+    else:
         return bad_request(request)
 
 def logout(request):
@@ -114,10 +118,10 @@ def logout(request):
     post_data = {'auth': auth}
     resp = post_request(url, post_data)
     if resp["status_code"] == 202 :# ==  True: --- If it returns Json, we want to pass and display message regardless
-        message = [resp["message"]]
+        message = "Logout Success"
         return render(request, 'logout.html', {'message': message})
     else :
-        message = [resp["message"]]
+        message = "Already Logout"
         return render(request, 'logout.html', {'message': message})
 
 def signup(request):
@@ -126,15 +130,14 @@ def signup(request):
         data = {}
         data['SignupForm'] = userform
         return render(request, 'signup.html', data)
-    if request.method == "POST":
+    elif request.method == "POST":
         signupForm = SignupForm(request.POST)
         if signupForm.is_valid():
-        # if signupdict['password'] == signupdict['retypepassword']:
             url = expApi + "signup/"
             data = signupForm.cleaned_data
             data.pop('password_repeat', None)
             ret= post_request(url, data)
-            if ret["status_code"] != 201:# ==  True: --- If it returns Json, we want to pass and display message regardless
+            if ret["status_code"] != 201:
                 message = ret["message"]
                 return render(request, 'signup.html', {'message': message})
             else:
@@ -144,6 +147,34 @@ def signup(request):
             data['SignupForm'] = signupForm
             data['message'] = "BAD INPUT"
             return render(request, 'signup.html', data)
+    else :
+        return HttpResponse("Bad Request")
+
+@login_required
+def createListing(request):
+    if request.method == "GET":
+        listForm = listingForm()
+        data = {}
+        data['listForm'] = listForm
+        return render(request, 'createListing.html', data)
+    elif request.method == "POST":
+        listForm = listingForm(request.POST)
+        if listForm.is_valid():
+            url = expApi + "createCar/"
+            data = listForm.cleaned_data
+            ret = post_request(url, data)
+            if ret["status_code"] != 201:
+                return render(request, 'createListing.html', {'message': message})
+            else :
+                car_id = ret['car']['id']
+                userid = request.COOKIES.get('id')
+                user = load_user(request)['users']
+                user["car_sell"].append(car_id)
+                url = expApi + 'user/update/'
+                response = special_post_request(url, user)
+                return HttpResponse(response)
+    else :
+        return HttpResponse("Bad Request")
 
 def bad_request(request):
     template = loader.get_template('404.html')

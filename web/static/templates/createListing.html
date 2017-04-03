@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 {% include 'header2.html' %}
-<!-- LOGIN TEST -->
-
 
 <div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
     <div class="container">
@@ -16,19 +14,19 @@
 
 <div class="container">
     <div class="row">
-        <form action="" method="POST" id="login-form">
-        {% csrf_token %}
-        {{userform}}
-        <div class="submit-row">
+    <b>SIGN UP:</b>
+    <br></br>
+
+       <form action="" method="POST" id="list-form">{% csrf_token %}
+
+         {{listForm}}
+
+          <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Log in" />
         </div>
-        <p>Not a user? Register <a href="/register">here</a></p>
-        {%if message%}
-        {{message}}
-        {%endif%}
-        <div>
-        </div>
-    </form>
+
+        <p>{{message}}<p>
+
     </div>
 </div>
 
