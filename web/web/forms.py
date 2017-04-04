@@ -5,11 +5,11 @@ class UserInfo(forms.Form):
 	password = forms.CharField(label='password', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'password'}))
 
 class SignupForm(forms.Form):
-	username = forms.CharField(label='Username', max_length=100)
-	password = forms.CharField(label='Password', widget=forms.PasswordInput)
-	password_repeat = forms.CharField(label="Retype Password",widget=forms.PasswordInput)
-	first_name = forms.CharField(label='First Name', max_length=20)
-	last_name = forms.CharField(label='Last Name', max_length=20)
+	username = forms.CharField(label='Username', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+	password = forms.CharField(label='Password', widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'password'}))
+	password_repeat = forms.CharField(label="Retype Password", widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'password'}))
+	first_name = forms.CharField(label='First Name', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
+	last_name = forms.CharField(label='Last Name', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 	def clean(self):
 		form_data = self.cleaned_data

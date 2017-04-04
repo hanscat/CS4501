@@ -14,12 +14,32 @@
 
 <div class="container">
     <div class="row">
-    <b>SIGN UP:</b>
-    <br></br>
 
-       <form action="" method="POST" id="signup-form">{% csrf_token %}
+       <form action="" method="POST" id="signup-form">
+       {% csrf_token %}
+       <h2>Sign Up</h2>
+        </br>
+        <label for="username">Username: </label>
+        {{SignupForm.username}}    
+        </br>
+    
+        <label for="password">Password: </label>
+        {{SignupForm.password}}
+        </br>
 
-         {{SignupForm}}
+        <label for="password_repeat">Retype Password: </label>
+        {{SignupForm.password_repeat}}
+        </br>
+
+        <label for="first_name">First Name: </label>
+        {{SignupForm.first_name}}
+        </br>
+  
+        <label for="last_name">Last Name: </label>
+        {{SignupForm.last_name}}
+        
+        <br/>
+        <br/>
 
           <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Register" />
