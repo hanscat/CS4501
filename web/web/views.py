@@ -152,11 +152,14 @@ def signup(request):
                     error_message.append(message[key][0])
                 return render(request, 'signup.html', {'SignupForm': userform, 'message': error_message})
             else:
-                return HttpResponse(request, 'confirmsignup.html')
+                return render(request, 'confirmsignup.html')
         else :
             data = {}
             data['SignupForm'] = signupForm
-            data['message'] = "BAD INPUT"
+            error_message = []
+            for key in signupForm._errors.keys():
+                error_message.append(signupForm._errors[key][0])
+            data['message'] = error_message
             return render(request, 'signup.html', data)
     else :
         return HttpResponse("Bad Request")

@@ -20,13 +20,15 @@
        <h2>Sign Up</h2>
         </br>
         <label for="username">Username: </label>
-        {{SignupForm.username}}    
+        {{SignupForm.username}}
         </br>
-    
+
         <label for="password">Password: </label>
         {{SignupForm.password}}
         </br>
-
+        <div class="alert alert-info">
+          <p>Your password should be at least 6 characters long</p>
+        </div>
         <label for="password_repeat">Retype Password: </label>
         {{SignupForm.password_repeat}}
         </br>
@@ -34,10 +36,10 @@
         <label for="first_name">First Name: </label>
         {{SignupForm.first_name}}
         </br>
-  
+
         <label for="last_name">Last Name: </label>
         {{SignupForm.last_name}}
-        
+
         <br/>
         <br/>
 
@@ -45,11 +47,14 @@
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Register" />
         </div>
       </form>
-        {%if message%}
-        {%for m in message%}
-        <p>{{m}}<p>
-        {%endfor%}
-        {%endif%}
+      <br/>
+      {%if message%}
+      {%for m in message%}
+      <div class="alert alert-warning">
+      {{m}}
+      </div>
+      {%endfor%}
+      {%endif%}
     </div>
 </div>
 

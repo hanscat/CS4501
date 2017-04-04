@@ -11,10 +11,16 @@ class SignupForm(forms.Form):
 	first_name = forms.CharField(label='First Name', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
 	last_name = forms.CharField(label='Last Name', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
+	def clean_password(self):
+		pw = self.cleaned_data['password']
+		if len(pw) < 6:
+			self._errors['password'] = ['Your password is too short']
+		return pw
+
 	def clean(self):
 		form_data = self.cleaned_data
 		if form_data['password'] != form_data['password_repeat']:
-			self._errors["password"] = ["Password do not match"]
+			self._errors["password_repeat"] = ["Password do not match"]
 			del form_data['password']
 			del form_data['password_repeat']
 		return form_data
