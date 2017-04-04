@@ -14,12 +14,44 @@
 
 <div class="container">
     <div class="row">
-    <b>SIGN UP:</b>
     <br></br>
 
        <form action="" method="POST" id="list-form">{% csrf_token %}
 
-         {{listForm}}
+         <h2>Create Listing</h2>
+        </br>
+        <label for="car_color">Color: </label>
+        {{listForm.car_color}}    
+        </br>
+        <label for="car_make">Car Make: </label>
+        {{listForm.car_make}}    
+        </br>
+        <label for="car_model">Car Model: </label>
+        {{listForm.car_model}}    
+        </br>
+        <label for="car_year">Car Year: </label>
+        {{listForm.car_year}}    
+        </br>
+        </br>
+        <label for="car_body_type">Body Type: </label>
+        {{listForm.car_body_type}}    
+        </br>
+        <label for="car_new">This is a new car  </label>
+        {{listForm.car_new}}    
+        </br>
+        </br>
+        <label for="description">Briefly describe your car:  </label>
+        </br>
+        {{listForm.description}}  
+        </br>  
+        </br>
+        <label for="price">Price Listing: </label>
+        {{listForm.price}}
+        </br>
+  
+      
+        <br/>
+        <br/>
 
           <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Create" />
