@@ -44,9 +44,12 @@
           <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Register" />
         </div>
-
-        <p>{{message}}<p>
-
+      </form>
+        {%if message%}
+        {%for m in message%}
+        <p>{{m}}<p>
+        {%endfor%}
+        {%endif%}
     </div>
 </div>
 

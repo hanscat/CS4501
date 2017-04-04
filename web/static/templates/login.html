@@ -10,7 +10,7 @@
             <h1>Welcome to CarSales.com!</h1>
             <p>Here at CarSales.com we are dedicated to providing quality service for customers</p>
         </font>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Join here&raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="/register" role="button">Join here&raquo;</a></p>
     </div>
 </div>
 
@@ -18,30 +18,30 @@
     <div class="row">
         <form action="" method="POST" id="login-form">
         {% csrf_token %}
-       
+
         <h2>Login</h2>
         </br>
         <label for="username">Username: </label>
-        {{userform.username}}    
+        {{userform.username}}
         </br>
-    
+
         <label for="password">Password: </label>
         {{userform.password}}
         </br>
-  
         <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Log in" />
         </div>
+      </form>
         <br/>
         <br/>
-        <p>Not a user? Register <a href="/register">here</a></p>
         {%if message%}
+        <div class="alert alert-warning">
         {{message}}
-        {%endif%}
-        <div>
         </div>
-        
-    </form>
+        {%endif%}
+        <div class="alert alert-info">
+          <p>Not a user? Register <a href="/register">here</a></p>
+        </div>
     </div>
 </div>
 

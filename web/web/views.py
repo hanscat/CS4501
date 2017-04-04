@@ -146,9 +146,13 @@ def signup(request):
             ret= post_request(url, data)
             if ret["status_code"] != 201:
                 message = ret["message"]
-                return render(request, 'signup.html', {'message': message})
+                userform = SignupForm()
+                error_message = []
+                for key in message.keys():
+                    error_message.append(message[key][0])
+                return render(request, 'signup.html', {'SignupForm': userform, 'message': error_message})
             else:
-                return HttpResponseRedirect(reverse('login'))
+                return HttpResponse(request, 'confirmsignup.html')
         else :
             data = {}
             data['SignupForm'] = signupForm
