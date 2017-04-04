@@ -190,6 +190,8 @@ def createListing(request):
                     return HttpResponseRedirect(reverse('user_detail_page'))
                 else :
                     return HttpResponseRedirect(reverse('createListing'))
+        else:
+            return HttpResponseRedirect(reverse('createListing'))
     else :
         return HttpResponse("Bad Request")
 

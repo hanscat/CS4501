@@ -19,10 +19,13 @@ class SignupForm(forms.Form):
 
 	def clean(self):
 		form_data = self.cleaned_data
-		if form_data['password'] != form_data['password_repeat']:
-			self._errors["password_repeat"] = ["Password do not match"]
-			del form_data['password']
-			del form_data['password_repeat']
+		try:
+			if form_data['password'] != form_data['password_repeat']:
+				self._errors["password_repeat"] = ["Password do not match"]
+				del form_data['password']
+				del form_data['password_repeat']
+		except:
+			pass
 		return form_data
 
 Year_Choices=[(x, x) for x in range(1970, 2017)]
