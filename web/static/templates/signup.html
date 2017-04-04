@@ -17,16 +17,18 @@
     <b>SIGN UP:</b>
     <br></br>
 
-       <form action="" method="POST" id="signup-form">{% csrf_token %}
-
+       <form action="" method="POST" id="signup-form">
+         {% csrf_token %}
          {{SignupForm}}
-
           <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Register" />
         </div>
-
-        <p>{{message}}<p>
-
+      </form>
+        {%if message%}
+        {%for m in message%}
+        <p>{{m}}<p>
+        {%endfor%}
+        {%endif%}
     </div>
 </div>
 
