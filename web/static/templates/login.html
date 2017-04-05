@@ -16,6 +16,11 @@
 
 <div class="container">
     <div class="row">
+        {%if message%}
+        <div class="alert alert-warning">
+        {{message}}
+        </div>
+        {%endif%}
         <form action="" method="POST" id="login-form">
         {% csrf_token %}
 
@@ -34,11 +39,6 @@
       </form>
         <br/>
         <br/>
-        {%if message%}
-        <div class="alert alert-warning">
-        {{message}}
-        </div>
-        {%endif%}
         <div class="alert alert-info">
           <p>Not a user? Register <a href="/register">here</a></p>
         </div>

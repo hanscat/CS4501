@@ -177,6 +177,7 @@ def createListing(request):
             url = expApi + "createCar/"
             data = listForm.cleaned_data
             ret = post_request(url, data)
+            message = "Car successfully created!!!"
             if ret["status_code"] != 201:
                 return render(request, 'createListing.html', {'message': message})
             else :
