@@ -8,7 +8,7 @@
 ##Project #4 User Stories
   1. As a user, I want to be able to remove a car from my favorite list or inventory list so that I will not be reached by people with outdated information.
   2. As a user, I want to register with a unique username and log in back using that username as my loggin account.
-  3. As a user, I want to create a listing of the car taht I am going to sell.
+  3. As a user, I want to create a listing of the car that I am going to sell.
   4. As a user, I want to see messeges when registration or logging in fail.
   
 ##User Stroies for future implementations:
