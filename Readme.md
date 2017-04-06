@@ -3,8 +3,17 @@
 ## Project 4 Timeline:
 1. 2017-03-21:
     1. model layer authenticator and related api setup and tested
-    2. TODO: add test cases
-
+    2. expired authenticator auto-removal completed. Current expire time set to 1000 seconds (for extra credit)
+    
+2. 2017-03-25
+    1. exp layer finished and tested (Tests are written for extra credit)
+    2. web page for login/logout/register completed
+    
+3. 2017-04-03
+    1. page messeges refined
+    2. exp layer redesigned and implemented
+    
+    
 ## Project 3 Timeline:
 1. 2017-02-17:
     1. User stories written
