@@ -11,6 +11,7 @@
   3. As a user, I want to create a listing of the car that I am going to sell.
   4. As a user, I want to see messeges when registration or logging in fail.
   
+  
 ##User Stroies for future implementations:
   1. As a user, I want to be able to specify a university when I enter the main page of the website so that I can make searches or post offers in a specific scope.
   2. As a user, I want to choose to display all or part of my contact information so that I can have a control on how people will reach me.
