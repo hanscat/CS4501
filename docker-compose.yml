@@ -55,4 +55,4 @@ batch:
    links:
       - kafka:kafka
       - es:es
-   command: bash -c "python /app/batch_script.py"
+   command: bash -c "python /app/batch/batch_script.py"
