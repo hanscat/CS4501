@@ -30,3 +30,29 @@ web:
    volumes:
       - ./web:/app
    command: "mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/web/wsgi.py"
+
+kafka:
+   image: spotify/kafka
+   container_name: kafka
+   environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+   hostname: kafka
+   
+es:
+   image: elasticsearch:2.0
+   container_name: es
+   ports:
+      - "9200:9200"
+
+batch:
+   image: tp33/django
+   external_links:
+      -  mysql:db
+   container_name: batch
+   volumes:
+      - ./batch:/app
+   links:
+      - kafka:kafka
+      - es:es
+   command: bash -c "python /app/batch_script.py"
