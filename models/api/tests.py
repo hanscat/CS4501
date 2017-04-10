@@ -33,7 +33,8 @@ class TestGetDetail(TestCase):
         response = c.get('/api/v1/detail/user/1')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': 'Cat', 'car_sell': [1,2,3], 'id': 1, 'password': '12345678', 'user_name': 'superCat', 'first_name': 'Hans', 'favourite': []}}
+        result['user'].pop('password', None)
+        output = {'status_code': 200, 'user': {'last_name': 'Cat', 'id': 1, 'favourite': [], 'username': 'superCat', 'car_sell': [{'price': 129999, 'car_year': 2016, 'car_body_type': 'a', 'id': 1, 'car_model': 'G63', 'car_make': 'Benz', 'car_color': 'red', 'description': 'This is a car', 'car_new': False}, {'price': 49999, 'car_year': 2016, 'car_body_type': 'a', 'id': 2, 'car_model': 'Cayanne', 'car_make': 'Porsche', 'car_color': 'black', 'description': 'This is a car', 'car_new': False}, {'price': 49999, 'car_year': 2016, 'car_body_type': 'a', 'id': 3, 'car_model': 'X5', 'car_make': 'BMW', 'car_color': 'white', 'description': 'This is a car', 'car_new': False}], 'first_name': 'Hans'}}
         self.assertEqual(result, output)
 
     #retrieve a not existing user
@@ -69,27 +70,27 @@ class sellerDetailTest(TestCase):
     def test_carCreate(self):
         c = Client()
         post_data = {'car_new': 0, 'car_make': 'BMW', 'car_year': 2016, 'price': 9999, 'car_model': 'Unknown', 'car_color': 'grey', 'car_body_type': 'a', 'description': 'This is a car'}
-        response = c.post('/api/v1/detail/car/5', json.dumps(post_data), 'json')
+        response = c.post('/api/v1/detail/car/5', post_data)
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 202, 'message': "Update Success"}
+        output ={'car': {'car_body_type': 'a', 'car_color': 'grey', 'car_make': 'BMW', 'car_model': 'Unknown', 'car_new': True, 'car_year': 2016, 'description': 'This is a car', 'id': 5, 'price': 9999}, 'status_code': 202}
         self.assertEqual(output, result)
 
     #User create account with an existing car in database
     def test_sellerCreate(self):
         # make a post to create the user
         c = Client()
-        post_data = {'last_name': '1', 'car_sell': [4], 'password': '12345678', 'user_name': 'newseller', 'first_name': 'seller'}
+        post_data = {'last_name': '1', 'car_sell': [4], 'password': '12345678', 'username': 'newseller', 'first_name': 'seller'}
         response = c.post('/api/v1/detail/user/6', json.dumps(post_data), 'json')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         output = {'status_code': 201, 'message': "Create Success"}
         self.assertEqual(output, result)
-        response = c.get('/api/v1/detail/user/?user_name=newseller')
+        response = c.get('/api/v1/detail/user/?username=newseller')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': [{'last_name': '1', 'car_sell': [4], 'id': 7, 'password': '12345678', 'user_name': 'newseller', 'first_name': 'seller', 'favourite': []}]}
-        self.assertEqual(result, output)
+        # output = {'user': [{'first_name': 'seller', 'last_name': '1', 'favourite': [], 'username': 'newseller', 'id': 7, 'car_sell': [{'price': 39999, 'description': 'This is a car', 'car_model': 'Q7', 'car_make': 'Audi', 'car_year': 2016, 'car_color': 'red', 'car_new': False, 'car_body_type': 'a', 'id': 4}], 'password': 'pbkdf2_sha256$30000$VjqusDSsR9GW$tXBewpNj1tfZovzbVel51Zj/cPNaHlg82zuCsrMQohM='}], 'status_code': 200}
+        self.assertEqual(result['user'][0]['username'], 'newseller')
 
     def tearDown(self):
         pass
@@ -105,7 +106,7 @@ class buyerDetailTest(TestCase):
     def test_buyerCreate(self):
         # make a post to create the user
         c = Client()
-        post_data = {'last_name': '1', 'favourite': [1], 'password': '12345678', 'user_name': 'newbuyer', 'first_name': 'buyer'}
+        post_data = {'last_name': '1', 'favourite': [1], 'password': '12345678', 'username': 'newbuyer', 'first_name': 'buyer'}
         response = c.post('/api/v1/detail/user/6', json.dumps(post_data), 'json')
         result = response.content.decode('utf-8')
         result = json.loads(result)
@@ -117,8 +118,8 @@ class buyerDetailTest(TestCase):
         response = c.get('/api/v1/detail/user/6')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '1', 'car_sell': [], 'id': 6, 'password': '12345678', 'user_name': 'newbuyer', 'first_name': 'buyer', 'favourite': [1]}}
-        self.assertEqual(result, output)
+        # output = {'user': {'id': 6, 'username': 'newbuyer', 'password': 'pbkdf2_sha256$30000$1lAF0C6cO4gH$jwPoD0YzncaHUPMSdjor53jy43nwcpcgymw1BjKVU4M=', 'favourite': [{'id': 1, 'car_color': 'red', 'car_model': 'G63', 'car_body_type': 'a', 'car_new': False, 'car_year': 2016, 'description': 'This is a car', 'car_make': 'Benz', 'price': 129999}], 'last_name': '1', 'first_name': 'buyer', 'car_sell': []}, 'status_code': 200}
+        self.assertEqual(result['user']['username'], 'newbuyer')
 
     def tearDown(self):
         pass
@@ -132,17 +133,17 @@ class userUpdateTest(TestCase):
 
     def test_updateBuyer(self):
         c = Client()
-        post_data = {'last_name': '1', 'favourite': [1], 'password': '12345678', 'user_name': 'newbuyer', 'first_name': 'buyer'}
+        post_data = {'last_name': '1', 'favourite': [1], 'password': '12345678', 'username': 'newbuyer', 'first_name': 'buyer'}
         response = c.post('/api/v1/detail/user/1', json.dumps(post_data), 'json')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         output = {'status_code': 202, 'message': 'Update Success'}
         self.assertEqual(output, result)
-        response = c.get('/api/v1/detail/user/1')
-        result = response.content.decode('utf-8')
-        result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '1', 'car_sell': [], 'id': 1, 'password': '12345678', 'user_name': 'newbuyer', 'first_name': 'buyer', 'favourite': [1]}}
-        self.assertEqual(output, result)
+        # response = c.get('/api/v1/detail/user/1')
+        # result = response.content.decode('utf-8')
+        # result = json.loads(result)
+        # output = {'status_code': 200, 'user': {'last_name': '1', 'car_sell': [], 'id': 1, 'password': '12345678', 'user_name': 'newbuyer', 'first_name': 'buyer', 'favourite': [1]}}
+        # self.assertEqual(output, result)
 
 # a car is deleted, the car instance will be deleted,
 # and all the related user's car list will be modified (remove the removed car)
@@ -165,7 +166,7 @@ class carDeleteTest(TestCase):
         response = c.get('/api/v1/detail/user/2')
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '2', 'car_sell': [], 'id': 2, 'password': '12345678', 'user_name': 'buyer2', 'first_name': 'buyer', 'favourite': [2]}}
+        output = {'user': {'first_name': 'buyer', 'id': 2, 'password': 'pbkdf2_sha256$30000$Jmxi4bhUgfy1$jhqFIj5WJ3+qM5m3iu0vJFj/iDqG2k7mjBf9kNFWYVM=', 'favourite': [{'id': 2, 'description': 'This is a car', 'car_make': 'Porsche', 'car_year': 2016, 'car_color': 'black', 'car_new': False, 'car_model': 'Cayanne', 'car_body_type': 'a', 'price': 49999}], 'last_name': '2', 'car_sell': [], 'username': 'buyer2'}, 'status_code': 200}
         self.assertEqual(output, result)
 
 # a user can delete the account, which also results in some car removal
@@ -199,9 +200,89 @@ class userDeleteTest(TestCase):
         output = {'status_code': 404, 'message': "Car doesn't exist"}
         self.assertEqual(result, output)
 
-        # also those deleted cars shall no longer present in any users list as well
-        response = c.get('/api/v1/detail/user/2')
+class authTest(TestCase):
+    fixtures = ['demo.json']
+
+    def setUp(self):
+        pass
+
+    # test if correct password, it will login successfully
+    def test_login_1(self):
+        c = Client()
+        post_data = {'username':'superCat', 'password':'12345678'}
+        response = c.post('/api/v1/auth/login/', post_data)
         result = response.content.decode('utf-8')
         result = json.loads(result)
-        output = {'status_code': 200, 'user': {'last_name': '2', 'car_sell': [], 'id': 2, 'password': '12345678', 'user_name': 'buyer2', 'first_name': 'buyer', 'favourite': [2]}}
-        self.assertEqual(output, result)
+        self.assertEqual(result['status_code'], 200)
+
+    # username incorrect
+    def test_login_2(self):
+        c = Client()
+        post_data = {'username':'superCatFake', 'password':'12345678'}
+        response = c.post('/api/v1/auth/login/', post_data)
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 404)
+
+    # username exists, but password not match
+    def test_login_3(self):
+        c = Client()
+        post_data = {'username':'superCat', 'password':'123456789'}
+        response = c.post('/api/v1/auth/login/', post_data)
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 403)
+
+    # if login success, check status
+    def test_check_status_1(self):
+        c = Client()
+        post_data = {'username':'superCat', 'password':'12345678'}
+        response = c.post('/api/v1/auth/login/', post_data)
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 200)
+
+        auth = result["authenticator"]["auth"]
+        response = c.post('/api/v1/auth/check_status/', {'auth' : auth})
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 200)
+
+    # wrong auth will return 403
+    def test_check_status_2(self):
+        c = Client()
+        post_data = {'username':'superCat', 'password':'12345678'}
+        response = c.post('/api/v1/auth/login/', post_data)
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 200)
+
+        auth = result["authenticator"]["auth"] + "fake"
+        response = c.post('/api/v1/auth/check_status/', {'auth' : auth})
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 403)
+
+    def test_logout(self):
+        c = Client()
+        post_data = {'username':'superCat', 'password':'12345678'}
+        response = c.post('/api/v1/auth/login/', post_data)
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 200)
+
+        auth = result["authenticator"]["auth"]
+        response = c.post('/api/v1/auth/check_status/', {'auth' : auth})
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 200)
+
+        response = c.post('/api/v1/auth/logout/', {'auth' : auth})
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 202)
+
+        response = c.post('/api/v1/auth/check_status/', {'auth' : auth})
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 403)
