@@ -1,5 +1,6 @@
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from kafka import KafkaProducer
+from elasticsearch import Elasticsearch
 import urllib.request
 import urllib.parse
 import json
@@ -41,6 +42,13 @@ def _make_post_request(url, post_data):
     return response
 
 
+def _make_get_request(url):
+    requester = urllib.request.Request(url)
+    response = urllib.request.urlopen(requester).read().decode('utf-8')
+    obj = json.loads(response)
+    return obj
+
+
 def _special_post_request(url, post_data):
     response = requests.post(url, data=json.dumps(post_data))
     return response
@@ -52,9 +60,7 @@ def home(request):
         showingCars = []
         for i in range(1, 8):
             urlForParticularCar = modelsAPI + "detail/car/"
-            requester = urllib.request.Request(urlForParticularCar + str(i))
-            response = urllib.request.urlopen(requester).read().decode('utf-8')
-            car = json.loads(response)
+            car = _make_get_request(urlForParticularCar + str(i))
             if car["status_code"] == 200:
                 car = car["car"]
                 showingCars.append(car)
@@ -63,9 +69,7 @@ def home(request):
         showingUsers = []
         for i in range(1, 2):
             urlForParticularUser = modelsAPI + "detail/user/"
-            requester = urllib.request.Request(urlForParticularUser + str(i))
-            response = urllib.request.urlopen(requester).read().decode('utf-8')
-            user = json.loads(response)
+            user = _make_get_request(urlForParticularUser + str(i))
             if user["status_code"] == 200:
                 user = user["user"]
             showingUsers.append(user)
@@ -79,9 +83,7 @@ def home(request):
 def car_detail(request, car_id):
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "detail/car/"
-        requester = urllib.request.Request(urlForParticularCar + car_id)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        car = json.loads(response)
+        car = _make_get_request(urlForParticularCar + car_id)
         if car["status_code"] == 200:
             car = car["car"]
             return get_success(200, car, "cars")
@@ -122,9 +124,7 @@ def car_detail(request, car_id):
 def user_detail(request, user_id):
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "detail/user/"
-        requester = urllib.request.Request(urlForParticularCar + user_id)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        user = json.loads(response)
+        user = _make_get_request(urlForParticularCar + user_id)
         if user["status_code"] == 200:
             user = user["user"]
             return get_success(200, user, "users")
@@ -137,9 +137,7 @@ def user_detail(request, user_id):
 def concise_user_detail(request, user_id):
     if request.method == 'GET':
         urlForParticularCar = modelsAPI + "detail/user/"
-        requester = urllib.request.Request(urlForParticularCar + user_id)
-        response = urllib.request.urlopen(requester).read().decode('utf-8')
-        user = json.loads(response)
+        user = _make_get_request(urlForParticularCar + user_id)
         if user["status_code"] == 200:
             user = user["user"]
             index_list = []
@@ -222,12 +220,19 @@ def create_car(request):
 
         car = _make_post_request(url, data)
         if car["status_code"] == 201:
+            
+            # send data to Kafka
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
             new_dict = {}
             model_field = 'api.car'
             new_dict['model'] = model_field
             new_dict['fields'] = data
             producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
+            
+            # add the listing to es
+            es_add_car_listing(request, car['id'])
+            
+            # return the json
             car = car["car"]
             return get_success(201, car, "car")
         else:
@@ -289,6 +294,79 @@ def logout(request):
         return get_success(200, response, "logout successfully")
     else:
         return model_failure(response)
+
+
+#########################
+def search(request):
+    if request.method != 'POST':
+        return _failure(400, 'incorrect request type')
+    post = request.POST
+    search_string = post['search_query']
+    search_index_specifier = post['query_specifier']
+    elasticsearch_index = search_index_specifier + '_index'
+
+    es = Elasticsearch(['es'])
+    try:
+        search_result = es.search(index=elasticsearch_index, body={
+            "query": {'query_string': {'query': search_string}},
+            'size': 100,
+        })
+    except:
+        return _failure(400, 'improper search query!')
+
+    result = {'status_code': 200}
+    result['time_taken'] = search_result['took'] / 1000
+    result['size'] = search_result['hits']['total']
+
+    result['size_model'] = {'user': 0, 'car': 0}
+    result['hits'] = []
+    for item in search_result['hits']['hits']:
+        detail = {'model': item['_source']['model']}
+
+        # if item['_source']['model'] == 'api.car':
+        #     detail['label'] = item['_source']['fields']['mnemonic']
+        #     detail['label'] += ' ' + item['_source']['fields']['number']
+        #     if 'title' in item['_source']['fields']:
+        #         detail['label'] += ': ' + item['_source']['fields']['title']
+        # 
+        #     url = 'http://models-api:8000/api/instructor/detail/'
+        #     url += item['_source']['fields']['instructor'] + '/'
+        #     resp = _make_get_request(url)
+        # 
+        #     detail['label'] += ' (' + resp['instructor']['first_name']
+        #     detail['label'] += ' ' + resp['instructor']['last_name'] + ')'
+        # else:
+        #     detail['label'] = item['_source']['fields']['first_name']
+        #     detail['label'] += ' ' + item['_source']['fields']['last_name']
+        #     detail['label'] += ' (' + item['_source']['fields']['id'] + ')'
+
+        if detail['model'] == 'api.user':
+            result['size_model']['user'] += 1
+            detail['href'] = '/user/detail/' + item['_id'] + '/'
+        else:
+            result['size_model']['car'] += 1
+            detail['href'] = '/car/detail/' + item['_id'] + '/'
+
+        result['hits'].append(detail)
+
+    # returns the final constructed data set
+    return get_success(200, result, "search results")
+
+
+# Helper
+def es_add_user_listing(request, username):
+    es = Elasticsearch(['es'])
+    user_new_listing = {'title': request.POST['title'], 'details': request.POST['details'], 'username': username,
+                        'id': id}
+    es.index(index='user_index', doc_type='listing', id=user_new_listing['id'], body=user_new_listing)
+    es.indices.refresh(index="user_index")
+
+
+def es_add_car_listing(request, id):
+    es = Elasticsearch(['es'])
+    car_new_listing = {'name': request.POST['name'], 'description': request.POST['description'], 'id': id}
+    es.index(index='car_index', doc_type='listing', id=car_new_listing['id'], body=car_new_listing)
+    es.indices.refresh(index='car_index')
 
 # """TO-DO"""
 # def showBuyers(request):
