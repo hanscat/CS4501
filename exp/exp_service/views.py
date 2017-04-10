@@ -1,9 +1,9 @@
-from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from kafka import KafkaProducer
 import urllib.request
 import urllib.parse
 import json
 import requests
-
 
 # Create your views here.
 modelsAPI = 'http://models-api:8000/api/v1/'
@@ -18,6 +18,7 @@ def _failure(code, message):
     failure = {"status_code": code, "message": message}
     return JsonResponse(failure)
 
+
 def model_failure(modelResponse):
     return _failure(modelResponse["status_code"], modelResponse["message"])
 
@@ -26,8 +27,10 @@ def get_success(code, data_dict, model_name):
     correct = {"status_code": code, model_name: data_dict}
     return JsonResponse(correct)
 
+
 def invalidURL(request):
     return _failure(404, "url not valid")
+
 
 def _make_post_request(url, post_data):
     data = urllib.parse.urlencode(post_data).encode('utf-8')
@@ -36,6 +39,7 @@ def _make_post_request(url, post_data):
     response_json = response_json.read().decode('utf-8')
     response = json.loads(response_json)
     return response
+
 
 def _special_post_request(url, post_data):
     response = requests.post(url, data=json.dumps(post_data))
@@ -68,8 +72,9 @@ def home(request):
         ret["users"] = showingUsers
 
         return get_success(200, ret, "ret")
-    else :
+    else:
         return _failure(405, "Methods not supported")
+
 
 def car_detail(request, car_id):
     if request.method == 'GET':
@@ -80,10 +85,11 @@ def car_detail(request, car_id):
         if car["status_code"] == 200:
             car = car["car"]
             return get_success(200, car, "cars")
-        else :
+        else:
             return model_failure(car)
     else:
         return _failure(405, "Methods not supported")
+
 
 # def showCertainColorCar(request, color):
 #     if request.method == 'GET':
@@ -119,13 +125,14 @@ def user_detail(request, user_id):
         requester = urllib.request.Request(urlForParticularCar + user_id)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
         user = json.loads(response)
-        if user["status_code"] == 200 :
+        if user["status_code"] == 200:
             user = user["user"]
             return get_success(200, user, "users")
-        else :
+        else:
             return model_failure(user)
-    else :
+    else:
         return _failure(405, "Methods not supported")
+
 
 def concise_user_detail(request, user_id):
     if request.method == 'GET':
@@ -133,7 +140,7 @@ def concise_user_detail(request, user_id):
         requester = urllib.request.Request(urlForParticularCar + user_id)
         response = urllib.request.urlopen(requester).read().decode('utf-8')
         user = json.loads(response)
-        if user["status_code"] == 200 :
+        if user["status_code"] == 200:
             user = user["user"]
             index_list = []
             for car in user['car_sell']:
@@ -144,10 +151,11 @@ def concise_user_detail(request, user_id):
                 index_list.append(car['id'])
             user['favourite'] = index_list
             return get_success(200, user, "users")
-        else :
+        else:
             return model_failure(user)
-    else :
+    else:
         return _failure(405, "Methods not supported")
+
 
 def update_user(request):
     if request.method != 'POST':
@@ -156,8 +164,8 @@ def update_user(request):
         data = request.body.decode('utf-8')
         post = json.loads(data)
         data = {}
-        try :
-            for key in ("first_name", "id", "last_name","password", "username", "car_sell", "favourite"):
+        try:
+            for key in ("first_name", "id", "last_name", "password", "username", "car_sell", "favourite"):
                 data[key] = post[key]
         except KeyError:
             return _failure(400, 'missing parameters')
@@ -166,6 +174,7 @@ def update_user(request):
         data.pop("id", None)
         user = _special_post_request(url, data)
         return _success(201, 'Create Success')
+
 
 def create_user(request):
     if request.method != 'POST':
@@ -176,17 +185,24 @@ def create_user(request):
         try:
             data["username"] = post["username"]
             data["password"] = post["password"]
-            data["last_name"]= post["last_name"]
+            data["last_name"] = post["last_name"]
             data["first_name"] = post["first_name"]
         except KeyError:
             return _failure(400, 'missing parameters')
         url = modelsAPI + 'signup/'
         user = _make_post_request(url, data)
-        if user["status_code"] == 200 :
+        if user["status_code"] == 200:
             user = user["user"]
+            # Index the new course into elastic search
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            new_dict = {}
+            new_dict['model'] = 'api.user'
+            new_dict['fields'] = data
+            producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
             return get_success(200, user, "users")
-        else :
+        else:
             return model_failure(user)
+
 
 def create_car(request):
     if request.method != 'POST':
@@ -206,10 +222,17 @@ def create_car(request):
 
         car = _make_post_request(url, data)
         if car["status_code"] == 201:
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            new_dict = {}
+            model_field = 'api.car'
+            new_dict['model'] = model_field
+            new_dict['fields'] = data
+            producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
             car = car["car"]
             return get_success(201, car, "car")
-        else :
+        else:
             return _failure(car['status_code'], "Model layer error")
+
 
 def check_loggedIn(request):
     post = request.POST
@@ -225,6 +248,7 @@ def check_loggedIn(request):
         return _success(200, "validated")
     else:
         return model_failure(response)
+
 
 def login(request):
     if request.method != 'POST':
@@ -245,6 +269,7 @@ def login(request):
             return get_success(200, response["authenticator"], "authenticator")
         else:
             return model_failure(response)
+
 
 def logout(request):
     if request.method != 'POST':
