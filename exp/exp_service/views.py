@@ -191,10 +191,12 @@ def create_user(request):
         user = _make_post_request(url, data)
         if user["status_code"] == 201:
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            new_dict = {}
-            new_dict['model'] = 'api.user'
-            new_dict['fields'] = data
-            producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
+            # new_dict = {}
+            # new_dict['model'] = 'api.user'
+            # new_dict['fields'] = data
+            # new_dict['username'] = data['username']
+            data['model'] = 'user'
+            producer.send('new-listings-topic', json.dumps(data).encode('utf-8'))
             return get_success(201, user, "users")
         else:
             return model_failure(user)
@@ -221,15 +223,14 @@ def create_car(request):
 
             # send data to Kafka
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            new_dict = {}
-            model_field = 'api.car'
-            new_dict['model'] = model_field
-            new_dict['fields'] = data
-            producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
-
-            # add the listing to es
-            es_add_car_listing(request, car['id'])
-
+            # new_dict = {}
+            # model_field = 'api.car'
+            # new_dict['model'] = model_field
+            # new_dict['fields'] = data
+            data['model'] = 'car'
+            producer.send('new-listings-topic', json.dumps(data).encode('utf-8'))
+            # # add the listing to es
+            # es_add_car_listing(request, data['id'])
             # return the json
             car = car["car"]
             return get_success(201, car, "car")
