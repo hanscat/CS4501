@@ -189,15 +189,13 @@ def create_user(request):
             return _failure(400, 'missing parameters')
         url = modelsAPI + 'signup/'
         user = _make_post_request(url, data)
-        if user["status_code"] == 200:
-            user = user["user"]
-            # Index the new course into elastic search
+        if user["status_code"] == 201:
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
             new_dict = {}
             new_dict['model'] = 'api.user'
             new_dict['fields'] = data
             producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
-            return get_success(200, user, "users")
+            return get_success(201, user, "users")
         else:
             return model_failure(user)
 
@@ -220,7 +218,7 @@ def create_car(request):
 
         car = _make_post_request(url, data)
         if car["status_code"] == 201:
-            
+
             # send data to Kafka
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
             new_dict = {}
@@ -228,10 +226,10 @@ def create_car(request):
             new_dict['model'] = model_field
             new_dict['fields'] = data
             producer.send('new-listings-topic', json.dumps(new_dict).encode('utf-8'))
-            
+
             # add the listing to es
             es_add_car_listing(request, car['id'])
-            
+
             # return the json
             car = car["car"]
             return get_success(201, car, "car")
@@ -328,11 +326,11 @@ def search(request):
         #     detail['label'] += ' ' + item['_source']['fields']['number']
         #     if 'title' in item['_source']['fields']:
         #         detail['label'] += ': ' + item['_source']['fields']['title']
-        # 
+        #
         #     url = 'http://models-api:8000/api/instructor/detail/'
         #     url += item['_source']['fields']['instructor'] + '/'
         #     resp = _make_get_request(url)
-        # 
+        #
         #     detail['label'] += ' (' + resp['instructor']['first_name']
         #     detail['label'] += ' ' + resp['instructor']['last_name'] + ')'
         # else:
