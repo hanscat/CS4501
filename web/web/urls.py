@@ -31,6 +31,7 @@ pages = [
     url(r'logout', views.logout, name='logout'),
     url(r'register', views.signup, name='signup'),
     url(r'createListing', views.createListing, name='createListing'),
+    url(r'search', views.search, name='search')
 ]
 
 handler400 = 'web.views.bad_request'

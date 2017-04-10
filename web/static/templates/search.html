@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'header2.html' %}
+
+<div class="jumbotron" style="background-image: url('/static/photos/carbackground.jpg') !important">
+    <div class="container">
+        <font color="white">
+            <h1>Welcome to CarSales.com!</h1>
+            <p>Here at CarSales.com we are dedicated to providing quality service for customers</p>
+        </font>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Join here&raquo;</a></p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+
+       <form action="" method="POST" id="signup-form">
+       {% csrf_token %}
+       <h2>Sign Up</h2>
+        </br>
+        <label for="query">Search For: </label>
+        {{form.query}}
+        </br>
+
+        <label for="user_or_car">Search Type: </label>
+        {{form.user_or_car}}
+
+        </br>
+        <br/>
+        <br/>
+
+          <div class="submit-row">
+          <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Register" />
+        </div>
+      </form>
+      <br/>
+
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

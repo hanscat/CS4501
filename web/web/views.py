@@ -37,13 +37,13 @@ def index(request):
 
 def search(request):
     if request.method == "GET":
-        searchForm = searchForm();
-        return render(request, 'search.html', {'form' : searchForm})
+        s_Form = searchForm()
+        return render(request, 'search.html', {'form' : s_Form})
     elif request.method == "POST":
-        searchform = searchForm(request.POST)
-        if searchForm.is_valid():
+        s_Form = searchForm(request.POST)
+        if s_Form.is_valid():
             url = "search_url"
-            search_data = searchForm.cleaned_data
+            search_data = s_Form.cleaned_data
             return HttpResponse(search_data)
             # response= post_request(url, search_data)
 
