@@ -190,13 +190,15 @@ def create_user(request):
         url = modelsAPI + 'signup/'
         user = _make_post_request(url, data)
         if user["status_code"] == 201:
+            
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            # new_dict = {}
-            # new_dict['model'] = 'api.user'
-            # new_dict['fields'] = data
-            # new_dict['username'] = data['username']
             data['model'] = 'user'
             producer.send('new-listings-topic', json.dumps(data).encode('utf-8'))
+
+            # # add the listing to es
+            es_add_user_listing(request, data["username"])
+
+            # return the json
             return get_success(201, user, "users")
         else:
             return model_failure(user)
@@ -223,14 +225,12 @@ def create_car(request):
 
             # send data to Kafka
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            # new_dict = {}
-            # model_field = 'api.car'
-            # new_dict['model'] = model_field
-            # new_dict['fields'] = data
             data['model'] = 'car'
             producer.send('new-listings-topic', json.dumps(data).encode('utf-8'))
+            
             # # add the listing to es
-            # es_add_car_listing(request, data['id'])
+            es_add_car_listing(request, 999) #fake id
+            
             # return the json
             car = car["car"]
             return get_success(201, car, "car")
@@ -299,12 +299,14 @@ def logout(request):
 def search(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
+    
     post = request.POST
     search_string = post['search_query']
     search_index_specifier = post['query_specifier']
+    
     elasticsearch_index = search_index_specifier + '_index'
-
     es = Elasticsearch(['es'])
+    
     try:
         search_result = es.search(index=elasticsearch_index, body={
             "query": {'query_string': {'query': search_string}},
@@ -322,24 +324,30 @@ def search(request):
     for item in search_result['hits']['hits']:
         detail = {'model': item['_source']['model']}
 
-        # if item['_source']['model'] == 'api.car':
-        #     detail['label'] = item['_source']['fields']['mnemonic']
-        #     detail['label'] += ' ' + item['_source']['fields']['number']
-        #     if 'title' in item['_source']['fields']:
-        #         detail['label'] += ': ' + item['_source']['fields']['title']
-        #
-        #     url = 'http://models-api:8000/api/instructor/detail/'
-        #     url += item['_source']['fields']['instructor'] + '/'
-        #     resp = _make_get_request(url)
-        #
-        #     detail['label'] += ' (' + resp['instructor']['first_name']
-        #     detail['label'] += ' ' + resp['instructor']['last_name'] + ')'
-        # else:
-        #     detail['label'] = item['_source']['fields']['first_name']
-        #     detail['label'] += ' ' + item['_source']['fields']['last_name']
-        #     detail['label'] += ' (' + item['_source']['fields']['id'] + ')'
+        if item['_source']['model'] == 'car':
+            attributes = ['car_make', 'car_color', 'car_model', 'car_body_type', 'price', 'year']
+            for attr in attributes:
+                if attr in item['_source']:
+                    detail['label'] += ': ' + item['_source'][attr]
 
-        if detail['model'] == 'api.user':
+            url = 'http://models-api:8000/api/detail/car/999/' # fake id
+            resp = _make_get_request(url)
+
+            detail['label'] += ' (' + resp['car']['car_make']
+            detail['label'] += ' ' + resp['car']['car_color'] + ')'
+        else:
+            attributes = ['username', 'first_name', 'last_name']
+            detail['label'] = ''
+            for attr in attributes:
+                if attr in item['_source']:
+                    detail['label'] += ': ' + item['_source'][attr]
+            url = 'http://models-api:8000/api/detail/user/' + item['_source']['username']
+            url = 'http://models-api:8000/api/detail/user/2'
+            resp = _make_get_request(url)
+            detail['label'] += ' (' + resp['car']['car_make']
+            detail['label'] += ' ' + resp['car']['car_color'] + ')'
+
+        if detail['model'] == 'user':
             result['size_model']['user'] += 1
             detail['href'] = '/user/detail/' + item['_id'] + '/'
         else:
@@ -353,17 +361,18 @@ def search(request):
 
 
 # Helper
-def es_add_user_listing(request, username):
+def es_add_user_listing(request, username): #username acts as unique id
     es = Elasticsearch(['es'])
-    user_new_listing = {'title': request.POST['title'], 'details': request.POST['details'], 'username': username,
-                        'id': id}
-    es.index(index='user_index', doc_type='listing', id=user_new_listing['id'], body=user_new_listing)
+    user_new_listing = {'first_name': request.POST['first_name'], 'last_name': request.POST['last_name'], 
+                        'username': username, 'model': 'user'}
+    es.index(index='user_index', doc_type='listing', id=user_new_listing['username'], body=user_new_listing)
     es.indices.refresh(index="user_index")
 
 
 def es_add_car_listing(request, id):
     es = Elasticsearch(['es'])
-    car_new_listing = {'name': request.POST['name'], 'description': request.POST['description'], 'id': id}
+    car_new_listing = {'car_make': request.POST['car_make'], 'description': request.POST['description'], 
+                       'id': id, 'model': 'car'}
     es.index(index='car_index', doc_type='listing', id=car_new_listing['id'], body=car_new_listing)
     es.indices.refresh(index='car_index')
 
