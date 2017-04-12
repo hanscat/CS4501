@@ -10,7 +10,11 @@
   2. As a user, I want to register with a unique username and log in back using that username as my loggin account.
   3. As a user, I want to create a listing of the car that I am going to sell.
   4. As a user, I want to see messeges when registration or logging in fail.
-  
+ 
+##Project #5 User Stories
+  1. As a user, I want to be able to search a user based on his/her username and view his/her profiles.
+  2. As a buyer, I want to be able to search a certain brand car or a certain make car.
+  3. As a user, I want to have a user friendly search page where I can specify what type of stuff that I want to search.
   
 ##User Stroies for future implementations:
   1. As a user, I want to be able to specify a university when I enter the main page of the website so that I can make searches or post offers in a specific scope.
