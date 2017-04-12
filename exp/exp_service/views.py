@@ -190,13 +190,13 @@ def create_user(request):
         url = modelsAPI + 'signup/'
         user = _make_post_request(url, data)
         if user["status_code"] == 201:
-            
+            user = user['user']
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            data['model'] = 'user'
-            producer.send('new-listings-topic', json.dumps(data).encode('utf-8'))
-
-            # # add the listing to es
-            es_add_user_listing(request, data["username"])
+            new_user = {}
+            new_user['model'] = 'api.user'
+            new_user['fields'] = dict(user)
+            new_user['pk'] = user['id']
+            producer.send('new-listings-topic', json.dumps(new_user).encode('utf-8'))
 
             # return the json
             return get_success(201, user, "users")
@@ -217,20 +217,18 @@ def create_car(request):
 
         except KeyError:
             return _failure(400, 'missing parameters')
-
         url = modelsAPI + 'detail/car/9999'
-
         car = _make_post_request(url, data)
         if car["status_code"] == 201:
-
             # send data to Kafka
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            data['model'] = 'car'
-            producer.send('new-listings-topic', json.dumps(data).encode('utf-8'))
-            
-            # # add the listing to es
-            es_add_car_listing(request, 999) #fake id
-            
+            new_car = {}
+            new_car['model'] = 'api.car'
+            new_car['pk'] = car['car']['id']
+            new_car['fields'] = dict(car['car'])
+            new_car['fields']['car_new'] = int(new_car['fields']['car_new'])
+            producer.send('new-listings-topic', json.dumps(new_car).encode('utf-8'))
+
             # return the json
             car = car["car"]
             return get_success(201, car, "car")
@@ -299,82 +297,54 @@ def logout(request):
 def search(request):
     if request.method != 'POST':
         return _failure(400, 'incorrect request type')
-    
+
     post = request.POST
     search_string = post['search_query']
     search_index_specifier = post['query_specifier']
-    
+
     elasticsearch_index = search_index_specifier + '_index'
     es = Elasticsearch(['es'])
-    
-    try:
-        search_result = es.search(index=elasticsearch_index, body={
-            "query": {'query_string': {'query': search_string}},
-            'size': 100,
-        })
-    except:
-        return _failure(400, 'improper search query!')
+    search_result = es.search(index=elasticsearch_index, body={
+        "query": {'query_string': {'query': search_string}},
+        'size': 100,
+    })
+    # except:
+        # return _failure(400, 'improper search query!')
 
     result = {'status_code': 200}
     result['time_taken'] = search_result['took'] / 1000
     result['size'] = search_result['hits']['total']
 
     result['size_model'] = {'user': 0, 'car': 0}
-    result['hits'] = []
+    result['hits'] = {}
+    car_list = []
+    user_list = []
     for item in search_result['hits']['hits']:
-        detail = {'model': item['_source']['model']}
-
-        if item['_source']['model'] == 'car':
+        car_detail = {}
+        user_detail = {}
+        if item['_index'] == 'car_index':
             attributes = ['car_make', 'car_color', 'car_model', 'car_body_type', 'price', 'year']
             for attr in attributes:
-                if attr in item['_source']:
-                    detail['label'] += ': ' + item['_source'][attr]
-
-            url = 'http://models-api:8000/api/detail/car/999/' # fake id
-            resp = _make_get_request(url)
-
-            detail['label'] += ' (' + resp['car']['car_make']
-            detail['label'] += ' ' + resp['car']['car_color'] + ')'
+                if attr in item['_source']['fields']:
+                    car_detail[attr] = item['_source']['fields'][attr]
+            car_detail['id'] = item['_id']
+            result['size_model']['car'] += 1
+            car_list.append(car_detail)
         else:
             attributes = ['username', 'first_name', 'last_name']
-            detail['label'] = ''
             for attr in attributes:
-                if attr in item['_source']:
-                    detail['label'] += ': ' + item['_source'][attr]
-            url = 'http://models-api:8000/api/detail/user/' + item['_source']['username']
-            url = 'http://models-api:8000/api/detail/user/2'
-            resp = _make_get_request(url)
-            detail['label'] += ' (' + resp['car']['car_make']
-            detail['label'] += ' ' + resp['car']['car_color'] + ')'
+                if attr in item['_source']['fields']:
+                    user_detail[attr] = item['_source']['fields'][attr]
 
-        if detail['model'] == 'user':
+            user_detail['id'] = item['_id']
             result['size_model']['user'] += 1
-            detail['href'] = '/user/detail/' + item['_id'] + '/'
-        else:
-            result['size_model']['car'] += 1
-            detail['href'] = '/car/detail/' + item['_id'] + '/'
+            user_list.append(user_detail)
 
-        result['hits'].append(detail)
+    result['hits']['car_list'] = car_list
+    result['hits']['user_list'] = user_list
 
     # returns the final constructed data set
     return get_success(200, result, "search results")
-
-
-# Helper
-def es_add_user_listing(request, username): #username acts as unique id
-    es = Elasticsearch(['es'])
-    user_new_listing = {'first_name': request.POST['first_name'], 'last_name': request.POST['last_name'], 
-                        'username': username, 'model': 'user'}
-    es.index(index='user_index', doc_type='listing', id=user_new_listing['username'], body=user_new_listing)
-    es.indices.refresh(index="user_index")
-
-
-def es_add_car_listing(request, id):
-    es = Elasticsearch(['es'])
-    car_new_listing = {'car_make': request.POST['car_make'], 'description': request.POST['description'], 
-                       'id': id, 'model': 'car'}
-    es.index(index='car_index', doc_type='listing', id=car_new_listing['id'], body=car_new_listing)
-    es.indices.refresh(index='car_index')
 
 # """TO-DO"""
 # def showBuyers(request):

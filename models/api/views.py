@@ -225,8 +225,13 @@ def signup(request):
     data_dict = request.POST
     form = UserForm(data_dict)
     if form.is_valid():
-        form.save()
-        return _success(201, 'Create Success')
+        user = form.save()
+        user = model_to_dict(user)
+        user.pop('car_sell', None)
+        user.pop('favourite', None)
+        user.pop('password', None)
+
+        return get_success(201, user, 'user')
     else:
         return _failure(400, form.errors)
 
