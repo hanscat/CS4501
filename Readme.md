@@ -1,5 +1,19 @@
 ## Web Application for CS 4501: college P2P Used Car Sale/Trade
 
+## Project 5 Timeline:
+1. 2017-04-05:
+    1. refined docker-compose, added two more containers for es and kafka
+    2. new images downloaded
+    
+2. 2017-04-10
+    1. modified create user and create car views to be compatible to kafka
+    2. search page completed
+    
+3. 2017-04-11
+    1. es and kafka tested and deloyed
+    2. search funtion connected to the search page (search options available, for extra credit)
+
+
 ## Project 4 Timeline:
 1. 2017-03-21:
     1. model layer authenticator and related api setup and tested
