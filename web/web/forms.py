@@ -41,8 +41,8 @@ class listingForm(forms.Form):
 	description = forms.CharField(label='Briefly Describe your car', widget=forms.Textarea)
 	price = forms.IntegerField(label='Price Listing')
 
-Type_Choices=[("user", "user"), ("car", "car"), ("both", "both")]
+Type_Choices=[("user", "user"), ("car", "car"), ("general", "general")]
 
 class searchForm(forms.Form):
 	query = forms.CharField(label='Type What you want to look for')
-	user_or_car = forms.CharField(widget=forms.Select(choices=Type_Choices))
+	query_specifier = forms.CharField(widget=forms.Select(choices=Type_Choices))
