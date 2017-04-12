@@ -24,6 +24,7 @@ def special_post_request(url, post_data):
     return response
 
 expApi = 'http://exp-api:8000/api/v1/'
+
 def index(request):
     url = expApi + "home"
     ret = get_request(url)
@@ -33,6 +34,19 @@ def index(request):
         return render(request, 'home.html', {'cars': cars, 'users': user})
     else :
         return bad_request(request)
+
+def search(request):
+    if request.method == "GET":
+        s_Form = searchForm()
+        return render(request, 'search.html', {'form' : s_Form})
+    elif request.method == "POST":
+        s_Form = searchForm(request.POST)
+        if s_Form.is_valid():
+            url = "search_url"
+            search_data = s_Form.cleaned_data
+            return HttpResponse(search_data)
+            # response= post_request(url, search_data)
+
 
 def car_detail(request, car_id):
     template = loader.get_template('home.html')
