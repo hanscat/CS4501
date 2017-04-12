@@ -6,7 +6,7 @@ car = [
     # url(r'^api/v1/showCarsColor=/(?P<color>[a-zA-Z]+)', views.showCertainColorCar),
     # url(r'^api/v1/showCarsMake=/(?P<make>[a-zA-Z]+)', views.showCertainMakeCar),
     url(r'^api/v1/car/(?P<car_id>[0-9]+)', views.car_detail, name='carPage'),
-    url(r'^api/v1/car/create$', views.create_car, name='createCarPage'),
+    url(r'^api/v1/car/create/$', views.create_car, name='createCarPage'),
 ]
 
 user = [

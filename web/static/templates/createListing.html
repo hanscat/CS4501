@@ -15,7 +15,13 @@
 <div class="container">
     <div class="row">
     <br></br>
-
+    {%if message%}
+  {%for m in message%}
+  <div class="alert alert-warning">
+  {{m}}
+  </div>
+  {%endfor%}
+  {%endif%}
        <form action="" method="POST" id="list-form">{% csrf_token %}
 
          <h2>Create Listing</h2>
@@ -56,9 +62,6 @@
           <div class="submit-row">
           <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Create" />
         </div>
-
-        <p>{{message}}<p>
-
     </div>
 </div>
 
