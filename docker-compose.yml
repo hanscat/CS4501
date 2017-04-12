@@ -15,6 +15,8 @@ exp:
    image: shadowgamefly/cs4501
    links:
       - models:models-api
+      - kafka:kafka
+      - es:es
    ports:
       - "8002:8000"
    volumes:
@@ -55,4 +57,4 @@ batch:
    links:
       - kafka:kafka
       - es:es
-   command: bash -c "python /app/batch/batch_script.py"
+   command: bash -c "python /app/batch_script.py"

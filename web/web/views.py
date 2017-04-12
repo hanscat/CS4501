@@ -174,7 +174,7 @@ def createListing(request):
     elif request.method == "POST":
         listForm = listingForm(request.POST)
         if listForm.is_valid():
-            url = expApi + "createCar/"
+            url = expApi + "car/create/"
             data = listForm.cleaned_data
             ret = post_request(url, data)
             message = "Car successfully created!!!"
