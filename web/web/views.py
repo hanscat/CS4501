@@ -195,7 +195,7 @@ def createListing(request):
             url = expApi + "car/create/"
             data = listForm.cleaned_data
             ret = post_request(url, data)
-            message = "Car successfully created!!!"
+            message = "Car create fail"
             if ret["status_code"] != 201:
                 return render(request, 'createListing.html', {'message': message})
             else :
@@ -210,7 +210,14 @@ def createListing(request):
                 else :
                     return HttpResponseRedirect(reverse('createListing'))
         else:
-            return HttpResponseRedirect(reverse('createListing'))
+            data = {}
+            data['listForm'] = listForm
+            error_message = []
+            for key in listForm._errors.keys():
+                error_message.append(listForm._errors[key][0])
+            data['message'] = error_message
+            return render(request, 'createListing.html', data)
+
     else :
         return HttpResponse("Bad Request")
 

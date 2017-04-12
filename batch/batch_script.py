@@ -45,11 +45,11 @@ finally:
             # Model Specific Indices
             if new_listing['model'] == 'api.car':
                 es.index(index='car_index', doc_type='listing', id=new_listing['pk'], body=new_listing)
-                es.index(index='general_index', doc_type='listing', id=element['pk'], body=new_listing)
+                es.index(index='general_index', doc_type='listing', id=new_listing['pk'] * 2, body=new_listing)
 
             elif new_listing['model'] == 'api.user':
                 es.index(index='user_index', doc_type='listing', id=new_listing['pk'], body=new_listing)
-                es.index(index='general_index', doc_type='listing', id=element['pk'], body=new_listing)
+                es.index(index='general_index', doc_type='listing', id=new_listing['pk'] * 2 + 1, body=new_listing)
 
         # refresh all incides to make changes effective
             es.indices.refresh(index="user_index")

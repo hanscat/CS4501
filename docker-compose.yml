@@ -6,9 +6,10 @@ models:
       -  ./models:/app
     ports:
       - "8001:8000"
-    command: bash -c "python manage.py makemigrations 
-                      && python manage.py migrate --no-input 
-                      && python manage.py loaddata demo.json 
+    command: bash -c "python manage.py makemigrations
+                      && python manage.py migrate --no-input
+                      && python manage.py flush --no-input
+                      && python manage.py loaddata demo.json
                       && mod_wsgi-express start-server --working-directory /app --reload-on-changes --log-to-terminal /app/models/wsgi.py"
 
 exp:
@@ -40,7 +41,7 @@ kafka:
       ADVERTISED_HOST: kafka
       ADVERTISED_PORT: 9092
    hostname: kafka
-   
+
 es:
    image: elasticsearch:2.0
    container_name: es

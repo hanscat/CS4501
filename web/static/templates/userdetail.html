@@ -10,33 +10,49 @@
         </font>
     </div>
 </div>
-
-<div class="container">
-    <div class="col-lg-12">
-        <h1>User Profile</h1>
-        <p>User Name: {{user.username}}</p>
-        {%if user.car_sell%}
-        <div class="row">
-            <h1>My inventory</h1>
-            <hr>
-            {%for car in user.car_sell%}
-            <div class="col-lg-4 col-md-4 col-sm-4 col-sxs-6">
-                <h2>{{car.car_make}} {{car.car_model}}</h2>
-                <p>Color: {{car.car_color}}</p>
-                <p>Make: {{car.car_make}}</p>
-                <p>Model: {{car.car_model}}</p>
-                <p>New: {{car.car_new}}</p>
-                <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
-                    details &raquo;</a></p>
-            </div>
-            {%endfor%}
-
-            {%endif%}
-            <div class="col-lg-4 col-md-4 col-sm-4 col-sxs-6">
-                <h2>Incoming listing</h2>
-                <p><a class="btn btn-default" href="{% url 'createListing' %}" role="button">Create
-                    new listing &raquo;</a></p>
-            </div>
+    <div class="container">
+        <div class="col-lg-12">
+          <h1>User Profile</h1>
+          <p>User Name: {{user.username}}</p>
+          <div class="row">
+          <h1>My inventory</h1>
+          <hr>
+          {%if user.car_sell%}
+          {%for car in user.car_sell%}
+          <div class="col-lg-4 col-md-4 col-sm-4 col-sxs-6">
+              <h2>{{car.car_make}} {{car.car_model}}</h2>
+              <p>Color: {{car.car_color}}</p>
+              <p>Make: {{car.car_make}}</p>
+              <p>Model: {{car.car_model}}</p>
+              <p>New: {{car.car_new}}</p>
+              <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
+                  details &raquo;</a></p>
+          </div>
+          {%endfor%}
+          {%endif%}
+          <div class="col-lg-4 col-md-4 col-sm-4 col-sxs-6">
+            <h2>Incoming listing</h2>
+            <p><a class="btn btn-default" href="{% url 'createListing' %}" role="button">Create
+                new listing &raquo;</a></p>
+          </div>
+          </div>
+          <div class="row">
+          {%if user.favourite%}
+          <h1>My Interested</h1>
+          <hr>
+          <br>
+          {%for car in user.favourite%}
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+              <h2>{{car.car_make}} {{car.car_model}}</h2>
+              <p>Color: {{car.car_color}}</p>
+              <p>Make: {{car.car_make}}</p>
+              <p>Model: {{car.car_model}}</p>
+              <p>New: {{car.car_new}}</p>
+              <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
+                  details &raquo;</a></p>
+          </div>
+          {%endfor%}
+          {%endif%}
         </div>
         <div class="row">
             {%if user.favourite%}
