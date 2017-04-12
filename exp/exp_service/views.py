@@ -301,7 +301,7 @@ def search(request):
     post = request.POST
     search_string = post['query']
     search_index_specifier = post['query_specifier']
-
+    
     elasticsearch_index = search_index_specifier + '_index'
     es = Elasticsearch(['es'])
     search_result = es.search(index=elasticsearch_index, body={

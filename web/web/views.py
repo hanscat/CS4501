@@ -45,6 +45,7 @@ def search(request):
             url = expApi + "search/"
             search_data = s_Form.cleaned_data
             response= post_request(url, search_data)
+            # return HttpResponse(response['search results'])
             if response['status_code'] == 200:
                 return render(request, 'search_result.html', response['search results'])
             else :
