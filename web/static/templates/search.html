@@ -17,21 +17,21 @@
 
        <form action="" method="POST" id="signup-form">
        {% csrf_token %}
-       <h2>Sign Up</h2>
+       <h2>Search</h2>
         </br>
         <label for="query">Search For: </label>
         {{form.query}}
         </br>
 
         <label for="user_or_car">Search Type: </label>
-        {{form.user_or_car}}
+        {{form.query_specifier}}
 
         </br>
         <br/>
         <br/>
 
           <div class="submit-row">
-          <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Register" />
+          <label>&nbsp;</label><input class="btn btn-primary btn-md" type="submit" value="Search" />
         </div>
       </form>
       <br/>

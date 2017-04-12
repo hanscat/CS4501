@@ -299,7 +299,7 @@ def search(request):
         return _failure(400, 'incorrect request type')
 
     post = request.POST
-    search_string = post['search_query']
+    search_string = post['query']
     search_index_specifier = post['query_specifier']
 
     elasticsearch_index = search_index_specifier + '_index'
@@ -308,10 +308,8 @@ def search(request):
         "query": {'query_string': {'query': search_string}},
         'size': 100,
     })
-    # except:
-        # return _failure(400, 'improper search query!')
 
-    result = {'status_code': 200}
+    result = {}
     result['time_taken'] = search_result['took'] / 1000
     result['size'] = search_result['hits']['total']
 
@@ -322,12 +320,12 @@ def search(request):
     for item in search_result['hits']['hits']:
         car_detail = {}
         user_detail = {}
-        if item['_index'] == 'car_index':
+        if item['_source']['model'] == 'api.car':
             attributes = ['car_make', 'car_color', 'car_model', 'car_body_type', 'price', 'year']
             for attr in attributes:
                 if attr in item['_source']['fields']:
                     car_detail[attr] = item['_source']['fields'][attr]
-            car_detail['id'] = item['_id']
+            car_detail['id'] = item['_source']['fields']['id']
             result['size_model']['car'] += 1
             car_list.append(car_detail)
         else:
@@ -336,7 +334,7 @@ def search(request):
                 if attr in item['_source']['fields']:
                     user_detail[attr] = item['_source']['fields'][attr]
 
-            user_detail['id'] = item['_id']
+            user_detail['id'] = item['_source']['fields']['id']
             result['size_model']['user'] += 1
             user_list.append(user_detail)
 

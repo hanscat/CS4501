@@ -42,11 +42,14 @@ def search(request):
     elif request.method == "POST":
         s_Form = searchForm(request.POST)
         if s_Form.is_valid():
-            url = "search_url"
+            url = expApi + "search/"
             search_data = s_Form.cleaned_data
-            return HttpResponse(search_data)
-            # response= post_request(url, search_data)
-
+            response= post_request(url, search_data)
+            if response['status_code'] == 200:
+                return render(request, 'search_result.html', response['search results'])
+            else :
+                return HttpResponse("shit")
+        return render(request, 'search.html', {'form' : s_Form})
 
 def car_detail(request, car_id):
     template = loader.get_template('home.html')
