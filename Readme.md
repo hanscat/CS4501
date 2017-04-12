@@ -5,11 +5,11 @@
     1. refined docker-compose, added two more containers for es and kafka
     2. new images downloaded
     
-2. 2017-04-10
+2. 2017-04-8
     1. modified create user and create car views to be compatible to kafka
     2. search page completed
     
-3. 2017-04-11
+3. 2017-04-10
     1. es and kafka tested and deloyed
     2. search funtion connected to the search page (search options available, for extra credit)
 
