@@ -26,7 +26,7 @@ install:
     grant all privileges on cs4501.* to 'www'@'%';" 
 
 # command to run tests
-before-script:
+before_script:
   - docker start mysql
   - docker-compose up -d
   - sleep 15
@@ -35,22 +35,15 @@ before-script:
   
 script: 
   # models.test
-  - docker start mysql
-  - docker-compose up -d
-  - docker ps -a
-  - sleep 15
   - > 
-    docker exec -it cs4501_models_1
-    cd models
-    python manage.py test
-    exit
+    docker exec -it cs4501_models_1 bash -c 
+    "python manage.py test"
   #exp.test
   - >
-    docker exec -it cs4501_exp_1
-    python manage.py test
-    exit
+    docker exec -it cs4501_exp_1 bash -c 
+    "python manage.py test"
 
-after-script:
+after_script:
   - docker-compose down
   - docker stop mysql
   - docker rm 'docker ps -a -q'
