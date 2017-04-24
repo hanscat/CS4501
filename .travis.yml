@@ -16,7 +16,7 @@ install:
   - sleep 5
   - docker ps -a
   - >
-    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash
+    docker run -it --name mysql-cmd --rm --link mysql:db mysql:5.7.14 bash
     mysql -uroot -p'$3cureUS' -h db -v -e
     "create user 'www'@'%' identified by '\$3cureUS';
     create database cs4501 character set utf8;
