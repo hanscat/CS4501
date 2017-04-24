@@ -16,7 +16,7 @@ install:
   - docker pull mysql:5.7.14
   - mkdir db
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
-  - sleep 10
+  - sleep 5
   - docker ps -a
   - >
     docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14
@@ -26,25 +26,32 @@ install:
     grant all privileges on cs4501.* to 'www'@'%';" 
 
 # command to run tests
-before-script:
+#before-script:
+#  - docker start mysql
+#  - docker-compose up -d
+#  - sleep 15
+#  - docker ps -a
+#  - docker start app_models_1 app_exp_1
+  
+script: 
+# run test commands
   - docker start mysql
   - docker-compose up -d
   - sleep 15
   - docker ps -a
   - docker start app_models_1 app_exp_1
-  
-script: 
-# run test commands
   # models.test
-  - docker run -it --name web -p 8000:8000 --link mysql:db tp33/django
-  - docker exec -it web bash
-  - cd models
-  - python manage.py test
-  - exit
+  - > 
+    docker run -it --name web -p 8000:8000 --link mysql:db tp33/django
+    docker exec -it web
+    cd models
+    python manage.py test
+    exit
   #exp.test
-  - docker exec -it app_exp_1 bash
-  - python manage.py test
-  - exit
+  - >
+    docker exec -it app_exp_1
+    python manage.py test
+    exit
 
 after-script:
   - docker-compose down
