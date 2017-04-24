@@ -11,6 +11,7 @@ python:
 install:
   - mkdir -p ~/cs4501/app
   - docker run -it --name web -v ~/cs4501/app:/app tp33/django
+  - exit
   # setup db
   - docker pull mysql:5.7.14
   - mkdir ~/cs4501/db
