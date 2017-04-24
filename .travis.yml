@@ -31,24 +31,24 @@ before-script:
   - docker-compose up -d
   - sleep 15
   - docker ps -a
-  - docker start app_models_1 app_exp_1
+#  - docker start models exp
   
 script: 
 # run test commands
   - docker ps -a
-  - docker-compose up -d
-  - sleep 15
-  - docker start app_models_1 app_exp_1
+#  - docker-compose up -d
+#  - sleep 15
+#  - docker start models exp
   # models.test
   - > 
-    docker run -it --name web -p 8000:8000 --link mysql:db tp33/django
-    docker exec -it web
+#    docker run -it --name web -p 8000:8000 --link mysql:db tp33/django
+    docker exec -it models
     cd models
     python manage.py test
     exit
   #exp.test
   - >
-    docker exec -it app_exp_1
+    docker exec -it exp
     python manage.py test
     exit
 
