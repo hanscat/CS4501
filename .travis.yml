@@ -11,8 +11,8 @@ python:
 install:
   # setup db
   - docker pull mysql:5.7.14
-  - mkdir ~/cs4501/db
-  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
+  - mkdir db
+  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v db:/var/lib/mysql  mysql:5.7.14
   - sleep 5
   - >
     docker ps -a
