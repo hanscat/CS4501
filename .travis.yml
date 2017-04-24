@@ -12,25 +12,26 @@ install:
   # setup db
   - docker pull mysql:5.7.14
   - mkdir db
-  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v db:/var/lib/mysql  mysql:5.7.14
+  - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v 'pwd'/db:/var/lib/mysql  mysql:5.7.14
   - sleep 5
+  - docker ps -a
   - >
-    docker ps -a
     docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash
-    mysql -uroot -p'$3cureUS' -h db
-    "create user 'www'@'%' identified by '$3cureUS';
+    mysql -uroot -p'$3cureUS' -h db -v -e
+    "create user 'www'@'%' identified by '\$3cureUS';
     create database cs4501 character set utf8;
-    grant all on cs4501.* to 'www'@'%';" 
+    grant all privileges on *.* to 'www'@'%';" 
 
 # command to run tests
 before-script:
   - docker start mysql
   - docker-compose up -d
-
+  - sleep 15
+  - docker ps -a
 script: 
 # run test commands
-  # models.test
   - docker start app_models_1 app_exp_1
+  # models.test
   - docker run -it --name web -p 8000:8000 --link mysql:db -v ~/absolute/directory/to/app:/app tp33/django
   - docker exec -it web bash
   - cd models
