@@ -12,7 +12,7 @@ install:
   # setup db
   - docker pull mysql:5.7.14
   - mkdir db
-  - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ./db:/var/lib/mysql  mysql:5.7.14
+  - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v db:/var/lib/mysql  mysql:5.7.14
   - sleep 5
   - docker ps -a
   - >
