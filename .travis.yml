@@ -23,15 +23,13 @@ install:
     mysql -uroot -p'$3cureUS' -h db -v -e
     "create user 'www'@'%' identified by '\$3cureUS';
     create database cs4501 character set utf8;
-    grant all privileges on cs4501.* to 'www'@'%';" 
+    grant all privileges on *.* to 'www'@'%';"
 
 # command to run tests
 before_script:
-  - docker start mysql
   - docker-compose up -d
   - sleep 15
   - docker ps -a
-#  - docker start models exp
   
 script: 
   # models.test
