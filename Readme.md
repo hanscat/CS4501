@@ -5,11 +5,11 @@
     1. refined docker-compose, added two more containers for es and kafka
     2. new images downloaded
     
-2. 2017-04-10
+2. 2017-04-8
     1. modified create user and create car views to be compatible to kafka
     2. search page completed
     
-3. 2017-04-11
+3. 2017-04-10
     1. es and kafka tested and deloyed
     2. search funtion connected to the search page (search options available, for extra credit)
 
@@ -85,6 +85,8 @@
   * the link under `user` all lead to the same user page
 * localhost:8000/cardetail/<id>: cardetail page, contain information of a car
 * localhost:8000/userdetail/<id>: userdetail page, contain information of a user
+* localhost:8000/createListing/<id>: to create a car listing, all fields are required
+* localhost:8000/register/<id>: to create a new user
 
 **if given id the car/user not found turn to a 404 error page**
 
@@ -189,7 +191,18 @@ To run test please do the following:
     localhost:8001/api/v1/auth/login
     localhost:8001/api/v1/auth/check_status
     localhost:8001/api/v1/auth/logout
-
+    localhost:8002/api/v1/car/[0-9]+
+    localhost:8002/api/v1/car/create/$
+    localhost:8002/api/v1/user/[0-9]+
+    localhost:8002/api/v1/user/signup/$
+    localhost:8002/api/v1/user/update
+    localhost:8002/api/v1/user/concise
+    localhost:8002/api/v1/auth/login
+    localhost:8002/api/v1/auth/logout
+    localhost:8002/api/v1/auth/check_status
+    localhost:8002/api/v1/search
+    localhost:8002/api/v1/home
+    
 ## General API
 
 * GET detail/user/?[fields]=[instance]&
@@ -253,6 +266,11 @@ To run test please do the following:
       * `200`: if authenticator not time-out return the same authenticator
       * `202`: if authenticator time-out automatically delete the authenticator
 
+* POST /api/v1/search
+    * Post: search index and search string
+      * `400`: if missing required parameters
+      * `404`: if search index not found
+      * `200`: if success
 
   * NOTE:
     * All other HTTP request other than those specified above will raise `500` error
