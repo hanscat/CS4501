@@ -34,10 +34,6 @@ before-script:
 #  - docker start models exp
   
 script: 
-# run test commands
-#  - docker-compose up -d
-#  - sleep 15
-#  - docker start models exp
   # models.test
   - > 
 #    docker run -it --name web -p 8000:8000 --link mysql:db tp33/django
