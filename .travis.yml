@@ -40,13 +40,13 @@ script:
   - docker ps -a
   - sleep 15
   - > 
-    docker exec -it models
+    docker exec -it app_models_1
     cd models
     python manage.py test
     exit
   #exp.test
   - >
-    docker exec -it exp
+    docker exec -it app_exp_1
     python manage.py test
     exit
 

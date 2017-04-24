@@ -1,6 +1,5 @@
 models:
     image: shadowgamefly/cs4501
-    name : models
     external_links:
       -  mysql:db
     volumes:
@@ -15,7 +14,6 @@ models:
 
 exp:
    image: shadowgamefly/cs4501
-   name: exp
    links:
       - models:models-api
       - kafka:kafka
