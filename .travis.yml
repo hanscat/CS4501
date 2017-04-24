@@ -36,7 +36,6 @@ before-script:
 script: 
   # models.test
   - > 
-#    docker run -it --name web -p 8000:8000 --link mysql:db tp33/django
     docker exec -it models
     cd models
     python manage.py test
