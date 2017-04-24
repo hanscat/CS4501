@@ -26,18 +26,15 @@ install:
     grant all privileges on cs4501.* to 'www'@'%';" 
 
 # command to run tests
-#before-script:
-#  - docker start mysql
-#  - docker-compose up -d
-#  - sleep 15
-#  - docker ps -a
-#  - docker start app_models_1 app_exp_1
-  
-script: 
-# run test commands
+before-script:
   - docker start mysql
   - docker-compose up -d
   - sleep 15
+  - docker ps -a
+  - docker start app_models_1 app_exp_1
+  
+script: 
+# run test commands
   - docker ps -a
   - docker start app_models_1 app_exp_1
   # models.test
