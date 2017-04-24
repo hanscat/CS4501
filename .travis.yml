@@ -35,6 +35,10 @@ before-script:
   
 script: 
   # models.test
+  - docker start mysql
+  - docker-compose up -d
+  - docker ps -a
+  - sleep 15
   - > 
     docker exec -it models
     cd models
