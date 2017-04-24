@@ -1,0 +1,50 @@
+# commands for docker. From https://docs.travis-ci.com/user/docker/
+services:
+  - docker
+  
+# commands for python. From https://docs.travis-ci.com/user/languages/python/
+language: python
+python:
+  - "3.5"
+  
+# command to install dependencies
+install:
+  # setup db
+  - docker pull mysql:5.7.14
+  - mkdir ~/cs4501/db
+  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
+  - sleep 5
+  - >
+    docker ps -a
+    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash
+    mysql -uroot -p'$3cureUS' -h db
+    "create user 'www'@'%' identified by '$3cureUS';
+    create database cs4501 character set utf8;
+    grant all on cs4501.* to 'www'@'%';" 
+
+# command to run tests
+before-script:
+  - docker start mysql
+  - docker-compose up -d
+
+script: 
+# run test commands
+  # models.test
+  - docker start app_models_1 app_exp_1
+  - docker run -it --name web -p 8000:8000 --link mysql:db -v ~/absolute/directory/to/app:/app tp33/django
+  - docker exec -it web bash
+  - cd models
+  - python manage.py test
+  - exit
+  #exp.test
+  - docker exec -it app_exp_1 bash
+  - python manage.py test
+  - exit
+
+after-script:
+  - docker-compose down
+  - docker stop mysql
+  - docker rm 'docker ps -a -q'
+  - docker rmi 'docker images -q'
+  # remove db
+  - sudo rm -rf db
