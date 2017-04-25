@@ -42,7 +42,7 @@ script:
   - mkdir app
   - mkdir db
   - docker run -it --name web -p 8000:8000 --link mysql:db -v ~:/app tp33/django
-  -> 
+  - > 
     docker exec -it web bash -c
     "cd models; python manage.py test; exit"
 
