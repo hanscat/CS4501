@@ -32,11 +32,10 @@ before_script:
   
 script: 
   # models.test
-  - docker start cs4501_models_1
   - docker ps -a
-  - > 
-    docker exec -it cs4501_models_1 bash -c 
-    "python manage.py test"
+#  - > 
+#    docker exec -it cs4501_models_1 bash -c 
+#    "python manage.py test"
   #exp.test
   - >
     docker exec -it cs4501_exp_1 bash -c 
