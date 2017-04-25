@@ -9,9 +9,6 @@ python:
   
 # command to install dependencies
 install:
-#  - mkdir -p ~/cs4501/app
-#  - docker run -it --name web -v ~/cs4501/app:/app tp33/django
-#  - exit
   # setup db
   - docker pull mysql:5.7.14
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
@@ -31,19 +28,25 @@ before_script:
   - docker ps -a
   
 script: 
-  # models.test
-  - docker ps -a
-#  - > 
-#    docker exec -it cs4501_models_1 bash -c 
-#    "python manage.py test"
   #exp.test
   - >
     docker exec -it cs4501_exp_1 bash -c 
-    "python manage.py test"
-
-after_script:
+    "python manage.py test; exit"
+    
   - docker-compose down
   - docker stop mysql
+  # models.test
+  #  - > 
+  #    docker exec -it cs4501_models_1 bash -c 
+  #    "python manage.py test"
+  - mkdir app
+  - mkdir db
+  - docker run -it --name web -p 8000:8000 --link mysql:db -v ~:/app tp33/django
+  -> 
+    docker exec -it web bash -c
+    "cd models; python manage.py test; exit"
+
+after_script:
   - docker rm 'docker ps -a -q'
   - docker rmi 'docker images -q'
   # remove db
