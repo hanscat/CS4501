@@ -57,19 +57,21 @@ install: # prepare mySQL database
 before_script:
   - docker-compose up -d
  # - apt-get google-chrome-stable
-  - docker ps -a
   - sleep 5
+  - docker ps -a
+
 
 script: 
 #    models.test
   - docker start cs4501_models_1
   - >
-    docker exec -it app_models_1 bash -c 
+    docker exec -it cs4501_models_1 bash -c 
     "python manage.py test"
     
 #     exp.test
+  - docker start cs4501_exp_1
   - >
-    docker exec -it app_exp_1 bash -c 
+    docker exec -it cs4501_exp_1 bash -c 
     "python manage.py test"
 
   - docker ps -a
