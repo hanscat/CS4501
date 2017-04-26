@@ -16,11 +16,11 @@ install:
   - mkdir ~/cs4501/db/
   - docker pull mysql:5.7.14
 #  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
-  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
+  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
   - sleep 20
   - docker ps -a
   - >
-    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14
+    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17
     mysql -uroot -p'$3cureUS' -h db -v -e
     "create user 'www'@'%' identified by '$3cureUS';
     create database cs4501 character set utf8;
@@ -39,8 +39,9 @@ script:
   - >
     docker exec -it app_exp_1 bash -c 
     "python manage.py test"
-    
+
   - docker-compose down
+  - cd ~
   # models.test
   #  - > 
   #    docker exec -it cs4501_models_1 bash -c 
