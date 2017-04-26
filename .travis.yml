@@ -34,8 +34,8 @@ before_script:
   - ls
 #  - docker-compose up -d
 #  - sleep 10
-#  - docker ps -a
-#  - docker start app_models_1
+  - docker ps -a
+  - docker start mysql
   
 script: 
   #exp.test
@@ -46,10 +46,7 @@ script:
 #  - docker-compose down
 #  - cd ~
   # models.test
-  #  - > 
-  #    docker exec -it cs4501_models_1 bash -c 
-  #    "python manage.py test" 
-  - cd ~
+  - cd ~/cs4501/
   - >
     docker run -it --name web -p 8000:8000 --link mysql:db -v ~/cs4501/app:/app tp33/django bash -c
     "cd models && python manage.py test"
