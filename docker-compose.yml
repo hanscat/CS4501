@@ -6,7 +6,7 @@ models:
       -  ./models:/app
     ports:
       - "8001:8000"
-    command: bash -c "python manage.py makemigrations
+    command: bash -c "python manage.py makemigrations api --no-input
                       && python manage.py migrate --no-input
                       && python manage.py flush --no-input
                       && python manage.py loaddata demo.json
