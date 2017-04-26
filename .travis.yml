@@ -14,17 +14,19 @@ install:
   - mkdir ~/cs4501/app/
   - mv -v ./{.[!.],}* ~/cs4501/app/
   - mkdir ~/cs4501/db/
+  - cd ~
   - docker pull mysql:5.7.17
 #  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
   - sleep 20
   - docker ps -a
   - >
-    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17
-    mysql -uroot -p'$3cureUS' -h db -v -e
-    "create user 'www'@'%' identified by '$3cureUS';
+    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 base -c
+    "mysql -uroot -p'$3cureUS' -h db -v -e"
+  - >  
+    create user 'www'@'%' identified by '$3cureUS';
     create database cs4501 character set utf8;
-    grant all privileges on cs4501.* to 'www'@'%';"
+    grant all privileges on cs4501.* to 'www'@'%';
 
 # command to run tests
 before_script:
