@@ -38,12 +38,12 @@ before_script:
   - docker ps -a
 
 script: 
-#    exp.test
+#    models.test
   - >
-    docker exec -it app_exp_1 bash -c 
+    docker exec -it app_models_1 bash -c 
     "python manage.py test"
     
-#     models.test
+#     exp.test
   - >
     docker exec -it app_exp_1 bash -c 
     "python manage.py test"
