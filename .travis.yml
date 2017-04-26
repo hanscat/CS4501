@@ -42,6 +42,7 @@ before_script:
 
 script: 
 #    models.test
+  - docker start app_models_1
   - >
     docker exec -it app_models_1 bash -c 
     "python manage.py test"
