@@ -9,19 +9,19 @@ class TestGetCar(TestCase):
         pass
 
     # test success of data retrieval with legal keys
-    def test_success_response(self):
+    def test_00_uccess_response(self):
         response = self.client.get(reverse('carPage', kwargs={'car_id': '1'}))  # assumes car with id 1 is stored in db
         #self.assertContains(response,
          #                   'car_id')  # checks that response contains parameter order list & implicitly checks that                                                 #statuscode is 200
         self.assertEqual(response.status_code, 200)
 
     # test failure when called with invalid key
-    def test_fails_invalid(self):
+    def test_01_fails_invalid(self):
         response = self.client.get(reverse('carPage', kwargs={'car_id': '0'}))
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         self.assertEquals(jsonResponse["status_code"], 404)
 
-    def test_itemFields(self):
+    def test_02_itemFields(self):
         response = self.client.get(reverse('carPage', kwargs={'car_id': '1'}))
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         # test for every fields of car model
@@ -40,19 +40,19 @@ class TestGetUser(TestCase):
         pass
 
     # test success of data retrieval with legal keys
-    def test_success_response(self):
+    def test_03_success_response(self):
         response = self.client.get(reverse('userPage', kwargs={'user_id': '1'}))  # assumes user with id 1 is stored in db
         #self.assertContains(response,
          #                   'user_id')  # checks that response contains parameter order list & implicitly checks that                                                 #statuscode is 200
         self.assertEqual(response.status_code, 200)
 
     # test failure when no key or invalid key
-    def test_fails_invalid(self):
+    def test_04_fails_invalid(self):
         response = self.client.get(reverse('userPage', kwargs={'user_id': '0'}))
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         self.assertEquals(jsonResponse["status_code"], 404)
 
-    def test_itemFields(self):
+    def test_05_itemFields(self):
         response = self.client.get(reverse('userPage', kwargs={'user_id': '1'}))
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         # test for every fields of car model
@@ -71,7 +71,7 @@ class createAccountTestCase(TestCase):
     def setUp(self):  # setUp method is called before each test in this class
         pass  # nothing to set uunpit
 
-    def test_success_createAccount(self):
+    def test_06_success_createAccount(self):
         response = self.client.post(reverse('createUserPage'),
                                     {'user_name': 'Hans', 'password': 'hans_pwd', 'first_name': 'Hans',
                                      'last_name': 'Zhang'})
@@ -79,7 +79,7 @@ class createAccountTestCase(TestCase):
         ret = json.loads(ret)
         self.assertEquals(ret['status_code'], 400)
 
-    def test_failure_createAccount(self):
+    def test_07_failure_createAccount(self):
         response = self.client.post(reverse('createUserPage'),
                                     {'password': 'jerry_pwd', 'first_name': 'Jerry',
                                      'last_name': 'Sun'})
@@ -108,7 +108,7 @@ class createListingTestCase(TestCase):
     #     ret = json.loads(ret)
     #     self.assertEqual(ret['status_code'], 400)
 
-    def test_success_Creation(self):
+    def test_08_success_Creation(self):
         # login first
         response = self.client.post(reverse('loginPage'), {'username': 'superCat', 'password': '12345678'})
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
@@ -140,7 +140,7 @@ class authTestCase(TestCase):
     def setUp(self):  # setUp method is called before each test in this class
         pass  # nothing to set uunpit
 
-    def test_success_response(self):
+    def test_09_success_response(self):
         # test logging in with an account not exist
         user = {'username': 'superCat', 'password': '12345678'}
         #response = self.client.post(reverse('loginPage'),user )
@@ -150,19 +150,19 @@ class authTestCase(TestCase):
         self.assertContains(response, 'status_code')
         self.assertContains(response, 'authenticator')
 
-    def test_incorrect_password(self):
+    def test_10_incorrect_password(self):
         # test logging in with an incorrect password
         response = self.client.post(reverse('loginPage'), {'username': 'superCat', 'password': '123'})
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         self.assertEqual(jsonResponse["status_code"], 403)
 
-    def test_unexist_account(self):
+    def test_11_unexist_account(self):
         # test logging in with an account not exist
         response = self.client.post(reverse('loginPage'), {'username': 'hansome', 'password': 'hans_pwd'})
         jsonResponse = json.loads(str(response.content, encoding='utf8'))
         self.assertEqual(jsonResponse["status_code"], 404)
 
-    def test_success_login_logout(self):
+    def test_12_uccess_login_logout(self):
         response = self.client.post(reverse('loginPage'), {'username': 'Hans', 'password': 'hans_pwd'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'status_code')
