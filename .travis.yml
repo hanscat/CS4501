@@ -21,7 +21,7 @@ install:
   - sleep 20
   - docker ps -a
   - >
-    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 base -c
+    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17 bash -c
     "mysql -uroot -p'$3cureUS' -h db -v -e"
   - >  
     create user 'www'@'%' identified by '$3cureUS';
