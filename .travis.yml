@@ -14,7 +14,7 @@ install:
   - mkdir ~/cs4501/app/
   - mv -v ./{.[!.],}* ~/cs4501/app/
   - mkdir ~/cs4501/db/
-  - docker pull mysql:5.7.14
+  - docker pull mysql:5.7.17
 #  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
   - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
   - sleep 20
