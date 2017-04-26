@@ -11,7 +11,7 @@ python:
 install:
   # setup db
   - mkdir ~/cs4501/
-  - mkdir ~/cs4501/app/
+  - mkdir -p ~/cs4501/app/
   - ls
   - mv -v ./{.[!.],}* ~/cs4501/app/
   - ls
