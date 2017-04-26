@@ -34,7 +34,7 @@ before_script:
   - ls
   - docker start mysql
   - docker-compose up -d
-#  - sleep 10
+  - sleep 10
   - docker ps -a
 
 script: 
