@@ -34,10 +34,11 @@ install:
 before_script:
   - cd ~/cs4501/app/
   - ls
-#  - docker-compose up -d
+  - docker start mysql
+  - docker-compose up -d
 #  - sleep 10
   - docker ps -a
-  - docker start mysql
+  - docker-compose down
   
 script: 
   #exp.test
