@@ -58,7 +58,7 @@ before_script:
   - docker-compose up -d
  # - apt-get google-chrome-stable
   - docker ps -a
-  - docker start cs4501_models_1
+  - sleep 5
 
 script: 
 #    models.test
