@@ -45,10 +45,10 @@ script:
   #  - > 
   #    docker exec -it cs4501_models_1 bash -c 
   #    "python manage.py test" 
-  - docker run -it --name web -p 8000:8000 --link mysql:db -v ~/cs4501/app:/app tp33/django
-  - > 
-    docker exec -it web bash -c
-    "cd models; python manage.py test"
+  - >
+    docker run -it --name web -p 8000:8000 --link mysql:db -v ~/cs4501/app:/app tp33/django bash -c
+    "cd models && python manage.py test"
+
 
 after_script:
   - docker stop mysql
