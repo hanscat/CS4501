@@ -26,24 +26,25 @@ install:
     "create user 'www'@'%' identified by '$3cureUS';
     create database cs4501 character set utf8;
     grant all privileges on *.* to 'www'@'%';"
+#    172.17.0.3
 
 # command to run tests
 before_script:
   - cd ~/cs4501/app/
   - ls
-  - docker-compose up -d
-  - sleep 15
-  - docker ps -a
-  - docker start app_models_1
+#  - docker-compose up -d
+#  - sleep 10
+#  - docker ps -a
+#  - docker start app_models_1
   
 script: 
   #exp.test
-  - >
-    docker exec -it app_exp_1 bash -c 
-    "python manage.py test"
-
-  - docker-compose down
-  - cd ~
+#  - >
+#    docker exec -it app_exp_1 bash -c 
+#    "python manage.py test"
+#
+#  - docker-compose down
+#  - cd ~
   # models.test
   #  - > 
   #    docker exec -it cs4501_models_1 bash -c 
