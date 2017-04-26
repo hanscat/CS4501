@@ -8,39 +8,57 @@ python:
   - "3.5"
   
 # command to install dependencies
-install:
-  # setup db
-  - mkdir ~/cs4501/
-  - mkdir -p ~/cs4501/app/
-  - ls
-  - mv -v ./{.[!.],}* ~/cs4501/app/
-  - ls
-  - mkdir ~/cs4501/db/
-  - cd ~
-  - ls
-  - cd cs4501
-  - ls
-  - docker pull mysql:5.7.17
-#  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
-  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
-  - sleep 5
-  - docker ps -a
-  - >
-    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17
-    mysql -uroot -p'$3cureUS' -h db -v -e
-    "create user 'www'@'%' identified by '$3cureUS';
-    create database cs4501 character set utf8;
-    grant all privileges on *.* to 'www'@'%';"
+#install:
+#  # setup db
+#  - mkdir ~/cs4501/
+#  - mkdir -p ~/cs4501/app/
+#  - ls
+#  - mv -v ./{.[!.],}* ~/cs4501/app/
+#  - ls
+#  - mkdir ~/cs4501/db/
+#  - cd ~
+#  - ls
+#  - cd cs4501
+#  - ls
+#  - docker pull mysql:5.7.17
+##  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' mysql:5.7.14
+#  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.17
+#  - sleep 5
+#  - docker ps -a
+#  - >
+#    docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.17
+#    mysql -uroot -p'$3cureUS' -h db -v -e
+#    "create user 'www'@'%' identified by '$3cureUS';
+#    create database cs4501 character set utf8;
+#    grant all privileges on *.* to 'www'@'%';"
 #    172.17.0.3
+install: # prepare mySQL database
+  - docker pull mysql:5.7.14
+  - mkdir db
+  - >
+    docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS'
+    -v `pwd`/db:/var/lib/mysql  mysql:5.7.14
+  - sleep 10 # need to give time for mysql to start
+  - >
+    docker run -it --name mysql-cmd --rm --link mysql:db mysql:5.7.14
+    mysql -uroot -p'$3cureUS' -h db -v -e
+    "CREATE DATABASE cs4501 CHARACTER SET utf8;
+    CREATE USER 'www'@'%' IDENTIFIED BY '\$3cureUS';
+    GRANT ALL PRIVILEGES ON *.* TO 'www'@'%';"
 
 # command to run tests
+#before_script:
+#  - cd ~/cs4501/app/
+#  - ls
+#  - docker start mysql
+#  - docker-compose up -d
+#  - sleep 5
+#  - docker ps -a
 before_script:
-  - cd ~/cs4501/app/
-  - ls
-  - docker start mysql
   - docker-compose up -d
-  - sleep 5
+ # - apt-get google-chrome-stable
   - docker ps -a
+  - docker start talentx_models_1
 
 script: 
 #    models.test
