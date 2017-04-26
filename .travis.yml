@@ -38,8 +38,12 @@ before_script:
   - docker-compose up -d
 #  - sleep 10
   - docker ps -a
+#    exp.test
+  - >
+    docker exec -it app_exp_1 bash -c 
+    "python manage.py test"
   - docker-compose down
-  
+  - sleep 20
 script: 
   #exp.test
 #  - >
@@ -47,15 +51,15 @@ script:
 #    "python manage.py test"
 #
 #  - docker-compose down
-#  - cd ~
+
   # models.test
   - cd ~
-  - >
-    docker run -it --name mysql-cmdline1 --link mysql:db mysql:5.7.17
-    mysql -uroot -p'$3cureUS' -h db -v -e
-    "grant all privileges on *.* to 'www'@'%';
-    grant all privileges on *.* to 'www'@'172.17.0.3';
-    uninstall plugin validate_password;"
+  - docker ps -a
+#  - >
+#    docker run -it --name mysql-cmdline1 --link mysql:db mysql:5.7.17
+#    mysql -uroot -p'$3cureUS' -h db -v -e
+#    "grant all privileges on *.* to 'www'@'%';
+#    grant all privileges on *.* to 'www'@'172.17.0.3';"
   - >
     docker run -it --name web -p 8000:8000 --link mysql:db -v ~/cs4501/app:/app tp33/django bash -c
     "cd models && python manage.py test"
