@@ -50,8 +50,7 @@ script:
   # models.test
   - cd ~
   - >
-    docker exect -it mysql-cmdline bash
-#    docker run -it --name mysql-cmdline1 --link mysql:db mysql:5.7.17
+    docker run -it --name mysql-cmdline1 --link mysql:db mysql:5.7.17
     mysql -uroot -p'$3cureUS' -h db -v -e
     "grant all privileges on *.* to 'www'@'%';
     grant all privileges on *.* to 'www'@'172.17.0.3';"
