@@ -11,9 +11,9 @@
 </div>
 
 <div class="container">
-      {% if cars %}
-        {% for car in cars %}
-        <div class="col-lg-12">
+    <div class = "row">
+      {% if car %}
+        <div class="col-lg-4">
           <h1>{{car.car_make}} {{car.car_model}}</h1>
           <p>Color: {{car.car_color}}</p>
           <p>Make: {{car.car_make}}</p>
@@ -22,12 +22,30 @@
           <p>Description: {{car.description}}</p>
           <p>Price: ${{car.price}}</p>
         </div>
-        {% endfor %}
       {% else %}
       <strong>There are no cars in stock.</strong>
       {% endif %}
     </div>
 
+      <div class="row">
+      {%if car.rec%}
+      <h1>Recommended Cars</h1>
+      <hr>
+      <br>
+      {%for car in car.rec%}
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+          <h2>{{car.car_make}} {{car.car_model}}</h2>
+          <p>Color: {{car.car_color}}</p>
+          <p>Make: {{car.car_make}}</p>
+          <p>Model: {{car.car_model}}</p>
+          <p>New: {{car.car_new}}</p>
+          <p><a class="btn btn-default" href="{% url 'car_detail_page' car_id=car.id %}" role="button">View
+              details &raquo;</a></p>
+      </div>
+      {%endfor%}
+      {%endif%}
+    </div>
+    </div>
     {% include 'footer.html' %}
 
 

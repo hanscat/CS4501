@@ -59,12 +59,14 @@ def car_detail(request, car_id):
     response = urllib.request.urlopen(requester).read().decode('utf-8')
     car = json.loads(response)
     if car["status_code"] == 200 :
-        car = [car["cars"]]
-        return render(request, 'cardetail.html', {'cars': car})
+        car = car["car"]
+        return render(request, 'cardetail.html', {'car': car})
     else :
         return bad_request(request)
 
 def check_status(request):
+    if 'auth' not in request.COOKIES:
+        return False
     auth = request.COOKIES.get('auth')
     post_data = {'auth': auth}
     url = 'http://exp-api:8000/api/v1/auth/check_status/'

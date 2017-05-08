@@ -225,6 +225,15 @@
     "username": "user1",
     "password": "pbkdf2_sha256$30000$jKjB7iCIdJxO$wsm+s/IXloj58pHet6aS22/EPSU+cj1kTrM+Kkiu2yE="
     }
+  },
+
+  {
+  "model": "api.recommendation",
+  "pk": 1,
+  "fields":{
+    "item": 1,
+    "rec": [2 , 3]
+  }
   }
 
 ]
