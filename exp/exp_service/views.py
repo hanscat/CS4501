@@ -86,6 +86,11 @@ def car_detail(request, car_id):
         car = _make_get_request(urlForParticularCar + car_id)
         if car["status_code"] == 200:
             car = car["car"]
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            car_view = {}
+            car_view['user_id'] = 'api.user'
+            car_view['car_id'] = car
+            producer.send('car-views', json.dumps(car_view).encode('utf-8'))
             return get_success(200, car, "cars")
         else:
             return model_failure(car)
