@@ -112,6 +112,9 @@ def user_detail(request):
 def login(request):
     # check current_status first
     if request.method == "GET":
+        valid = check_status(request)
+        if valid:
+            return HttpResponseRedirect(reverse('logout'))
         userform = UserInfo()
         data = {}
         data['userform'] = userform
@@ -145,14 +148,20 @@ def login(request):
 def logout(request):
     url = expApi + "auth/logout/"
     #need to pass authenticator
-    auth = request.COOKIES.get('auth')
-    post_data = {'auth': auth}
-    resp = post_request(url, post_data)
-    if resp["status_code"] == 202 :# ==  True: --- If it returns Json, we want to pass and display message regardless
+    if 'auth' in request.COOKIES:
+        auth = request.COOKIES.get('auth')
+        post_data = {'auth': auth}
+        resp = post_request(url, post_data)
+        if resp["status_code"] == 202 :# ==  True: --- If it returns Json, we want to pass and display message regardless
+            response = HttpResponseRedirect(reverse("logout"))
+            response.delete_cookie('auth')
+            response.delete_cookie('id')
+            return response
+        else :
+            message = "Logout Success"
+            return render(request, 'logout.html', {'message': message})
+    else:
         message = "Logout Success"
-        return render(request, 'logout.html', {'message': message})
-    else :
-        message = "Already Logout"
         return render(request, 'logout.html', {'message': message})
 
 def signup(request):
