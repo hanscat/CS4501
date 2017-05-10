@@ -85,8 +85,18 @@ class CarView(View):
         except ObjectDoesNotExist:
             return _failure(404, "Car doesn't exist")
 
-        car = model_to_dict(car)
-        return get_success(200, car, self.model.__name__)
+        cars = model_to_dict(car)
+        try :
+            rec = recommendation.objects.get(item = kwargs['car_id'])
+            cars["rec"] = []
+            rec = model_to_dict(rec)
+            for car in rec['rec']:
+                car = model_to_dict(car)
+                cars["rec"].append(car)
+        except ObjectDoesNotExist:
+            cars["rec"] = []
+
+        return get_success(200, cars, self.model.__name__)
 
     def post(self, request, *args, **kwargs):
         # data = request.body.decode('utf-8')
@@ -234,147 +244,3 @@ def signup(request):
         return get_success(201, user, 'user')
     else:
         return _failure(400, form.errors)
-
-
-
-
-
-# class DeleteSellCarView(DeleteCarView):
-#     model = car_to_sell
-#     owner = seller
-#
-# class DeleteBuyCarView(DeleteCarView):
-#     model = car_to_buy
-#     owner = buyer
-#
-# class DeleteSellerView(DeleteUserView):
-#     model = seller
-#
-# class DeleteBuyerView(DeleteUserView):
-#     model = buyer
-#
-# class BuyerView(UserView):
-#     model = buyer
-#     modelForm = BuyerForm
-#     submodel = car_to_buy
-#
-# class SellerView(UserView):
-#     model = seller
-#     modelForm = SellerForm
-#     submodel = car_to_sell
-#
-# class CarSellView(CarView):
-#     model = car_to_sell
-#     modelForm = CarSellForm
-#
-# class CarBuyView(CarView):
-#     model = car_to_buy
-#     modelForm = CarBuyForm
-
-# class CarSellView(View):
-#     model = car_to_sell
-#
-#     def get(self, request, *args, **kwargs):
-#         car = get_object_or_404(car_to_sell, pk=kwargs['car_id'])
-#         car = model_to_dict(car)
-#         return _success(car, 'car_to_sell')
-#
-#     def post(self, request, *args, **kwargs):
-#         data = request.body.decode('utf-8')
-#         data_dict = json.loads(data)
-#         form = CarSellForm(data_dict)
-#         if form.is_valid() :
-#             form.save()
-#             return HttpResponse('Success')
-#         else :
-#             return HttpResponse('Bad Post Request')
-#
-#
-# class CarBuyView(View):
-#     model = car_to_buy
-#
-#     def get(self, request, *args, **kwargs):
-#         car= get_object_or_404(car_to_buy, pk=kwargs['car_id'])
-#         car = model_to_dict(car)
-#         return _success(car, 'car_to_buy')
-#
-#     def post(self, request, *args, **kwargs):
-#         data = request.body.decode('utf-8')
-#         data_dict = json.loads(data)
-#         form = CarBuyForm(data_dict)
-#         if form.is_valid() :
-#             form.save()
-#             return HttpResponse('Success')
-#         else :
-#             return HttpResponse('Bad Post Request')
-
-
-# class BuyerView(View):
-#     model = buyer
-#
-#     def get(self, request, *args, **kwargs):
-#         user = get_object_or_404(buyer, pk=kwargs['user_id'])
-#         user_want = model_to_dict(user)
-#         l = []
-#         for car in user['favourite'] :
-#             l.append(car.pk)
-#         user['favourite'] = l;
-#         return _success(user_want, 'buyer')
-#
-#     def post(self, request, *args, **kwargs):
-#         data = request.body.decode('utf-8')
-#         data_dict = json.loads(data)
-#         form = BuyerForm(data_dict)
-#         if form.is_valid() :
-#             form.save()
-#             return HttpResponse('Success')
-#         else :
-#             return HttpResponse('Bad Post Request')
-#
-# class SellerView(View):
-#     model = seller
-#
-#     def get(self, request, *args, **kwargs):
-#         user = get_object_or_404(seller, pk=kwargs['user_id'])
-#         user = model_to_dict(user)
-#         l = []
-#         for car in user['car_sell'] :
-#             l.append(car.pk)
-#         user['car_sell'] = l;
-#         return _success(user, 'seller')
-#
-#     def post(self, request, *args, **kwargs):
-#         data = request.body.decode('utf-8')
-#         data_dict = json.loads(data)
-#         form = SellerForm(data_dict)
-#         if form.is_valid() :
-#             form.save()
-#             return HttpResponse('Success')
-#         else :
-#             return HttpResponse('Bad Post Request')
-
-
-
-
-# Original implementation changed to class_based view
-# def SellerDetail(request, user_id):
-#     user = get_object_or_404(seller, pk=user_id)
-#
-#     if request.method == 'GET':
-#         user_want = model_to_dict(user)
-#         return _success(user_want, 'seller', 200)
-#     elif request.method == 'POST':
-#         return HttpResponse("Implementing")
-#     else :
-#         return HttpResponse("Method Not Known")
-#
-# def BuyerDetail(request, user_id):
-#     user= get_object_or_404(buyer, pk=user_id)
-#
-#     if request.method == 'GET':
-#         user_want = model_to_dict(user)
-#         return _success(user_want, 'buyer', 200)
-#     elif request.method == 'POST':
-#         return HttpResponse("Implementing")
-#     else :
-#         return HttpResponse("Method Not Known")

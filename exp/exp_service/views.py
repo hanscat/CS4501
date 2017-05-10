@@ -80,13 +80,18 @@ def home(request):
         return _failure(405, "Methods not supported")
 
 
-def car_detail(request, car_id):
-    if request.method == 'GET':
+def car_detail(request):
+    if request.method == 'POST':
+        post = request.POST
+        car_id = post['car_id']
+        # this is the user_id, if user hasn't login, then the user_id is automatically set as 0
+        # I have tested this, and this does work
+        user_id = post['user_id']
         urlForParticularCar = modelsAPI + "detail/car/"
         car = _make_get_request(urlForParticularCar + car_id)
         if car["status_code"] == 200:
             car = car["car"]
-            return get_success(200, car, "cars")
+            return get_success(200, car, "car")
         else:
             return model_failure(car)
     else:
@@ -301,7 +306,7 @@ def search(request):
     post = request.POST
     search_string = post['query']
     search_index_specifier = post['query_specifier']
-    
+
     elasticsearch_index = search_index_specifier + '_index'
     es = Elasticsearch(['es'])
     search_result = es.search(index=elasticsearch_index, body={

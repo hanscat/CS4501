@@ -30,6 +30,9 @@ class Authenticator(models.Model):
     auth = models.CharField(max_length=100, primary_key=True, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
+class recommendation(models.Model):
+    item = models.OneToOneField(car, on_delete=models.CASCADE, related_name = "idForCar")
+    rec = models.ManyToManyField(car, blank = True, related_name = "recommend")
 # class inventory(models.Model):
 #     owner = models.CharField(max_length=20)
 #     num = models.IntegerField(default=0)
