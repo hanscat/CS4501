@@ -74,6 +74,19 @@ def SearchUser(request):
     users = li
     return get_success(200, users, "user")
 
+def GetRec(request, car_id):
+    if request.method == 'GET' :
+        try :
+            rec = recommendation.objects.get(item = car_id)
+            rec = model_to_dict(rec)
+            recs = []
+            for car in rec['rec']:
+                car = model_to_dict(car)
+                recs.append(car)
+        except ObjectDoesNotExist:
+            recs = []
+        return get_success(200, recs, "rec")
+
 class CarView(View):
     model = car
     modelForm = CarForm
@@ -86,15 +99,6 @@ class CarView(View):
             return _failure(404, "Car doesn't exist")
 
         cars = model_to_dict(car)
-        try :
-            rec = recommendation.objects.get(item = kwargs['car_id'])
-            cars["rec"] = []
-            rec = model_to_dict(rec)
-            for car in rec['rec']:
-                car = model_to_dict(car)
-                cars["rec"].append(car)
-        except ObjectDoesNotExist:
-            cars["rec"] = []
 
         return get_success(200, cars, self.model.__name__)
 
@@ -186,7 +190,6 @@ class UserView(View):
             return _success(202, 'Update Success')
         else :
             return _failure(400, 'form invalid, bad post request.')
-
 
 class DeleteCarView(DeleteView):
     model = car
