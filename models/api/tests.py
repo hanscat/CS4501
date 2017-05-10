@@ -286,3 +286,19 @@ class authTest(TestCase):
         result = response.content.decode('utf-8')
         result = json.loads(result)
         self.assertEqual(result['status_code'], 403)
+
+class recTest(TestCase):
+    fixtures = ['demo.json']
+
+    def setUp(self):
+        pass
+
+    # test if correct password, it will login successfully
+    def test_rec(self):
+        c = Client()
+        response = c.get('/api/v1/detail/rec/1')
+        result = response.content.decode('utf-8')
+        result = json.loads(result)
+        self.assertEqual(result['status_code'], 200)
+        self.assertEqual(result['rec'][0]['id'], 2)
+        self.assertEqual(result['rec'][1]['id'], 3)

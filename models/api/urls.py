@@ -22,7 +22,7 @@ index = [url(r'^$', views.index),]
 
 car = [
        url(r'v1/detail/car/(?P<car_id>[0-9]+)', CarView.as_view()),
-       url(r'v1/detail/car/', views.SearchCar, name='SearchCar'),
+       url(r'v1/detail/car/$', views.SearchCar, name='SearchCar'),
        url(r'v1/delete/car/(?P<car_id>[0-9]+)', DeleteCarView.as_view()),
        ]
 
@@ -35,9 +35,12 @@ user = [
 
 auth = [
         url(r'v1/auth/login/', auth_view.login, name='login'),
-        url(r'v1/auth/logout/', auth_view.logout, name='login'),
-        url(r'v1/auth/check_status/', auth_view.check_status, name='login'),
-
+        url(r'v1/auth/logout/', auth_view.logout, name='logout'),
+        url(r'v1/auth/check_status/', auth_view.check_status, name='check_status'),
 ]
 
-urlpatterns = index + car + auth + user
+misc = [
+        url(r'v1/detail/rec/(?P<car_id>[0-9]+)', views.GetRec, name='recommendation'),
+]
+
+urlpatterns = index + car + auth + user + misc

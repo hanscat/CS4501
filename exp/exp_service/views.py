@@ -88,12 +88,16 @@ def car_detail(request):
         # I have tested this, and this does work
         user_id = post['user_id']
         urlForParticularCar = modelsAPI + "detail/car/"
+        urlForRec = modelsAPI + "detail/rec/"
         car = _make_get_request(urlForParticularCar + car_id)
         if car["status_code"] == 200:
             car = car["car"]
-            return get_success(200, car, "car")
-        else:
+        else :
             return model_failure(car)
+        rec = _make_get_request(urlForRec + car_id)
+        if rec["status_code"] == 200:
+            car["rec"] = rec["rec"]
+        return get_success(200, car, "car")
     else:
         return _failure(405, "Methods not supported")
 
