@@ -1,5 +1,10 @@
 ## Web Application for CS 4501: college P2P Used Car Sale/Trade
-
+## Project 7:
+1. Jerry Sun:
+    1. add rec model in model layer, and change exp, web layer for rendering corresponding recommendation(tested through fixture)
+    2. add unit tests for both model and exp layer for rec system
+    3. modify exp layer and web layer interface to provide user-id car-id pair for usage
+    
 ## Project 5 Timeline:
 1. 2017-04-05:
     1. refined docker-compose, added two more containers for es and kafka

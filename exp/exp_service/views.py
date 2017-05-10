@@ -80,20 +80,29 @@ def home(request):
         return _failure(405, "Methods not supported")
 
 
-def car_detail(request, car_id):
-    if request.method == 'GET':
+def car_detail(request):
+    if request.method == 'POST':
+        post = request.POST
+        car_id = post['car_id']
+        # this is the user_id, if user hasn't login, then the user_id is automatically set as 0
+        # I have tested this, and this does work
+        user_id = post['user_id']
         urlForParticularCar = modelsAPI + "detail/car/"
+        urlForRec = modelsAPI + "detail/rec/"
         car = _make_get_request(urlForParticularCar + car_id)
         if car["status_code"] == 200:
             car = car["car"]
+        else :
+            return model_failure(car)
+        rec = _make_get_request(urlForRec + car_id)
+        if rec["status_code"] == 200:
+            car["rec"] = rec["rec"]
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
             car_view = {}
-            car_view['user_id'] = 'api.user'
+            car_view['user_id'] = user_id
             car_view['car_id'] = car
             producer.send('car-views', json.dumps(car_view).encode('utf-8'))
-            return get_success(200, car, "cars")
-        else:
-            return model_failure(car)
+        return get_success(200, car, "car")
     else:
         return _failure(405, "Methods not supported")
 
@@ -306,7 +315,7 @@ def search(request):
     post = request.POST
     search_string = post['query']
     search_index_specifier = post['query_specifier']
-    
+
     elasticsearch_index = search_index_specifier + '_index'
     es = Elasticsearch(['es'])
     search_result = es.search(index=elasticsearch_index, body={
