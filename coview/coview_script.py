@@ -15,9 +15,10 @@ finally:
 
 	while True:
 		for message in CVconsumer:
-			logfile = open("log.txt", "a")
 			new_view = (json.loads(message.value.decode('utf-8'))) 
 			user_id = new_view['user_id']
 			car_id = new_view['car_id']['id']
+			logfile = open("log.txt", "a")
 			logfile.write(str(user_id) + " " + str(car_id) + '\n')
+			logfile.close()
 
