@@ -97,6 +97,11 @@ def car_detail(request):
         rec = _make_get_request(urlForRec + car_id)
         if rec["status_code"] == 200:
             car["rec"] = rec["rec"]
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            car_view = {}
+            car_view['user_id'] = user_id
+            car_view['car_id'] = car
+            producer.send('car-views', json.dumps(car_view).encode('utf-8'))
         return get_success(200, car, "car")
     else:
         return _failure(405, "Methods not supported")
