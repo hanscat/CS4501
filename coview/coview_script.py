@@ -11,7 +11,8 @@ try:
 finally:
 
 	CVconsumer = KafkaConsumer('car-views', group_id='carview-indexer', bootstrap_servers=['kafka:9092'])
-	logfile = open("log.txt", "w")
+	logfile = open("log.txt", "a")
+
 	while True:
 		for message in CVconsumer:
 			logfile = open("log.txt", "a")
@@ -19,3 +20,4 @@ finally:
 			user_id = new_view['user_id']
 			car_id = new_view['car_id']['id']
 			logfile.write(str(user_id) + " " + str(car_id) + '\n')
+
