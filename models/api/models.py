@@ -37,15 +37,3 @@ class recommendation(models.Model):
 #     num = models.IntegerField(default=0)
 #     location = models.CharField(max_length = 20)
 
-# class favorite(models.Model):
-#     user = models.CharField(max_length=20)
-class Recommendation(models.Model):
-    item_id = models.CharField(max_length=5, primary_key=True)
-    recommended_list = models.CharField(
-        max_length=250)  # Comma-separated list of item_ids that were co-viewed 3+ times
-
-    def as_json(self):
-        return dict(
-            curr_item_id=self.item_id,
-            curr_recommended_items=self.recommended_items
-        )

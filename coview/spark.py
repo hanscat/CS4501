@@ -49,8 +49,8 @@ for tuple in output:
     print(tuple)
     # Insert coview record into db
     try:
-        query = "INSERT INTO Recommendation (iten_id, recommended_list) VALUES (%s, %s);"
-        cursor.execute(query, (tuple[1], tuple[0]))
+        query = "INSERT INTO recommendation (item, rec) VALUES (%s, %s);"
+        cursor.execute(query, (tuple[0], tuple[1]))
         db.commit()
     except:
         db.rollback()
