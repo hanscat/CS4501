@@ -1,9 +1,10 @@
 import itertools
 from pyspark import SparkContext
+import MySQLdb
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
-data = sc.textFile("/tmp/data/access.log", 2)  # each worker loads a piece of the data file
+data = sc.textFile("/tmp/data/log.txt", 2)  # each worker loads a piece of the data file
 
 
 # helper function to generate co-views
@@ -34,7 +35,28 @@ itemPairCount = itemPairUserList.map(lambda x: (x[0], 1)).reduceByKey(lambda x, 
 filteredCount = itemPairCount.filter(lambda x: x[1] >= 3)
 
 output = filteredCount.collect()  # bring the data back to the master node so we can print it out
+
+# Connect to database
+print("connecting to db...")
+db = MySQLdb.connect("db", "www", "$3cureUS", "cs4501")
+cursor = db.cursor()
+
+# clear up the table
+cursor.execute("TRUNCATE TABLE Recommendation;")
+
+# now print to output while inserting into db     
 for tuple in output:
     print(tuple)
+    # Insert coview record into db
+    try:
+        query = "INSERT INTO Recommendation (iten_id, recommended_list) VALUES (%s, %s);"
+        cursor.execute(query, (tuple[1], tuple[0]))
+        db.commit()
+    except:
+        db.rollback()
 print("Popular items done")
+
+# stop sc
 sc.stop()
+# Disconnect db
+db.close()
