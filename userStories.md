@@ -1,6 +1,6 @@
-##Project #3 User Stories
+## i Project #3 User Stories
   1. As a user, I want to maintain a watching list (favorite) so that I can keep track of the cars that I am interested in.
-  2. As a user/buyer, I want to keep an interest list (certain color, brand and price) so that sellers may contact me if they have compatible offers.
+  2. As a user/buyer, I want to keep an interest list (certain color, brand and price) so that sellers may contact me if they have compatible offers.  
   3. As a user/seller, I want to keep an inventory list so that potential buyers may see what I have.
   4. As  a user/buyer, I want to see detailed informations of the car so that I can determine if the price is reasonable or not.
   5. As a user/seller, I want to post the condition of the car (year, make, model, mileage) so that buyers can have better knowledge about the car.
@@ -16,8 +16,5 @@
   2. As a buyer, I want to be able to search a certain brand car or a certain make car.
   3. As a user, I want to have a user friendly search page where I can specify what type of stuff that I want to search.
   
-##User Stroies for future implementations:
-  1. As a user, I want to be able to specify a university when I enter the main page of the website so that I can make searches or post offers in a specific scope.
-  2. As a user, I want to choose to display all or part of my contact information so that I can have a control on how people will reach me.
-  3. As a user, I want to be able to post swap/trade request so that I can swap my car with another person.
-  4. As a user/buyer, I want to see pictures of the car so that I can further determine whether to contact the seller or not.
+##Project #7 User Stories:
+  1. As a user, while I am browsing the items I also want to get some recommended items if possible
